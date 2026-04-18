@@ -1,0 +1,2589 @@
+﻿<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Python Introduction — Teaching UI</title>
+  <style>
+    :root{--bg:#0b1220;--panel:#0f1a33;--text:#e8eefc;--muted:#a9b7da;--b:#ffffff1a;--brand:#7aa2ff;--brand2:#66e3c4;--r:16px;--py:#ffd43b;--py2:#306998}
+    *{box-sizing:border-box}
+    body{margin:0;font-family:system-ui,Segoe UI,Roboto,Arial;background:var(--bg);color:var(--text)}
+    .app{display:grid;grid-template-columns:320px 1fr;min-height:100vh;transition:grid-template-columns .3s ease}
+    .app.collapsed{grid-template-columns:0px 1fr}
+    @media(max-width:980px){.app{grid-template-columns:1fr}}
+    .side{padding:14px;border-right:1px solid var(--b);background:linear-gradient(180deg,rgba(15,26,51,.85),rgba(15,26,51,.35));position:sticky;top:0;height:100vh;overflow-y:auto;overflow-x:hidden;transition:padding .3s ease,opacity .3s ease;white-space:nowrap}
+    .app.collapsed .side{padding:0;opacity:0;pointer-events:none}
+    .toggle-nav{position:fixed;top:12px;left:12px;z-index:100;width:36px;height:36px;border-radius:10px;border:1px solid var(--b);background:rgba(15,26,51,.85);color:var(--text);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:18px;transition:left .3s ease}
+    .app.collapsed .toggle-nav{left:12px}
+    main{overflow-y:auto;height:100vh}
+    .card{border:1px solid var(--b);border-radius:var(--r);padding:14px;background:rgba(15,26,51,.7)}
+    h1,h2{margin:0 0 10px 0}
+    h1{font-size:20px}
+    h2{font-size:18px;margin-top:18px}
+    p{line-height:1.6;color:var(--text)}
+    .muted{color:var(--muted);font-size:12px}
+    .nav a{display:block;text-decoration:none;color:var(--text);padding:10px 12px;border-radius:12px;margin:6px 0;border:1px solid transparent}
+    .nav a:hover{background:rgba(255,255,255,.06)}
+    .nav a.active{border-color:rgba(122,162,255,.35);background:rgba(38,59,106,.1)}
+    main{padding:16px}
+    .top{display:flex;gap:10px;align-items:center;margin-bottom:10px;flex-wrap:wrap}
+    input{width:100%;max-width:520px;padding:10px 12px;border-radius:12px;border:1px solid var(--b);background:#0b1220;color:var(--text)}
+    button{padding:10px 12px;border-radius:12px;border:1px solid var(--b);background:rgba(102,227,196,.10);color:var(--text);cursor:pointer}
+    button:hover{background:rgba(102,227,196,.16)}
+    section{border:1px solid var(--b);border-radius:var(--r);padding:0;background:rgba(15,26,51,.55);margin-bottom:24px;border-top:3px solid var(--brand);position:relative;overflow:hidden}
+    .sec-header{display:flex;align-items:center;justify-content:space-between;padding:16px 14px 12px;cursor:pointer;user-select:none}
+    .sec-header:hover{background:rgba(255,255,255,.04)}
+    .sec-header h2{margin:0;flex:1}
+    .sec-toggle{width:28px;height:28px;border-radius:8px;border:1px solid var(--b);background:rgba(255,255,255,.06);color:var(--text);display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0;transition:transform .2s}
+    section.collapsed .sec-toggle{transform:rotate(-90deg)}
+    .sec-body{padding:0 14px 14px}
+    section.collapsed .sec-body{display:none}
+    section::before{content:attr(data-label);position:absolute;top:-1px;left:20px;background:var(--brand);color:#0b1220;font-size:11px;font-weight:700;padding:3px 12px;border-radius:0 0 8px 8px;letter-spacing:.5px;text-transform:uppercase}
+    .callout{border-left:4px solid var(--brand2);padding:10px 12px;background:rgba(102,227,196,.08);border-radius:12px}
+    .callout.warn{border-left-color:#ffd666;background:rgba(255,214,102,.08)}
+    .callout.info{border-left-color:var(--brand);background:rgba(122,162,255,.08)}
+    .hl{background:rgba(255,214,102,.22);padding:0 3px;border-radius:6px}
+    .pill{display:inline-block;border:1px solid var(--b);border-radius:999px;padding:6px 10px;margin:4px 6px 0 0;font-size:12px}
+    .pill b{color:var(--brand2)}
+    details{border:1px solid var(--b);border-radius:12px;padding:10px 12px;margin:10px 0;background:rgba(255,255,255,.04)}
+    summary{cursor:pointer;font-weight:700}
+    .grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+    @media(max-width:700px){.grid{grid-template-columns:1fr}}
+    ul{margin:8px 0 0 18px}
+    ol{margin:8px 0 0 18px}
+    .grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:10px 0}
+    .grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin:10px 0}
+    @media(max-width:700px){.grid2{grid-template-columns:1fr}.grid3{grid-template-columns:1fr}}
+    .mini{border:1px solid var(--b);border-radius:var(--r);padding:14px;background:rgba(15,26,51,.7)}
+    .mini h3{margin:0 0 4px 0;font-size:16px}
+    table{color:var(--text);width:100%;border-collapse:separate;border-spacing:0;border:1px solid rgba(255,255,255,.10);border-radius:14px;overflow:hidden}
+    th{color:var(--brand);font-weight:600;text-align:left;padding:12px;border-bottom:1px solid rgba(255,255,255,.10)}
+    td{padding:12px;border-bottom:1px solid rgba(255,255,255,.08)}
+    pre{background:rgba(0,0,0,.4);border:1px solid var(--b);border-radius:12px;padding:14px;overflow-x:auto;font-family:'Cascadia Code','Fira Code','Consolas',monospace;font-size:13px;line-height:1.6;color:#e8eefc;margin:10px 0}
+    code{font-family:'Cascadia Code','Fira Code','Consolas',monospace;font-size:13px;background:rgba(255,255,255,.08);padding:2px 6px;border-radius:6px}
+    pre code{background:none;padding:0}
+    .comment{color:#6a9955}
+    .keyword{color:#c586c0}
+    .string{color:#ce9178}
+    .func{color:#dcdcaa}
+    .number{color:#b5cea8}
+    .builtin{color:#4ec9b0}
+    .output{color:#66e3c4;font-style:italic}
+    .pylogo{display:inline-flex;align-items:center;gap:6px;font-size:24px;font-weight:700}
+    .pylogo span{background:linear-gradient(135deg,#306998,#ffd43b);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+  </style>
+</head>
+<body>
+<div class="app" id="app">
+  <button class="toggle-nav" id="toggleNav" title="Toggle navigation">☰</button>
+  <aside class="side">
+    <div class="card">
+      <h1><span class="pylogo">🐍 <span>Python</span></span></h1>
+      <div class="muted">Introduction &amp; Basics</div>
+
+      <div style="margin-top:12px" class="nav" id="nav">
+        <a href="#overview" class="active">📌 Overview</a>
+        <a href="#why-python">🤔 Why Python?</a>
+        <a href="#setup">⚙️ Setup &amp; First Program</a>
+        <a href="#variables">📦 Variables &amp; Data Types</a>
+        <a href="#data-structures">🗂️ Data Structures</a>
+        <a href="#operators">➕ Operators</a>
+        <a href="#input-output">📥 Input / Output</a>
+        <a href="#conditionals">🔀 Conditionals</a>
+        <a href="#loops">🔁 Loops</a>
+        <a href="#functions">🧩 Functions</a>
+        <a href="#file-handling">📁 File Handling</a>
+        <a href="#error-handling">🛡️ Error Handling</a>
+        <a href="#modules">📦 Modules &amp; Packages</a>
+        <a href="#numpy-pandas">📊 NumPy &amp; Pandas</a>
+        <a href="#mini-project">🎬 Mini Project: Movies</a>
+        <a href="#oop">🏗️ OOP (Classes)</a>
+        <a href="#practice">🏋️ Practice Exercises</a>
+      </div>
+
+      <div class="muted" style="margin-top:12px">
+        Part of the <b>Data Science with AI</b> teaching series.<br/>
+        Save as <b>.html</b> and open in a browser for full experience.
+      </div>
+    </div>
+  </aside>
+  <script>
+    document.getElementById('toggleNav').addEventListener('click',function(){
+      document.getElementById('app').classList.toggle('collapsed');
+    });
+  </script>
+  <main>
+    <div class="top">
+      <input id="q" placeholder="Search inside the page (e.g., variable, loop, function, list)"/>
+      <button id="clear">Clear</button>
+    </div>
+
+    <!-- ───────────── OVERVIEW ───────────── -->
+    <section id="overview" data-label="Section 1">
+    <div class="sec-header" onclick="this.parentElement.classList.toggle('collapsed')">
+      <h2>📌 Overview — What is Python?</h2>
+      <span class="sec-toggle">▼</span>
+    </div>
+    <div class="sec-body">
+      <p class="muted">The world's most popular beginner-friendly programming language</p>
+
+      <span class="pill"><b>Created</b> 1991 by Guido van Rossum</span>
+      <span class="pill"><b>Type</b> Interpreted, high-level</span>
+      <span class="pill"><b>Typing</b> Dynamically typed</span>
+      <span class="pill"><b>Use</b> Web, AI/ML, Data Science, Automation</span>
+
+      <div class="callout" style="margin-top:12px">
+        <p style="margin:0"><b>Teaching hook:</b> "Python reads almost like English — if you can describe what you want, you can probably write it in Python."</p>
+      </div>
+
+      <p style="margin-top:14px">Python is a <b>general-purpose</b> programming language that prioritizes <b>readability</b> and <b>simplicity</b>. It uses <b>indentation</b> instead of curly braces, making code look clean and consistent.</p>
+
+      <h2 style="margin-top:18px">What Do These Terms Mean?</h2>
+      <div class="grid2">
+        <div class="mini">
+          <h3>🔄 Interpreted</h3>
+          <p style="margin:4px 0 0">Python runs your code <b>line by line</b>, translating each line to machine language on the fly. You don't need a separate "compile" step — just write and run.</p>
+          <p class="muted" style="margin:6px 0 0">Like a <b>live translator</b> at a conference — translates each sentence as you speak.</p>
+          <p style="margin:6px 0 0"><b>Compiled languages</b> (C, Java) translate the <em>entire</em> program first, <em>then</em> run it — like translating a whole book before publishing.</p>
+        </div>
+        <div class="mini">
+          <h3>🏔️ High-Level</h3>
+          <p style="margin:4px 0 0">Python is <b>close to human language</b>, not machine code. You don't manage memory, registers, or hardware directly — Python handles that for you.</p>
+          <p class="muted" style="margin:6px 0 0">Like ordering food at a restaurant — you say <em>"I want biryani"</em>, you don't go into the kitchen.</p>
+          <p style="margin:6px 0 0"><b>Low-level languages</b> (C, Assembly) give you direct hardware control but require more effort.</p>
+        </div>
+        <div class="mini">
+          <h3>🔀 Dynamically Typed</h3>
+          <p style="margin:4px 0 0">You <b>don't declare</b> the type of a variable — Python figures it out automatically at runtime. A variable can even change type!</p>
+<pre style="margin:8px 0 0"><code>x = <span class="number">10</span>        <span class="comment"># x is an int</span>
+x = <span class="string">"hello"</span>   <span class="comment"># now x is a str ✅</span></code></pre>
+          <p class="muted" style="margin:6px 0 0">In <b>statically typed</b> languages (Java, C#), you must declare: <code>int x = 10;</code> and <code>x = "hello"</code> would be an error.</p>
+        </div>
+        <div class="mini">
+          <h3>🆚 Quick Comparison</h3>
+          <table style="width:100%;font-size:13px">
+            <tr><th></th><th>Python</th><th>Java / C</th></tr>
+            <tr><td>Execution</td><td>Interpreted</td><td>Compiled</td></tr>
+            <tr><td>Level</td><td>High-level</td><td>Mid / Low</td></tr>
+            <tr><td>Typing</td><td>Dynamic</td><td>Static</td></tr>
+            <tr><td>Speed</td><td>Slower</td><td>Faster</td></tr>
+            <tr><td>Ease</td><td>Easier</td><td>More verbose</td></tr>
+          </table>
+        </div>
+      </div>
+
+      <div class="grid2" style="margin-top:12px">
+        <div class="mini">
+          <h3>🐍 Python</h3>
+<pre><code><span class="keyword">if</span> age >= <span class="number">18</span>:
+    <span class="func">print</span>(<span class="string">"You can vote!"</span>)
+<span class="keyword">else</span>:
+    <span class="func">print</span>(<span class="string">"Too young to vote"</span>)</code></pre>
+        </div>
+        <div class="mini">
+          <h3>☕ Java (same logic)</h3>
+<pre><code><span class="keyword">if</span> (age >= <span class="number">18</span>) {
+    System.out.<span class="func">println</span>(<span class="string">"You can vote!"</span>);
+} <span class="keyword">else</span> {
+    System.out.<span class="func">println</span>(<span class="string">"Too young to vote"</span>);
+}</code></pre>
+        </div>
+      </div>
+      <p class="muted">Notice: Python has no semicolons, no curly braces, no boilerplate — just clean logic.</p>
+    </div>
+    </section>
+
+    <!-- ───────────── WHY PYTHON ───────────── -->
+    <section id="why-python" data-label="Section 2">
+    <div class="sec-header" onclick="this.parentElement.classList.toggle('collapsed')">
+      <h2>🤔 Why Python?</h2>
+      <span class="sec-toggle">▼</span>
+    </div>
+    <div class="sec-body">
+
+      <div class="grid3">
+        <div class="mini">
+          <h3>📖 Easy to Learn</h3>
+          <p style="margin:4px 0 0">Simple syntax that reads like English. No complex boilerplate. Great first language.</p>
+        </div>
+        <div class="mini">
+          <h3>🌍 Huge Community</h3>
+          <p style="margin:4px 0 0">Millions of developers, thousands of free tutorials, Stack Overflow answers for everything.</p>
+        </div>
+        <div class="mini">
+          <h3>📦 Rich Libraries</h3>
+          <p style="margin:4px 0 0">NumPy, Pandas, Matplotlib, Scikit-learn, TensorFlow, Flask, Django — ready-made tools for any task.</p>
+        </div>
+        <div class="mini">
+          <h3>🤖 AI &amp; Data Science</h3>
+          <p style="margin:4px 0 0">#1 language for Machine Learning, Deep Learning, and Data Analysis.</p>
+        </div>
+        <div class="mini">
+          <h3>💼 Career Demand</h3>
+          <p style="margin:4px 0 0">Top-5 most in-demand language globally. Used at Google, Microsoft, Netflix, Instagram, NASA.</p>
+        </div>
+        <div class="mini">
+          <h3>🔄 Versatile</h3>
+          <p style="margin:4px 0 0">Web apps, APIs, automation scripts, desktop apps, games, IoT — Python does it all.</p>
+        </div>
+      </div>
+
+      <div class="callout" style="margin-top:14px">
+        <p style="margin:0">💡 <b>Fun fact:</b> Python is named after <em>Monty Python's Flying Circus</em> (a British comedy show), not the snake!</p>
+      </div>
+
+      <h2 style="margin-top:18px">Where is Python used?</h2>
+      <table>
+        <thead>
+          <tr style="background:rgba(122,162,255,.12)">
+            <th>Domain</th>
+            <th>What Python Does</th>
+            <th>Popular Libraries</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td><b>Data Science</b></td><td>Analyze data, build dashboards, find patterns</td><td>Pandas, NumPy, Matplotlib</td></tr>
+          <tr><td><b>Machine Learning</b></td><td>Train models, make predictions</td><td>Scikit-learn, XGBoost</td></tr>
+          <tr><td><b>Deep Learning</b></td><td>Image recognition, NLP, speech</td><td>TensorFlow, PyTorch</td></tr>
+          <tr><td><b>Web Development</b></td><td>Build websites &amp; APIs</td><td>Django, Flask, FastAPI</td></tr>
+          <tr><td><b>Automation</b></td><td>Automate repetitive tasks, scraping</td><td>Selenium, BeautifulSoup</td></tr>
+          <tr><td><b>DevOps</b></td><td>Infrastructure scripts, CI/CD</td><td>Ansible, Fabric</td></tr>
+        </tbody>
+      </table>
+    </div>
+    </section>
+
+    <!-- ───────────── SETUP ───────────── -->
+    <section id="setup" data-label="Section 3">
+    <div class="sec-header" onclick="this.parentElement.classList.toggle('collapsed')">
+      <h2>⚙️ Setup &amp; First Program</h2>
+      <span class="sec-toggle">▼</span>
+    </div>
+    <div class="sec-body">
+
+      <h2>Step 1 — Install Python</h2>
+      <div class="grid2">
+        <div class="mini">
+          <h3>🪟 Windows</h3>
+          <ol>
+            <li>Go to <b>python.org/downloads</b></li>
+            <li>Download Python 3.12+ installer</li>
+            <li>✅ Check <b>"Add Python to PATH"</b></li>
+            <li>Click Install Now</li>
+          </ol>
+        </div>
+        <div class="mini">
+          <h3>🍎 macOS / 🐧 Linux</h3>
+          <p>Usually pre-installed. Verify:</p>
+<pre><code>python3 --version
+<span class="output"># Python 3.12.x</span></code></pre>
+          <p class="muted">Or install via <code>brew install python3</code> (macOS)</p>
+        </div>
+      </div>
+
+      <h2 style="margin-top:18px">Step 2 — Choose an Editor</h2>
+      <div class="grid3">
+        <div class="mini">
+          <h3>⭐ VS Code</h3>
+          <p class="muted" style="margin:0">Free, lightweight, Python extension with IntelliSense &amp; debugging. <b>Recommended.</b></p>
+        </div>
+        <div class="mini">
+          <h3>🧪 Jupyter Notebook</h3>
+          <p class="muted" style="margin:0">Interactive, cell-by-cell execution. Great for data exploration.</p>
+        </div>
+        <div class="mini">
+          <h3>🌐 Google Colab</h3>
+          <p class="muted" style="margin:0">Browser-based, no setup needed. Free GPU for ML. Perfect for beginners.</p>
+        </div>
+      </div>
+
+      <h2 style="margin-top:18px">Step 3 — Your First Program 🎉</h2>
+<pre><code><span class="comment"># hello.py — your very first Python program</span>
+<span class="func">print</span>(<span class="string">"Hello, World!"</span>)
+<span class="func">print</span>(<span class="string">"Welcome to Python 🐍"</span>)</code></pre>
+
+      <div class="callout">
+        <p style="margin:0">▶️ <b>Run it:</b> Open terminal → <code>python hello.py</code> → see the output!</p>
+      </div>
+
+<pre><code><span class="output">Hello, World!
+Welcome to Python 🐍</span></code></pre>
+
+      <h2 style="margin-top:24px">🧪 What is Jupyter Notebook?</h2>
+      <p>Jupyter Notebook is an <b>interactive coding environment</b> where you write and run Python in small chunks called <b>cells</b> — instead of writing an entire <code>.py</code> file. You see the output <b>immediately below each cell</b>, making it perfect for learning, experimentation, and data analysis.</p>
+
+      <div class="grid2">
+        <div class="mini">
+          <h3>📄 Regular .py File</h3>
+          <p style="margin:4px 0 0">Write all code → Run everything at once → See all output at the end</p>
+          <p class="muted" style="margin:4px 0 0">Like writing a full essay and submitting it</p>
+        </div>
+        <div class="mini">
+          <h3>🧪 Jupyter Notebook (.ipynb)</h3>
+          <p style="margin:4px 0 0">Write code in cells → Run one cell at a time → See output instantly below</p>
+          <p class="muted" style="margin:4px 0 0">Like having a conversation — ask a question, get an answer</p>
+        </div>
+      </div>
+
+      <h3 style="margin-top:14px">How to Get Jupyter</h3>
+      <div class="grid3">
+        <div class="mini">
+          <h3>Option 1: Install Locally</h3>
+<pre><code>pip install notebook
+jupyter notebook</code></pre>
+          <p class="muted" style="margin:4px 0 0">Opens in your browser at <code>localhost:8888</code></p>
+        </div>
+        <div class="mini">
+          <h3>Option 2: VS Code</h3>
+          <p style="margin:4px 0 0">Install the <b>Jupyter extension</b> in VS Code. Create a <code>.ipynb</code> file and run cells right inside the editor.</p>
+          <p class="muted" style="margin:4px 0 0">⭐ Best of both worlds</p>
+        </div>
+        <div class="mini">
+          <h3>Option 3: Google Colab</h3>
+          <p style="margin:4px 0 0">Go to <b>colab.research.google.com</b> — it's a free, cloud-hosted Jupyter notebook. No install needed!</p>
+          <p class="muted" style="margin:4px 0 0">🌐 Zero setup</p>
+        </div>
+      </div>
+
+      <h3 style="margin-top:14px">How It Works — Cell by Cell</h3>
+      <p>In Jupyter, you write code in <b>cells</b> and press <b>Shift + Enter</b> to run each one. The output appears right below:</p>
+
+      <div style="border:1px solid var(--b);border-radius:14px;overflow:hidden;margin:10px 0">
+        <div style="background:rgba(122,162,255,.08);padding:10px 14px;border-bottom:1px solid var(--b)">
+          <span class="muted">Cell 1 — Code</span>
+        </div>
+        <div style="padding:12px 14px;background:rgba(0,0,0,.3)">
+<pre style="margin:0"><code>name = <span class="string">"Alice"</span>
+age = <span class="number">25</span>
+<span class="func">print</span>(<span class="string">f"Hi, I'm {name} and I'm {age} years old"</span>)</code></pre>
+        </div>
+        <div style="padding:10px 14px;background:rgba(102,227,196,.06);border-top:1px solid var(--b)">
+          <span class="muted">Output:</span><br/>
+          <code class="output">Hi, I'm Alice and I'm 25 years old</code>
+        </div>
+      </div>
+
+      <div style="border:1px solid var(--b);border-radius:14px;overflow:hidden;margin:10px 0">
+        <div style="background:rgba(122,162,255,.08);padding:10px 14px;border-bottom:1px solid var(--b)">
+          <span class="muted">Cell 2 — Code (uses variables from Cell 1!)</span>
+        </div>
+        <div style="padding:12px 14px;background:rgba(0,0,0,.3)">
+<pre style="margin:0"><code><span class="comment"># Variables from Cell 1 are still available</span>
+birth_year = <span class="number">2026</span> - age
+<span class="func">print</span>(<span class="string">f"{name} was born in {birth_year}"</span>)</code></pre>
+        </div>
+        <div style="padding:10px 14px;background:rgba(102,227,196,.06);border-top:1px solid var(--b)">
+          <span class="muted">Output:</span><br/>
+          <code class="output">Alice was born in 2001</code>
+        </div>
+      </div>
+
+      <div class="callout info" style="margin-top:12px">
+        <p style="margin:0">💡 <b>Key concept:</b> Variables persist across cells — once you define <code>name</code> in Cell 1, you can use it in Cell 2, 3, 4, etc. Think of the entire notebook as <b>one shared workspace</b>.</p>
+      </div>
+
+      <h3 style="margin-top:14px">Jupyter Cell Types</h3>
+      <div class="grid2">
+        <div class="mini">
+          <h3>💻 Code Cell</h3>
+          <p style="margin:4px 0 0">Write and run Python code. Output appears below. This is where your logic lives.</p>
+        </div>
+        <div class="mini">
+          <h3>📝 Markdown Cell</h3>
+          <p style="margin:4px 0 0">Write notes, headings, explanations using Markdown. Great for documenting your thought process alongside code.</p>
+        </div>
+      </div>
+
+      <div class="callout" style="margin-top:12px">
+        <p style="margin:0">🎓 <b>For this course:</b> We'll be using <b>Jupyter Notebooks</b> for all our coding exercises. It lets you experiment step by step, see results immediately, and keep notes alongside your code.</p>
+      </div>
+    </div>
+    </section>
+
+    <!-- ───────────── VARIABLES & DATA TYPES ───────────── -->
+    <section id="variables" data-label="Section 4">
+    <div class="sec-header" onclick="this.parentElement.classList.toggle('collapsed')">
+      <h2>📦 Variables &amp; Data Types</h2>
+      <span class="sec-toggle">▼</span>
+    </div>
+    <div class="sec-body">
+      <p>A <b>variable</b> is a named container that stores a value. In Python, you don't need to declare the type — Python figures it out automatically (<b>dynamic typing</b>).</p>
+
+<pre><code><span class="comment"># Creating variables — no type declaration needed!</span>
+name = <span class="string">"Alice"</span>         <span class="comment"># str  (text)</span>
+age = <span class="number">25</span>                <span class="comment"># int  (whole number)</span>
+height = <span class="number">5.6</span>            <span class="comment"># float (decimal number)</span>
+is_student = <span class="keyword">True</span>       <span class="comment"># bool (True/False)</span>
+
+<span class="func">print</span>(name, age, height, is_student)
+<span class="output"># Alice 25 5.6 True</span></code></pre>
+
+      <h2 style="margin-top:18px">Core Data Types</h2>
+      <table>
+        <thead>
+          <tr style="background:rgba(122,162,255,.12)">
+            <th>Type</th>
+            <th>What It Stores</th>
+            <th>Example</th>
+            <th>Check with</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td><code>int</code></td><td>Whole numbers</td><td><code>42</code>, <code>-7</code>, <code>0</code></td><td><code>type(42)</code></td></tr>
+          <tr><td><code>float</code></td><td>Decimal numbers</td><td><code>3.14</code>, <code>-0.5</code></td><td><code>type(3.14)</code></td></tr>
+          <tr><td><code>str</code></td><td>Text (strings)</td><td><code>"hello"</code>, <code>'world'</code></td><td><code>type("hi")</code></td></tr>
+          <tr><td><code>bool</code></td><td>True / False</td><td><code>True</code>, <code>False</code></td><td><code>type(True)</code></td></tr>
+          <tr><td><code>NoneType</code></td><td>No value / empty</td><td><code>None</code></td><td><code>type(None)</code></td></tr>
+        </tbody>
+      </table>
+
+      <h2 style="margin-top:18px">Type Checking &amp; Conversion</h2>
+<pre><code><span class="comment"># Check the type of a variable</span>
+x = <span class="number">42</span>
+<span class="func">print</span>(<span class="func">type</span>(x))       <span class="output"># &lt;class 'int'&gt;</span>
+
+<span class="comment"># Convert between types (type casting)</span>
+num_str = <span class="string">"100"</span>
+num_int = <span class="func">int</span>(num_str)     <span class="comment"># str → int</span>
+num_float = <span class="func">float</span>(num_str) <span class="comment"># str → float</span>
+back_to_str = <span class="func">str</span>(<span class="number">42</span>)     <span class="comment"># int → str</span>
+
+<span class="func">print</span>(num_int, num_float, back_to_str)
+<span class="output"># 100 100.0 42</span></code></pre>
+
+      <div class="callout warn">
+        <p style="margin:0">⚠️ <b>Common mistake:</b> <code>int("hello")</code> will crash! You can only convert strings that actually look like numbers.</p>
+      </div>
+
+      <h2 style="margin-top:18px">Variable Naming Rules</h2>
+      <div class="grid2">
+        <div class="mini">
+          <h3>✅ Valid Names</h3>
+<pre><code>my_name = <span class="string">"Alice"</span>
+age2 = <span class="number">25</span>
+_private = <span class="string">"secret"</span>
+MAX_SIZE = <span class="number">100</span></code></pre>
+        </div>
+        <div class="mini">
+          <h3>❌ Invalid Names</h3>
+<pre><code><span class="comment"># 2name = "Bob"    ← starts with number</span>
+<span class="comment"># my-name = "Eve"  ← has hyphen</span>
+<span class="comment"># class = "Math"   ← reserved keyword</span>
+<span class="comment"># my name = "Pat"  ← has space</span></code></pre>
+        </div>
+      </div>
+      <p class="muted">Convention: Use <code>snake_case</code> for variables and functions in Python (e.g., <code>student_name</code>, not <code>studentName</code>).</p>
+
+      <h2 style="margin-top:24px">🔤 Strings — Working with Text</h2>
+      <p>Strings (<code>str</code>) are sequences of characters. Python makes it easy to create, combine, and manipulate them.</p>
+
+<pre><code><span class="comment"># Creating strings</span>
+single = <span class="string">'Hello'</span>
+double = <span class="string">"World"</span>
+multi = <span class="string">"""This is a
+multi-line string"""</span>
+
+<span class="comment"># Concatenation (joining)</span>
+greeting = single + <span class="string">" "</span> + double
+<span class="func">print</span>(greeting)    <span class="output"># Hello World</span>
+
+<span class="comment"># Repetition</span>
+<span class="func">print</span>(<span class="string">"Ha"</span> * <span class="number">3</span>)    <span class="output"># HaHaHa</span>
+
+<span class="comment"># Length</span>
+<span class="func">print</span>(<span class="func">len</span>(greeting))  <span class="output"># 11</span></code></pre>
+
+      <h3 style="margin-top:18px">f-Strings (Formatted Strings) ⭐</h3>
+      <p>The modern, recommended way to embed variables inside strings:</p>
+<pre><code>name = <span class="string">"Alice"</span>
+age = <span class="number">25</span>
+city = <span class="string">"Hyderabad"</span>
+
+<span class="comment"># f-string — put f before the quote, use {variable}</span>
+<span class="func">print</span>(<span class="string">f"My name is {name}, I'm {age} years old"</span>)
+<span class="output"># My name is Alice, I'm 25 years old</span>
+
+<span class="comment"># You can even put expressions inside {}</span>
+<span class="func">print</span>(<span class="string">f"Next year I'll be {age + 1}"</span>)
+<span class="output"># Next year I'll be 26</span></code></pre>
+
+      <h3 style="margin-top:18px">Useful String Methods</h3>
+<pre><code>text = <span class="string">"  Hello, Python World!  "</span>
+
+<span class="func">print</span>(text.<span class="func">strip</span>())       <span class="output"># "Hello, Python World!"  (remove spaces)</span>
+<span class="func">print</span>(text.<span class="func">lower</span>())       <span class="output"># "  hello, python world!  "</span>
+<span class="func">print</span>(text.<span class="func">upper</span>())       <span class="output"># "  HELLO, PYTHON WORLD!  "</span>
+<span class="func">print</span>(text.<span class="func">replace</span>(<span class="string">"Python"</span>, <span class="string">"Java"</span>))  <span class="output"># "  Hello, Java World!  "</span>
+<span class="func">print</span>(text.<span class="func">split</span>(<span class="string">","</span>))     <span class="output"># ['  Hello', ' Python World!  ']</span>
+<span class="func">print</span>(<span class="string">"Python"</span> <span class="keyword">in</span> text)  <span class="output"># True</span></code></pre>
+
+      <h3 style="margin-top:18px">String Indexing &amp; Slicing</h3>
+      <p>Every character in a string has a <b>position number</b> (index). Slicing lets you extract a <b>portion</b> of the string using the syntax <code>[start:stop:step]</code>.</p>
+
+      <h3 style="margin-top:14px">📍 Indexing — Accessing One Character</h3>
+<pre><code>word = <span class="string">"PYTHON"</span>
+<span class="comment">#        P  Y  T  H  O  N</span>
+<span class="comment"># Index: 0  1  2  3  4  5</span>
+<span class="comment"># Neg:  -6 -5 -4 -3 -2 -1</span>
+
+<span class="func">print</span>(word[<span class="number">0</span>])      <span class="output"># P   (first character)</span>
+<span class="func">print</span>(word[<span class="number">3</span>])      <span class="output"># H   (4th character)</span>
+<span class="func">print</span>(word[-<span class="number">1</span>])     <span class="output"># N   (last character)</span>
+<span class="func">print</span>(word[-<span class="number">2</span>])     <span class="output"># O   (second from end)</span></code></pre>
+
+      <div class="callout info" style="margin-top:10px">
+        <p style="margin:0">💡 <b>Positive index</b> counts from the <b>left</b> (starts at 0). <b>Negative index</b> counts from the <b>right</b> (starts at -1).</p>
+      </div>
+
+      <h3 style="margin-top:18px">✂️ Slicing — <code>[start : stop : step]</code></h3>
+      <p>Slicing extracts a <b>substring</b>. The syntax has 3 parts:</p>
+
+      <div style="overflow:auto">
+        <table style="font-size:13px">
+          <thead>
+            <tr style="background:rgba(122,162,255,.12)">
+              <th>Part</th>
+              <th>Meaning</th>
+              <th>Default</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td><code>start</code></td><td>Where to <b>begin</b> (inclusive)</td><td><code>0</code> (beginning)</td></tr>
+            <tr><td><code>stop</code></td><td>Where to <b>end</b> (exclusive — NOT included!)</td><td>end of string</td></tr>
+            <tr><td><code>step</code></td><td>How many characters to <b>skip</b></td><td><code>1</code> (every character)</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+<pre><code>word = <span class="string">"PYTHON"</span>
+
+<span class="comment"># [start:stop] — from start up to (but NOT including) stop</span>
+<span class="func">print</span>(word[<span class="number">0</span>:<span class="number">3</span>])    <span class="output"># PYT   (index 0, 1, 2 — stop at 3)</span>
+<span class="func">print</span>(word[<span class="number">2</span>:<span class="number">5</span>])    <span class="output"># THO   (index 2, 3, 4)</span>
+
+<span class="comment"># Omit start → starts from beginning</span>
+<span class="func">print</span>(word[:<span class="number">4</span>])     <span class="output"># PYTH  (first 4 characters)</span>
+
+<span class="comment"># Omit stop → goes to the end</span>
+<span class="func">print</span>(word[<span class="number">2</span>:])     <span class="output"># THON  (from index 2 to end)</span>
+
+<span class="comment"># Both omitted → entire string</span>
+<span class="func">print</span>(word[:])      <span class="output"># PYTHON (full copy)</span></code></pre>
+
+      <h3 style="margin-top:14px">🦘 Using Step</h3>
+<pre><code>word = <span class="string">"PYTHON"</span>
+
+<span class="comment"># [::step] — skip characters</span>
+<span class="func">print</span>(word[::<span class="number">2</span>])    <span class="output"># PTO   (every 2nd character: P_T_O_)</span>
+<span class="func">print</span>(word[::<span class="number">3</span>])    <span class="output"># PH    (every 3rd character: P__H__)</span>
+
+<span class="comment"># Negative step → go BACKWARDS</span>
+<span class="func">print</span>(word[::-<span class="number">1</span>])   <span class="output"># NOHTYP  (reversed!)</span>
+<span class="func">print</span>(word[::-<span class="number">2</span>])   <span class="output"># NHY     (reversed, every 2nd)</span>
+
+<span class="comment"># Combine start:stop:step</span>
+<span class="func">print</span>(word[<span class="number">1</span>:<span class="number">5</span>:<span class="number">2</span>])  <span class="output"># YH      (index 1 to 4, every 2nd)</span></code></pre>
+
+      <h3 style="margin-top:14px">📝 More Slicing Examples</h3>
+<pre><code>msg = <span class="string">"Hello, World!"</span>
+
+<span class="func">print</span>(msg[<span class="number">0</span>:<span class="number">5</span>])       <span class="output"># Hello</span>
+<span class="func">print</span>(msg[<span class="number">7</span>:])        <span class="output"># World!</span>
+<span class="func">print</span>(msg[-<span class="number">6</span>:])       <span class="output"># orld!</span>
+<span class="func">print</span>(msg[-<span class="number">6</span>:-<span class="number">1</span>])     <span class="output"># orld</span>
+
+<span class="comment"># Check if palindrome</span>
+word = <span class="string">"madam"</span>
+<span class="func">print</span>(word == word[::-<span class="number">1</span>])   <span class="output"># True ✅ (it's a palindrome!)</span></code></pre>
+
+      <div class="callout" style="margin-top:10px">
+        <p style="margin:0">💡 <b>Memory trick:</b> Think of slicing as <code>[start : stop : step]</code> = <b>"From where? To where? How fast?"</b><br/>The stop index is <b>never included</b> — like a hotel checkout time: "checkout by 11" means you leave <em>before</em> 11.</p>
+      </div>
+
+      <div class="callout">
+        <p style="margin:0">💡 <b>Remember:</b> Strings are <b>immutable</b> in Python — you can't change a character in place. You create a new string instead.</p>
+      </div>
+
+      <details style="margin-top:10px">
+        <summary>🔒 What does "immutable" mean? (click to expand)</summary>
+        <p><b>Immutable</b> = once created, it <b>cannot be changed</b>. If you try to modify a character inside a string, Python will throw an error:</p>
+<pre><code>name = <span class="string">"Alice"</span>
+
+<span class="comment"># ❌ This will CRASH — strings can't be changed in place</span>
+name[<span class="number">0</span>] = <span class="string">"B"</span>
+<span class="output"># TypeError: 'str' object does not support item assignment</span></code></pre>
+
+        <p style="margin-top:10px"><b>So how do you "change" a string?</b> You create a <b>brand new string</b>:</p>
+<pre><code>name = <span class="string">"Alice"</span>
+
+<span class="comment"># ✅ Create a NEW string using concatenation</span>
+new_name = <span class="string">"B"</span> + name[<span class="number">1</span>:]
+<span class="func">print</span>(new_name)    <span class="output"># Blice</span>
+
+<span class="comment"># ✅ Or use replace() — also creates a new string</span>
+new_name = name.<span class="func">replace</span>(<span class="string">"A"</span>, <span class="string">"B"</span>)
+<span class="func">print</span>(new_name)    <span class="output"># Blice</span>
+
+<span class="comment"># The original is UNCHANGED</span>
+<span class="func">print</span>(name)        <span class="output"># Alice  (still the same!)</span></code></pre>
+
+        <div class="callout info" style="margin-top:10px">
+          <p style="margin:0">💡 <b>Analogy:</b> Think of a string like a <b>printed page</b> — you can't erase a letter on a printed page. But you can <b>photocopy it with changes</b> and throw away the old one. That's what Python does — it creates a new string every time.</p>
+        </div>
+
+        <h3 style="margin-top:12px">Mutable vs Immutable — Quick Reference</h3>
+        <div class="grid2">
+          <div class="mini">
+            <h3>🔒 Immutable (can't change)</h3>
+            <ul>
+              <li><code>str</code> — <code>"hello"</code></li>
+              <li><code>int</code> — <code>42</code></li>
+              <li><code>float</code> — <code>3.14</code></li>
+              <li><code>bool</code> — <code>True</code></li>
+              <li><code>tuple</code> — <code>(1, 2, 3)</code></li>
+              <li><code>frozenset</code> — <code>frozenset([1,2])</code></li>
+            </ul>
+          </div>
+          <div class="mini">
+            <h3>🔓 Mutable (can change)</h3>
+            <ul>
+              <li><code>list</code> — <code>[1, 2, 3]</code></li>
+              <li><code>dict</code> — <code>{"a": 1}</code></li>
+              <li><code>set</code> — <code>{1, 2, 3}</code></li>
+            </ul>
+            <p class="muted" style="margin:6px 0 0">These can be modified in place — add, remove, or change items without creating a new object.</p>
+          </div>
+        </div>
+      </details>
+    </div>
+    </section>
+
+    <!-- ───────────── DATA STRUCTURES ───────────── -->
+    <section id="data-structures" data-label="Section 5">
+    <div class="sec-header" onclick="this.parentElement.classList.toggle('collapsed')">
+      <h2>🗂️ Data Structures — Organizing Your Data</h2>
+      <span class="sec-toggle">▼</span>
+    </div>
+    <div class="sec-body">
+      <p>So far we've seen simple values like <code>int</code>, <code>str</code>, <code>bool</code>. But real programs need to store <b>collections</b> of data. Python gives you <b>four built-in data structures</b>, each designed for different situations.</p>
+
+      <div class="callout" style="margin-top:12px">
+        <p style="margin:0"><b>Teaching hook:</b> "Think of your phone — your contacts are a <b>list</b>, your settings are a <b>dictionary</b>, your unique app permissions are a <b>set</b>, and your screen resolution is a <b>tuple</b>."</p>
+      </div>
+
+      <h2 style="margin-top:18px">Key Terms</h2>
+      <div class="grid2">
+        <div class="mini">
+          <h3>📌 Ordered</h3>
+          <p style="margin:4px 0 0">Items stay in the <b>sequence you added them</b>. You can access them by position (index 0, 1, 2…). If it's <b>unordered</b>, there's no guaranteed position.</p>
+        </div>
+        <div class="mini">
+          <h3>✏️ Mutable</h3>
+          <p style="margin:4px 0 0">You can <b>change, add, or remove</b> items after creation. <b>Immutable</b> means once created, the contents are locked — you must create a new one instead.</p>
+        </div>
+        <div class="mini">
+          <h3>🔢 Indexed</h3>
+          <p style="margin:4px 0 0">You can access an item using <code>[position]</code> or <code>[key]</code>. Non-indexed structures require looping to find an item.</p>
+        </div>
+        <div class="mini">
+          <h3>🚫 Duplicates</h3>
+          <p style="margin:4px 0 0">Whether the same value can appear <b>more than once</b>. Sets and dictionary keys enforce uniqueness automatically.</p>
+        </div>
+      </div>
+
+      <h2 style="margin-top:18px">The Big Picture</h2>
+      <div style="overflow:auto">
+        <table>
+          <thead>
+            <tr style="background:rgba(122,162,255,.12)">
+              <th></th>
+              <th>List <code>[]</code></th>
+              <th>Tuple <code>()</code></th>
+              <th>Set <code>{}</code></th>
+              <th>Dictionary <code>{k:v}</code></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td><b>Ordered?</b></td><td>✅ Yes</td><td>✅ Yes</td><td>❌ No</td><td>✅ Yes (3.7+)</td></tr>
+            <tr><td><b>Mutable?</b></td><td>✅ Yes</td><td>❌ No</td><td>✅ Yes</td><td>✅ Yes</td></tr>
+            <tr><td><b>Duplicates?</b></td><td>✅ Allowed</td><td>✅ Allowed</td><td>❌ No</td><td>❌ Keys unique</td></tr>
+            <tr><td><b>Indexed?</b></td><td>✅ By position</td><td>✅ By position</td><td>❌ No</td><td>✅ By key</td></tr>
+            <tr><td><b>Syntax</b></td><td><code>[1, 2, 3]</code></td><td><code>(1, 2, 3)</code></td><td><code>{1, 2, 3}</code></td><td><code>{"a": 1}</code></td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- ─── LIST ─── -->
+      <h2 style="margin-top:24px">📋 1. Lists — Ordered &amp; Mutable</h2>
+      <p>A list is like a <b>shopping cart</b> — you can add, remove, reorder, and change items anytime.</p>
+
+      <details open>
+        <summary>Creating &amp; Accessing Lists</summary>
+<pre><code><span class="comment"># Creating lists</span>
+fruits = [<span class="string">"apple"</span>, <span class="string">"banana"</span>, <span class="string">"cherry"</span>, <span class="string">"mango"</span>]
+numbers = [<span class="number">10</span>, <span class="number">20</span>, <span class="number">30</span>, <span class="number">40</span>, <span class="number">50</span>]
+mixed = [<span class="string">"Alice"</span>, <span class="number">25</span>, <span class="keyword">True</span>, <span class="number">3.14</span>]  <span class="comment"># different types OK!</span>
+empty = []                            <span class="comment"># empty list</span>
+
+<span class="comment"># Accessing by index (0-based)</span>
+<span class="func">print</span>(fruits[<span class="number">0</span>])      <span class="output"># apple   (first)</span>
+<span class="func">print</span>(fruits[-<span class="number">1</span>])     <span class="output"># mango   (last)</span>
+<span class="func">print</span>(fruits[<span class="number">1</span>:<span class="number">3</span>])    <span class="output"># ['banana', 'cherry']  (slice)</span>
+
+<span class="comment"># Check if item exists</span>
+<span class="func">print</span>(<span class="string">"banana"</span> <span class="keyword">in</span> fruits)   <span class="output"># True</span>
+<span class="func">print</span>(<span class="string">"grape"</span> <span class="keyword">in</span> fruits)    <span class="output"># False</span></code></pre>
+      </details>
+
+      <details open>
+        <summary>Modifying Lists (Add, Remove, Change)</summary>
+<pre><code>fruits = [<span class="string">"apple"</span>, <span class="string">"banana"</span>, <span class="string">"cherry"</span>]
+
+<span class="comment"># ➕ Adding items</span>
+fruits.<span class="func">append</span>(<span class="string">"mango"</span>)          <span class="comment"># Add to end</span>
+fruits.<span class="func">insert</span>(<span class="number">1</span>, <span class="string">"kiwi"</span>)        <span class="comment"># Add at index 1</span>
+fruits.<span class="func">extend</span>([<span class="string">"grape"</span>, <span class="string">"fig"</span>]) <span class="comment"># Add multiple items</span>
+<span class="func">print</span>(fruits)
+<span class="output"># ['apple', 'kiwi', 'banana', 'cherry', 'mango', 'grape', 'fig']</span>
+
+<span class="comment"># ➖ Removing items</span>
+fruits.<span class="func">remove</span>(<span class="string">"banana"</span>)        <span class="comment"># Remove by value (first match)</span>
+popped = fruits.<span class="func">pop</span>()          <span class="comment"># Remove &amp; return last item</span>
+fruits.<span class="func">pop</span>(<span class="number">0</span>)                   <span class="comment"># Remove by index</span>
+<span class="func">print</span>(<span class="string">f"Popped: {popped}"</span>)    <span class="output"># Popped: fig</span>
+
+<span class="comment"># ✏️ Changing items</span>
+fruits[<span class="number">0</span>] = <span class="string">"blueberry"</span>       <span class="comment"># Replace at index</span>
+
+<span class="comment"># 📏 Length</span>
+<span class="func">print</span>(<span class="func">len</span>(fruits))             <span class="output"># number of items</span></code></pre>
+      </details>
+
+      <details>
+        <summary>Sorting, Reversing &amp; Useful Operations</summary>
+<pre><code>numbers = [<span class="number">5</span>, <span class="number">2</span>, <span class="number">8</span>, <span class="number">1</span>, <span class="number">9</span>, <span class="number">3</span>]
+
+<span class="comment"># Sorting</span>
+<span class="func">print</span>(<span class="func">sorted</span>(numbers))       <span class="output"># [1, 2, 3, 5, 8, 9]  (new list)</span>
+numbers.<span class="func">sort</span>()                <span class="comment"># sorts in-place (modifies original)</span>
+numbers.<span class="func">sort</span>(reverse=<span class="keyword">True</span>)   <span class="comment"># descending: [9, 8, 5, 3, 2, 1]</span>
+
+<span class="comment"># Reversing</span>
+numbers.<span class="func">reverse</span>()             <span class="comment"># reverses in-place</span>
+
+<span class="comment"># Math on lists</span>
+<span class="func">print</span>(<span class="func">sum</span>(numbers))          <span class="output"># 28</span>
+<span class="func">print</span>(<span class="func">min</span>(numbers))          <span class="output"># 1</span>
+<span class="func">print</span>(<span class="func">max</span>(numbers))          <span class="output"># 9</span>
+<span class="func">print</span>(numbers.<span class="func">count</span>(<span class="number">5</span>))     <span class="output"># 1  (how many times 5 appears)</span>
+<span class="func">print</span>(numbers.<span class="func">index</span>(<span class="number">8</span>))     <span class="output"># position of first 8</span>
+
+<span class="comment"># Joining lists</span>
+a = [<span class="number">1</span>, <span class="number">2</span>]
+b = [<span class="number">3</span>, <span class="number">4</span>]
+<span class="func">print</span>(a + b)                 <span class="output"># [1, 2, 3, 4]</span>
+<span class="func">print</span>(a * <span class="number">3</span>)                 <span class="output"># [1, 2, 1, 2, 1, 2]</span></code></pre>
+      </details>
+
+      <details>
+        <summary>⭐ List Comprehensions — One-Liner Magic</summary>
+        <p>Create new lists by transforming or filtering existing ones — in a single line.</p>
+<pre><code><span class="comment"># Basic: squares of 1 to 5</span>
+squares = [x**<span class="number">2</span> <span class="keyword">for</span> x <span class="keyword">in</span> <span class="func">range</span>(<span class="number">1</span>, <span class="number">6</span>)]
+<span class="func">print</span>(squares)    <span class="output"># [1, 4, 9, 16, 25]</span>
+
+<span class="comment"># With filter: only even numbers</span>
+nums = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>, <span class="number">7</span>, <span class="number">8</span>]
+evens = [x <span class="keyword">for</span> x <span class="keyword">in</span> nums <span class="keyword">if</span> x % <span class="number">2</span> == <span class="number">0</span>]
+<span class="func">print</span>(evens)      <span class="output"># [2, 4, 6, 8]</span>
+
+<span class="comment"># Transform: uppercase each fruit</span>
+fruits = [<span class="string">"apple"</span>, <span class="string">"banana"</span>, <span class="string">"cherry"</span>]
+upper = [f.<span class="func">upper</span>() <span class="keyword">for</span> f <span class="keyword">in</span> fruits]
+<span class="func">print</span>(upper)      <span class="output"># ['APPLE', 'BANANA', 'CHERRY']</span>
+
+<span class="comment"># Nested: flatten a 2D list</span>
+matrix = [[<span class="number">1</span>, <span class="number">2</span>], [<span class="number">3</span>, <span class="number">4</span>], [<span class="number">5</span>, <span class="number">6</span>]]
+flat = [n <span class="keyword">for</span> row <span class="keyword">in</span> matrix <span class="keyword">for</span> n <span class="keyword">in</span> row]
+<span class="func">print</span>(flat)       <span class="output"># [1, 2, 3, 4, 5, 6]</span></code></pre>
+      </details>
+
+      <div class="callout" style="margin-top:12px">
+        <p style="margin:0">💡 <b>Real-world analogy:</b> A list is like a <b>playlist</b> — ordered, you can add/remove songs, rearrange them, and have duplicates.</p>
+      </div>
+
+      <!-- ─── TUPLE ─── -->
+      <h2 style="margin-top:24px">📌 2. Tuples — Ordered &amp; Immutable</h2>
+      <p>A tuple is like a <b>sealed envelope</b> — once created, you <b>cannot change</b> its contents. Use it for data that should stay fixed.</p>
+
+      <details open>
+        <summary>Creating &amp; Accessing Tuples</summary>
+<pre><code><span class="comment"># Creating tuples</span>
+coordinates = (<span class="number">10</span>, <span class="number">20</span>)
+colors = (<span class="string">"red"</span>, <span class="string">"green"</span>, <span class="string">"blue"</span>)
+singleton = (<span class="number">42</span>,)         <span class="comment"># ⚠️ single-element tuple needs a comma!</span>
+from_list = <span class="func">tuple</span>([<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>])  <span class="comment"># convert list → tuple</span>
+
+<span class="comment"># Accessing (same as list)</span>
+<span class="func">print</span>(colors[<span class="number">0</span>])       <span class="output"># red</span>
+<span class="func">print</span>(colors[-<span class="number">1</span>])      <span class="output"># blue</span>
+<span class="func">print</span>(colors[<span class="number">0</span>:<span class="number">2</span>])     <span class="output"># ('red', 'green')</span>
+<span class="func">print</span>(<span class="func">len</span>(colors))      <span class="output"># 3</span>
+<span class="func">print</span>(<span class="string">"red"</span> <span class="keyword">in</span> colors)  <span class="output"># True</span></code></pre>
+      </details>
+
+      <details open>
+        <summary>Tuple Unpacking &amp; Multiple Assignment</summary>
+<pre><code><span class="comment"># Unpacking — assign each element to a variable</span>
+point = (<span class="number">10</span>, <span class="number">20</span>, <span class="number">30</span>)
+x, y, z = point
+<span class="func">print</span>(<span class="string">f"x={x}, y={y}, z={z}"</span>)   <span class="output"># x=10, y=20, z=30</span>
+
+<span class="comment"># Swap two variables (Python magic!)</span>
+a = <span class="number">5</span>
+b = <span class="number">10</span>
+a, b = b, a
+<span class="func">print</span>(a, b)    <span class="output"># 10 5</span>
+
+<span class="comment"># Return multiple values from a function</span>
+<span class="keyword">def</span> <span class="func">get_min_max</span>(numbers):
+    <span class="keyword">return</span> <span class="func">min</span>(numbers), <span class="func">max</span>(numbers)
+
+lo, hi = <span class="func">get_min_max</span>([<span class="number">4</span>, <span class="number">1</span>, <span class="number">9</span>, <span class="number">2</span>])
+<span class="func">print</span>(<span class="string">f"Min: {lo}, Max: {hi}"</span>)  <span class="output"># Min: 1, Max: 9</span>
+
+<span class="comment"># Star unpacking — grab the rest</span>
+first, *middle, last = (<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>)
+<span class="func">print</span>(first, middle, last)  <span class="output"># 1 [2, 3, 4] 5</span></code></pre>
+      </details>
+
+      <details>
+        <summary>Why Tuples? (vs Lists)</summary>
+        <div class="grid2">
+          <div class="mini">
+            <h3>✅ Use Tuples When</h3>
+            <ul>
+              <li>Data should <b>not change</b> (coordinates, RGB)</li>
+              <li>Using as <b>dictionary keys</b> (lists can't be keys!)</li>
+              <li>Returning <b>multiple values</b> from functions</li>
+              <li>You want <b>slightly faster</b> performance</li>
+            </ul>
+          </div>
+          <div class="mini">
+            <h3>✅ Use Lists When</h3>
+            <ul>
+              <li>Data <b>changes</b> (add/remove/update items)</li>
+              <li>You need <b>sorting, filtering</b></li>
+              <li>Building a collection <b>over time</b></li>
+              <li>Order + mutability both matter</li>
+            </ul>
+          </div>
+        </div>
+      </details>
+
+      <div class="callout warn" style="margin-top:12px">
+        <p style="margin:0">⚠️ <b>Gotcha:</b> <code>(42)</code> is just the number 42 in parentheses. For a single-element tuple, you need a trailing comma: <code>(42,)</code></p>
+      </div>
+
+      <!-- ─── SET ─── -->
+      <h2 style="margin-top:24px">🎯 3. Sets — Unordered &amp; Unique</h2>
+      <p>A set is like a <b>bag of unique items</b> — no duplicates allowed, and there's no fixed order.</p>
+
+      <details open>
+        <summary>Creating Sets &amp; Removing Duplicates</summary>
+<pre><code><span class="comment"># Creating sets</span>
+unique_nums = {<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>}
+vowels = {<span class="string">"a"</span>, <span class="string">"e"</span>, <span class="string">"i"</span>, <span class="string">"o"</span>, <span class="string">"u"</span>}
+empty_set = <span class="func">set</span>()   <span class="comment"># ⚠️ NOT {} — that creates an empty dict!</span>
+
+<span class="comment"># 🔥 Killer feature: auto-remove duplicates</span>
+names = [<span class="string">"Alice"</span>, <span class="string">"Bob"</span>, <span class="string">"Alice"</span>, <span class="string">"Charlie"</span>, <span class="string">"Bob"</span>]
+unique_names = <span class="func">set</span>(names)
+<span class="func">print</span>(unique_names)   <span class="output"># {'Alice', 'Bob', 'Charlie'}</span>
+
+<span class="comment"># Convert back to list if needed</span>
+unique_list = <span class="func">list</span>(unique_names)
+<span class="func">print</span>(unique_list)    <span class="output"># ['Alice', 'Bob', 'Charlie']</span></code></pre>
+      </details>
+
+      <details open>
+        <summary>Adding, Removing &amp; Checking Membership</summary>
+<pre><code>skills = {<span class="string">"Python"</span>, <span class="string">"SQL"</span>, <span class="string">"Excel"</span>}
+
+<span class="comment"># ➕ Adding</span>
+skills.<span class="func">add</span>(<span class="string">"Tableau"</span>)          <span class="comment"># add one item</span>
+skills.<span class="func">update</span>([<span class="string">"R"</span>, <span class="string">"Java"</span>])  <span class="comment"># add multiple items</span>
+
+<span class="comment"># ➖ Removing</span>
+skills.<span class="func">discard</span>(<span class="string">"Excel"</span>)       <span class="comment"># remove (no error if missing)</span>
+skills.<span class="func">remove</span>(<span class="string">"SQL"</span>)          <span class="comment"># remove (KeyError if missing!)</span>
+
+<span class="comment"># 🔍 Membership test — SUPER FAST (O(1))</span>
+<span class="func">print</span>(<span class="string">"Python"</span> <span class="keyword">in</span> skills)    <span class="output"># True</span>
+<span class="func">print</span>(<span class="string">"C++"</span> <span class="keyword">in</span> skills)       <span class="output"># False</span></code></pre>
+      </details>
+
+      <details>
+        <summary>⭐ Set Operations — Union, Intersection, Difference</summary>
+        <p>Sets support mathematical operations — perfect for comparing groups!</p>
+<pre><code>frontend = {<span class="string">"HTML"</span>, <span class="string">"CSS"</span>, <span class="string">"JavaScript"</span>, <span class="string">"React"</span>}
+backend = {<span class="string">"Python"</span>, <span class="string">"JavaScript"</span>, <span class="string">"SQL"</span>, <span class="string">"Django"</span>}
+
+<span class="comment"># Union — all skills from both (no duplicates)</span>
+all_skills = frontend | backend
+<span class="func">print</span>(all_skills)
+<span class="output"># {'HTML', 'CSS', 'JavaScript', 'React', 'Python', 'SQL', 'Django'}</span>
+
+<span class="comment"># Intersection — skills in BOTH</span>
+common = frontend &amp; backend
+<span class="func">print</span>(common)          <span class="output"># {'JavaScript'}</span>
+
+<span class="comment"># Difference — in frontend but NOT in backend</span>
+only_front = frontend - backend
+<span class="func">print</span>(only_front)      <span class="output"># {'HTML', 'CSS', 'React'}</span>
+
+<span class="comment"># Symmetric difference — in one but NOT both</span>
+exclusive = frontend ^ backend
+<span class="func">print</span>(exclusive)
+<span class="output"># {'HTML', 'CSS', 'React', 'Python', 'SQL', 'Django'}</span></code></pre>
+
+        <div class="callout" style="margin-top:10px">
+          <p style="margin:0">💡 <b>Real example:</b> "Find students enrolled in Math but not Science" → <code>math_students - science_students</code></p>
+        </div>
+      </details>
+
+      <details>
+        <summary>Frozen Sets — Immutable Sets</summary>
+<pre><code><span class="comment"># A frozenset is an immutable set — cannot add/remove items</span>
+constants = <span class="func">frozenset</span>([<span class="number">3.14</span>, <span class="number">2.718</span>, <span class="number">1.618</span>])
+<span class="func">print</span>(<span class="number">3.14</span> <span class="keyword">in</span> constants)  <span class="output"># True</span>
+
+<span class="comment"># Can be used as dictionary keys or inside other sets</span>
+pair = <span class="func">frozenset</span>([<span class="number">1</span>, <span class="number">2</span>])
+my_dict = {pair: <span class="string">"a pair"</span>}  <span class="comment"># ✅ works!</span></code></pre>
+      </details>
+
+      <div class="callout" style="margin-top:12px">
+        <p style="margin:0">💡 <b>Real-world analogy:</b> A set is like a <b>bag of unique Lego colors</b> — you can't have two reds, and you just reach in without caring about order.</p>
+      </div>
+
+      <!-- ─── DICTIONARY ─── -->
+      <h2 style="margin-top:24px">📖 4. Dictionaries — Key-Value Pairs</h2>
+      <p>A dictionary is like a <b>phone book</b> — you look up a <b>name</b> (key) to find a <b>number</b> (value). Every key must be unique.</p>
+
+      <details open>
+        <summary>Creating &amp; Accessing Dictionaries</summary>
+<pre><code><span class="comment"># Creating a dictionary</span>
+student = {
+    <span class="string">"name"</span>: <span class="string">"Alice"</span>,
+    <span class="string">"age"</span>: <span class="number">25</span>,
+    <span class="string">"city"</span>: <span class="string">"Hyderabad"</span>,
+    <span class="string">"courses"</span>: [<span class="string">"Python"</span>, <span class="string">"Data Science"</span>]
+}
+
+<span class="comment"># Accessing values</span>
+<span class="func">print</span>(student[<span class="string">"name"</span>])                 <span class="output"># Alice</span>
+<span class="func">print</span>(student.<span class="func">get</span>(<span class="string">"age"</span>))               <span class="output"># 25</span>
+<span class="func">print</span>(student.<span class="func">get</span>(<span class="string">"phone"</span>, <span class="string">"N/A"</span>))    <span class="output"># N/A  (default if missing)</span>
+<span class="func">print</span>(student[<span class="string">"courses"</span>][<span class="number">0</span>])           <span class="output"># Python  (nested access)</span></code></pre>
+      </details>
+
+      <details open>
+        <summary>Adding, Updating &amp; Removing</summary>
+<pre><code>student = {<span class="string">"name"</span>: <span class="string">"Alice"</span>, <span class="string">"age"</span>: <span class="number">25</span>}
+
+<span class="comment"># ➕ Adding / Updating</span>
+student[<span class="string">"email"</span>] = <span class="string">"alice@email.com"</span>   <span class="comment"># add new key</span>
+student[<span class="string">"age"</span>] = <span class="number">26</span>                     <span class="comment"># update existing</span>
+student.<span class="func">update</span>({<span class="string">"city"</span>: <span class="string">"Mumbai"</span>, <span class="string">"gpa"</span>: <span class="number">3.8</span>})  <span class="comment"># add multiple</span>
+
+<span class="comment"># ➖ Removing</span>
+<span class="keyword">del</span> student[<span class="string">"email"</span>]                   <span class="comment"># delete key</span>
+removed = student.<span class="func">pop</span>(<span class="string">"gpa"</span>)           <span class="comment"># remove &amp; return value</span>
+<span class="func">print</span>(<span class="string">f"Removed GPA: {removed}"</span>)       <span class="output"># 3.8</span>
+
+<span class="comment"># 📏 Info</span>
+<span class="func">print</span>(<span class="func">len</span>(student))                    <span class="output"># number of keys</span>
+<span class="func">print</span>(<span class="string">"name"</span> <span class="keyword">in</span> student)              <span class="output"># True</span></code></pre>
+      </details>
+
+      <details>
+        <summary>Looping Through Dictionaries</summary>
+<pre><code>scores = {<span class="string">"Math"</span>: <span class="number">90</span>, <span class="string">"Science"</span>: <span class="number">85</span>, <span class="string">"English"</span>: <span class="number">78</span>}
+
+<span class="comment"># Loop through keys</span>
+<span class="keyword">for</span> subject <span class="keyword">in</span> scores:
+    <span class="func">print</span>(subject)                <span class="output"># Math, Science, English</span>
+
+<span class="comment"># Loop through values</span>
+<span class="keyword">for</span> marks <span class="keyword">in</span> scores.<span class="func">values</span>():
+    <span class="func">print</span>(marks)                  <span class="output"># 90, 85, 78</span>
+
+<span class="comment"># Loop through key-value pairs ⭐</span>
+<span class="keyword">for</span> subject, marks <span class="keyword">in</span> scores.<span class="func">items</span>():
+    <span class="func">print</span>(<span class="string">f"{subject}: {marks}"</span>)
+
+<span class="output"># Math: 90</span>
+<span class="output"># Science: 85</span>
+<span class="output"># English: 78</span></code></pre>
+      </details>
+
+      <details>
+        <summary>Dictionary Comprehension</summary>
+<pre><code><span class="comment"># Create a dict of squares</span>
+squares = {x: x**<span class="number">2</span> <span class="keyword">for</span> x <span class="keyword">in</span> <span class="func">range</span>(<span class="number">1</span>, <span class="number">6</span>)}
+<span class="func">print</span>(squares)   <span class="output"># {1: 1, 2: 4, 3: 9, 4: 16, 5: 25}</span>
+
+<span class="comment"># Filter: only passing scores</span>
+scores = {<span class="string">"Math"</span>: <span class="number">90</span>, <span class="string">"Art"</span>: <span class="number">45</span>, <span class="string">"Science"</span>: <span class="number">85</span>, <span class="string">"PE"</span>: <span class="number">30</span>}
+passed = {k: v <span class="keyword">for</span> k, v <span class="keyword">in</span> scores.<span class="func">items</span>() <span class="keyword">if</span> v >= <span class="number">50</span>}
+<span class="func">print</span>(passed)    <span class="output"># {'Math': 90, 'Science': 85}</span>
+
+<span class="comment"># Swap keys and values</span>
+swapped = {v: k <span class="keyword">for</span> k, v <span class="keyword">in</span> scores.<span class="func">items</span>()}
+<span class="func">print</span>(swapped)   <span class="output"># {90: 'Math', 45: 'Art', 85: 'Science', 30: 'PE'}</span></code></pre>
+      </details>
+
+      <details>
+        <summary>Nested Dictionaries</summary>
+<pre><code><span class="comment"># A dictionary of dictionaries</span>
+classroom = {
+    <span class="string">"Alice"</span>: {<span class="string">"age"</span>: <span class="number">25</span>, <span class="string">"grade"</span>: <span class="string">"A"</span>},
+    <span class="string">"Bob"</span>:   {<span class="string">"age"</span>: <span class="number">22</span>, <span class="string">"grade"</span>: <span class="string">"B"</span>},
+    <span class="string">"Charlie"</span>: {<span class="string">"age"</span>: <span class="number">23</span>, <span class="string">"grade"</span>: <span class="string">"A"</span>}
+}
+
+<span class="comment"># Access nested value</span>
+<span class="func">print</span>(classroom[<span class="string">"Alice"</span>][<span class="string">"grade"</span>])  <span class="output"># A</span>
+
+<span class="comment"># Loop through nested dict</span>
+<span class="keyword">for</span> name, info <span class="keyword">in</span> classroom.<span class="func">items</span>():
+    <span class="func">print</span>(<span class="string">f"{name}: age {info['age']}, grade {info['grade']}"</span>)</code></pre>
+      </details>
+
+      <div class="callout" style="margin-top:12px">
+        <p style="margin:0">💡 <b>Real-world analogy:</b> A dictionary is like a <b>student ID card</b> — each field (name, roll number, department) is a key, and the actual data is the value.</p>
+      </div>
+
+      <!-- ─── BONUS: STRINGS AS SEQUENCES ─── -->
+      <h2 style="margin-top:24px">🔤 Bonus: Strings Are Sequences Too!</h2>
+      <p>Strings behave like <b>immutable lists of characters</b> — you can index, slice, and loop through them.</p>
+<pre><code>word = <span class="string">"PYTHON"</span>
+
+<span class="func">print</span>(word[<span class="number">0</span>])      <span class="output"># P</span>
+<span class="func">print</span>(word[-<span class="number">1</span>])     <span class="output"># N</span>
+<span class="func">print</span>(word[<span class="number">1</span>:<span class="number">4</span>])    <span class="output"># YTH</span>
+<span class="func">print</span>(<span class="func">len</span>(word))     <span class="output"># 6</span>
+
+<span class="keyword">for</span> ch <span class="keyword">in</span> word:
+    <span class="func">print</span>(ch, end=<span class="string">" "</span>)
+<span class="output"># P Y T H O N</span></code></pre>
+
+      <!-- ─── RANGE ─── -->
+      <h2 style="margin-top:24px">🔢 Bonus: range() — Generate Number Sequences</h2>
+      <p><code>range()</code> produces a <b>sequence of numbers</b> on the fly — it doesn't store them all in memory, making it very efficient. You'll use it constantly with <code>for</code> loops.</p>
+
+<pre><code><span class="comment"># range(stop) — 0 to stop-1</span>
+<span class="func">print</span>(<span class="func">list</span>(<span class="func">range</span>(<span class="number">5</span>)))
+<span class="output"># [0, 1, 2, 3, 4]</span>
+
+<span class="comment"># range(start, stop) — start to stop-1</span>
+<span class="func">print</span>(<span class="func">list</span>(<span class="func">range</span>(<span class="number">2</span>, <span class="number">8</span>)))
+<span class="output"># [2, 3, 4, 5, 6, 7]</span>
+
+<span class="comment"># range(start, stop, step) — with custom step</span>
+<span class="func">print</span>(<span class="func">list</span>(<span class="func">range</span>(<span class="number">0</span>, <span class="number">20</span>, <span class="number">3</span>)))
+<span class="output"># [0, 3, 6, 9, 12, 15, 18]</span>
+
+<span class="comment"># Counting backwards</span>
+<span class="func">print</span>(<span class="func">list</span>(<span class="func">range</span>(<span class="number">10</span>, <span class="number">0</span>, -<span class="number">1</span>)))
+<span class="output"># [10, 9, 8, 7, 6, 5, 4, 3, 2, 1]</span>
+
+<span class="comment"># Even numbers from 2 to 10</span>
+<span class="func">print</span>(<span class="func">list</span>(<span class="func">range</span>(<span class="number">2</span>, <span class="number">11</span>, <span class="number">2</span>)))
+<span class="output"># [2, 4, 6, 8, 10]</span></code></pre>
+
+      <h3 style="margin-top:14px">Common Uses with Loops</h3>
+<pre><code><span class="comment"># Repeat something 5 times</span>
+<span class="keyword">for</span> i <span class="keyword">in</span> <span class="func">range</span>(<span class="number">5</span>):
+    <span class="func">print</span>(<span class="string">f"Attempt {i + 1}"</span>)
+
+<span class="comment"># Loop with index over a list</span>
+fruits = [<span class="string">"apple"</span>, <span class="string">"banana"</span>, <span class="string">"cherry"</span>]
+<span class="keyword">for</span> i <span class="keyword">in</span> <span class="func">range</span>(<span class="func">len</span>(fruits)):
+    <span class="func">print</span>(<span class="string">f"{i}: {fruits[i]}"</span>)
+<span class="output"># 0: apple
+# 1: banana
+# 2: cherry</span>
+
+<span class="comment"># Quick sum: 1 + 2 + ... + 100</span>
+total = <span class="func">sum</span>(<span class="func">range</span>(<span class="number">1</span>, <span class="number">101</span>))
+<span class="func">print</span>(total)   <span class="output"># 5050</span></code></pre>
+
+      <div class="callout info">
+        <p style="margin:0">💡 <b>Key point:</b> <code>range()</code> is <b>lazy</b> — it generates numbers one at a time instead of creating a whole list. That's why <code>range(1000000)</code> uses almost no memory, but <code>list(range(1000000))</code> would create a million-item list.</p>
+      </div>
+
+      <!-- ─── WHEN TO USE WHAT ─── -->
+      <h2 style="margin-top:24px">🧭 When to Use What? — Decision Guide</h2>
+
+      <div style="overflow:auto">
+        <table>
+          <thead>
+            <tr style="background:rgba(122,162,255,.12)">
+              <th>Scenario</th>
+              <th>Best Choice</th>
+              <th>Why</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>Shopping cart items</td><td><b>List</b></td><td>Order matters, items change</td></tr>
+            <tr><td>GPS coordinates (lat, lng)</td><td><b>Tuple</b></td><td>Fixed data, should not change</td></tr>
+            <tr><td>Unique tags on a blog post</td><td><b>Set</b></td><td>No duplicates, order doesn't matter</td></tr>
+            <tr><td>Student profile (name, age, city)</td><td><b>Dictionary</b></td><td>Label each piece of data with a key</td></tr>
+            <tr><td>Collecting survey responses</td><td><b>List</b></td><td>Append as they come, duplicates OK</td></tr>
+            <tr><td>Days of the week</td><td><b>Tuple</b></td><td>Never changes (Mon–Sun)</td></tr>
+            <tr><td>Unique visitors to a website</td><td><b>Set</b></td><td>Auto-removes repeat visitors</td></tr>
+            <tr><td>Config settings (key=value)</td><td><b>Dictionary</b></td><td>Look up by setting name</td></tr>
+            <tr><td>Return multiple values from function</td><td><b>Tuple</b></td><td>Lightweight, unpacking support</td></tr>
+            <tr><td>Counting word frequencies</td><td><b>Dictionary</b></td><td>word → count mapping</td></tr>
+            <tr><td>Remove duplicates from a list</td><td><b>Set</b></td><td><code>list(set(my_list))</code></td></tr>
+            <tr><td>Undo history (stack)</td><td><b>List</b></td><td>append() + pop() = stack behavior</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h2 style="margin-top:18px">Decision Flowchart</h2>
+      <div class="callout info">
+        <p style="margin:0">
+          <b>Ask yourself these questions:</b><br/><br/>
+          1️⃣ Do I need <b>key-value pairs</b>? → <b>Dictionary</b><br/>
+          2️⃣ Do I need <b>only unique items</b>? → <b>Set</b><br/>
+          3️⃣ Should the data <b>never change</b>? → <b>Tuple</b><br/>
+          4️⃣ Everything else? → <b>List</b> (the default choice)
+        </p>
+      </div>
+
+      <h2 style="margin-top:18px">Converting Between Types</h2>
+<pre><code><span class="comment"># List ↔ Tuple ↔ Set</span>
+my_list = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">3</span>, <span class="number">3</span>]
+
+my_tuple = <span class="func">tuple</span>(my_list)    <span class="output"># (1, 2, 2, 3, 3, 3)</span>
+my_set = <span class="func">set</span>(my_list)        <span class="output"># {1, 2, 3}  — duplicates removed!</span>
+back_to_list = <span class="func">list</span>(my_set)  <span class="output"># [1, 2, 3]</span>
+
+<span class="comment"># Dict keys/values to list</span>
+d = {<span class="string">"a"</span>: <span class="number">1</span>, <span class="string">"b"</span>: <span class="number">2</span>}
+<span class="func">print</span>(<span class="func">list</span>(d.<span class="func">keys</span>()))     <span class="output"># ['a', 'b']</span>
+<span class="func">print</span>(<span class="func">list</span>(d.<span class="func">values</span>()))   <span class="output"># [1, 2]</span>
+<span class="func">print</span>(<span class="func">list</span>(d.<span class="func">items</span>()))    <span class="output"># [('a', 1), ('b', 2)]</span></code></pre>
+
+      <div class="callout" style="margin-top:14px">
+        <p style="margin:0">🎓 <b>Summary:</b> Python's 4 built-in collections give you the right tool for every situation. Start with <b>lists</b> (most common), use <b>dicts</b> when you need labels, <b>sets</b> for uniqueness, and <b>tuples</b> for immutability.</p>
+      </div>
+    </div>
+    </section>
+
+    <!-- ───────────── OPERATORS ───────────── -->
+    <section id="operators" data-label="Section 6">
+    <div class="sec-header" onclick="this.parentElement.classList.toggle('collapsed')">
+      <h2>➕ Operators</h2>
+      <span class="sec-toggle">▼</span>
+    </div>
+    <div class="sec-body">
+      <p>Operators let you perform calculations, comparisons, and logical operations.</p>
+
+      <h2>Arithmetic Operators</h2>
+<pre><code>a = <span class="number">15</span>
+b = <span class="number">4</span>
+
+<span class="func">print</span>(a + b)    <span class="output"># 19   Addition</span>
+<span class="func">print</span>(a - b)    <span class="output"># 11   Subtraction</span>
+<span class="func">print</span>(a * b)    <span class="output"># 60   Multiplication</span>
+<span class="func">print</span>(a / b)    <span class="output"># 3.75 Division (always float)</span>
+<span class="func">print</span>(a // b)   <span class="output"># 3    Floor division (integer)</span>
+<span class="func">print</span>(a % b)    <span class="output"># 3    Modulus (remainder)</span>
+<span class="func">print</span>(a ** b)   <span class="output"># 50625  Exponent (15^4)</span></code></pre>
+
+      <h2 style="margin-top:18px">Comparison Operators</h2>
+      <p>These return <code>True</code> or <code>False</code>:</p>
+<pre><code>x = <span class="number">10</span>
+y = <span class="number">20</span>
+
+<span class="func">print</span>(x == y)   <span class="output"># False  (equal to?)</span>
+<span class="func">print</span>(x != y)   <span class="output"># True   (not equal?)</span>
+<span class="func">print</span>(x &lt; y)    <span class="output"># True   (less than?)</span>
+<span class="func">print</span>(x &gt; y)    <span class="output"># False  (greater than?)</span>
+<span class="func">print</span>(x &lt;= y)   <span class="output"># True   (less or equal?)</span>
+<span class="func">print</span>(x &gt;= y)   <span class="output"># False  (greater or equal?)</span></code></pre>
+
+      <h2 style="margin-top:18px">Logical Operators</h2>
+<pre><code>a = <span class="keyword">True</span>
+b = <span class="keyword">False</span>
+
+<span class="func">print</span>(a <span class="keyword">and</span> b)  <span class="output"># False  (both must be True)</span>
+<span class="func">print</span>(a <span class="keyword">or</span> b)   <span class="output"># True   (at least one True)</span>
+<span class="func">print</span>(<span class="keyword">not</span> a)     <span class="output"># False  (flip the value)</span></code></pre>
+
+      <div class="callout info">
+        <p style="margin:0">💡 <b>Tip:</b> <code>=</code> is <b>assignment</b> (store a value). <code>==</code> is <b>comparison</b> (check equality). Mixing them up is the #1 beginner mistake!</p>
+      </div>
+    </div>
+    </section>
+
+    <!-- ───────────── INPUT / OUTPUT ───────────── -->
+    <section id="input-output" data-label="Section 7">
+    <div class="sec-header" onclick="this.parentElement.classList.toggle('collapsed')">
+      <h2>📥 Input / Output</h2>
+      <span class="sec-toggle">▼</span>
+    </div>
+    <div class="sec-body">
+
+      <h2>print() — Showing Output</h2>
+<pre><code><span class="comment"># Basic print</span>
+<span class="func">print</span>(<span class="string">"Hello!"</span>)
+
+<span class="comment"># Multiple values</span>
+<span class="func">print</span>(<span class="string">"Age:"</span>, <span class="number">25</span>, <span class="string">"City:"</span>, <span class="string">"Mumbai"</span>)
+<span class="output"># Age: 25 City: Mumbai</span>
+
+<span class="comment"># Custom separator</span>
+<span class="func">print</span>(<span class="string">"A"</span>, <span class="string">"B"</span>, <span class="string">"C"</span>, sep=<span class="string">"-"</span>)
+<span class="output"># A-B-C</span>
+
+<span class="comment"># Prevent new line at end</span>
+<span class="func">print</span>(<span class="string">"Loading"</span>, end=<span class="string">"..."</span>)
+<span class="func">print</span>(<span class="string">"Done!"</span>)
+<span class="output"># Loading...Done!</span></code></pre>
+
+      <h2 style="margin-top:18px">input() — Getting User Input</h2>
+<pre><code><span class="comment"># input() always returns a STRING</span>
+name = <span class="func">input</span>(<span class="string">"What's your name? "</span>)
+<span class="func">print</span>(<span class="string">f"Hello, {name}!"</span>)
+
+<span class="comment"># For numbers, you must convert!</span>
+age = <span class="func">int</span>(<span class="func">input</span>(<span class="string">"Enter your age: "</span>))
+year = <span class="number">2026</span> - age
+<span class="func">print</span>(<span class="string">f"You were born around {year}"</span>)</code></pre>
+
+      <div class="callout warn">
+        <p style="margin:0">⚠️ <b>Key point:</b> <code>input()</code> <b>always returns a string</b>. If you need a number, wrap it with <code>int()</code> or <code>float()</code>.</p>
+      </div>
+    </div>
+    </section>
+
+    <!-- ───────────── CONDITIONALS ───────────── -->
+    <section id="conditionals" data-label="Section 8">
+    <div class="sec-header" onclick="this.parentElement.classList.toggle('collapsed')">
+      <h2>🔀 Conditionals — Making Decisions</h2>
+      <span class="sec-toggle">▼</span>
+    </div>
+    <div class="sec-body">
+      <p>Conditionals let your program choose different paths based on conditions.</p>
+
+<pre><code>age = <span class="number">18</span>
+
+<span class="keyword">if</span> age >= <span class="number">18</span>:
+    <span class="func">print</span>(<span class="string">"You can vote! ✅"</span>)
+<span class="keyword">elif</span> age >= <span class="number">16</span>:
+    <span class="func">print</span>(<span class="string">"Almost there! 🔜"</span>)
+<span class="keyword">else</span>:
+    <span class="func">print</span>(<span class="string">"Too young to vote ❌"</span>)</code></pre>
+
+      <div class="callout info" style="margin-top:12px">
+        <p style="margin:0">💡 <b>Indentation matters!</b> Python uses 4 spaces to define code blocks. No braces <code>{}</code> — indentation <em>is</em> the structure.</p>
+      </div>
+
+      <h2 style="margin-top:18px">Nested Conditions</h2>
+<pre><code>score = <span class="number">85</span>
+
+<span class="keyword">if</span> score >= <span class="number">90</span>:
+    grade = <span class="string">"A"</span>
+<span class="keyword">elif</span> score >= <span class="number">80</span>:
+    grade = <span class="string">"B"</span>
+<span class="keyword">elif</span> score >= <span class="number">70</span>:
+    grade = <span class="string">"C"</span>
+<span class="keyword">elif</span> score >= <span class="number">60</span>:
+    grade = <span class="string">"D"</span>
+<span class="keyword">else</span>:
+    grade = <span class="string">"F"</span>
+
+<span class="func">print</span>(<span class="string">f"Score: {score} → Grade: {grade}"</span>)
+<span class="output"># Score: 85 → Grade: B</span></code></pre>
+
+      <h2 style="margin-top:18px">Combining Conditions</h2>
+<pre><code>age = <span class="number">25</span>
+has_license = <span class="keyword">True</span>
+
+<span class="keyword">if</span> age >= <span class="number">18</span> <span class="keyword">and</span> has_license:
+    <span class="func">print</span>(<span class="string">"You can drive! 🚗"</span>)
+
+<span class="comment"># Ternary (one-liner)</span>
+status = <span class="string">"adult"</span> <span class="keyword">if</span> age >= <span class="number">18</span> <span class="keyword">else</span> <span class="string">"minor"</span>
+<span class="func">print</span>(status)  <span class="output"># adult</span></code></pre>
+
+      <h2 style="margin-top:18px">match-case — Python's Switch Statement (3.10+)</h2>
+      <p><code>match-case</code> is Python's version of a <b>switch statement</b>. It takes a value and checks it against multiple <b>patterns</b> — when a pattern matches, that block runs. Think of it as a cleaner alternative to writing long <code>if-elif-elif-else</code> chains when you're comparing <b>one variable against many possible values</b>.</p>
+
+      <div class="callout" style="margin-top:10px">
+        <p style="margin:0"><b>When to use match-case:</b></p>
+        <ul style="margin:6px 0 0 18px">
+          <li>Checking <b>one value</b> against <b>many fixed options</b> (menu choices, commands, status codes)</li>
+          <li>Replacing long <code>if-elif</code> chains that all compare the <b>same variable</b></li>
+          <li>Handling different <b>message types, API responses, or user actions</b></li>
+        </ul>
+        <p style="margin:8px 0 0"><b>When NOT to use:</b> For range checks (<code>x > 10</code>), complex boolean logic, or if you need Python &lt; 3.10 compatibility — stick with <code>if-elif</code>.</p>
+      </div>
+
+<pre><code>command = <span class="string">"start"</span>
+
+<span class="keyword">match</span> command:
+    <span class="keyword">case</span> <span class="string">"start"</span>:
+        <span class="func">print</span>(<span class="string">"Starting the engine... 🚀"</span>)
+    <span class="keyword">case</span> <span class="string">"stop"</span>:
+        <span class="func">print</span>(<span class="string">"Stopping the engine... 🛑"</span>)
+    <span class="keyword">case</span> <span class="string">"pause"</span>:
+        <span class="func">print</span>(<span class="string">"Pausing... ⏸️"</span>)
+    <span class="keyword">case</span> _:
+        <span class="func">print</span>(<span class="string">"Unknown command ❓"</span>)
+
+<span class="output"># Starting the engine... 🚀</span></code></pre>
+
+      <h3 style="margin-top:14px">Matching with Patterns</h3>
+<pre><code><span class="comment"># Match numbers</span>
+status_code = <span class="number">404</span>
+
+<span class="keyword">match</span> status_code:
+    <span class="keyword">case</span> <span class="number">200</span>:
+        <span class="func">print</span>(<span class="string">"OK ✅"</span>)
+    <span class="keyword">case</span> <span class="number">301</span> | <span class="number">302</span>:
+        <span class="func">print</span>(<span class="string">"Redirect ↪️"</span>)
+    <span class="keyword">case</span> <span class="number">404</span>:
+        <span class="func">print</span>(<span class="string">"Not Found 🔍"</span>)
+    <span class="keyword">case</span> <span class="number">500</span>:
+        <span class="func">print</span>(<span class="string">"Server Error 💥"</span>)
+    <span class="keyword">case</span> _:
+        <span class="func">print</span>(<span class="string">f"Status: {status_code}"</span>)
+
+<span class="output"># Not Found 🔍</span></code></pre>
+
+      <div class="callout info">
+        <p style="margin:0">💡 <b>Key points:</b><br/>
+          • <code>case _:</code> is the <b>default/catch-all</b> (like <code>default:</code> in switch)<br/>
+          • Use <code>|</code> to match <b>multiple values</b> in one case (like <code>case 301 | 302</code>)<br/>
+          • No <code>break</code> needed — Python doesn't fall through like C/Java<br/>
+          • Requires <b>Python 3.10+</b></p>
+      </div>
+    </div>
+    </section>
+
+    <!-- ───────────── LOOPS ───────────── -->
+    <section id="loops" data-label="Section 9">
+    <div class="sec-header" onclick="this.parentElement.classList.toggle('collapsed')">
+      <h2>🔁 Loops — Repeating Actions</h2>
+      <span class="sec-toggle">▼</span>
+    </div>
+    <div class="sec-body">
+
+      <h2>for Loop — Iterate Over a Sequence</h2>
+<pre><code><span class="comment"># Loop through a list</span>
+fruits = [<span class="string">"apple"</span>, <span class="string">"banana"</span>, <span class="string">"cherry"</span>]
+<span class="keyword">for</span> fruit <span class="keyword">in</span> fruits:
+    <span class="func">print</span>(<span class="string">f"I like {fruit}"</span>)
+
+<span class="output"># I like apple
+# I like banana
+# I like cherry</span></code></pre>
+
+      <h2 style="margin-top:18px">range() — Generate Number Sequences</h2>
+<pre><code><span class="comment"># Print 1 to 5</span>
+<span class="keyword">for</span> i <span class="keyword">in</span> <span class="func">range</span>(<span class="number">1</span>, <span class="number">6</span>):
+    <span class="func">print</span>(i, end=<span class="string">" "</span>)
+<span class="output"># 1 2 3 4 5</span>
+
+<span class="comment"># Count by 2s</span>
+<span class="keyword">for</span> i <span class="keyword">in</span> <span class="func">range</span>(<span class="number">0</span>, <span class="number">10</span>, <span class="number">2</span>):
+    <span class="func">print</span>(i, end=<span class="string">" "</span>)
+<span class="output"># 0 2 4 6 8</span></code></pre>
+
+      <h2 style="margin-top:18px">while Loop — Repeat Until a Condition is False</h2>
+<pre><code>count = <span class="number">1</span>
+<span class="keyword">while</span> count &lt;= <span class="number">5</span>:
+    <span class="func">print</span>(<span class="string">f"Count: {count}"</span>)
+    count += <span class="number">1</span>
+
+<span class="output"># Count: 1
+# Count: 2
+# Count: 3
+# Count: 4
+# Count: 5</span></code></pre>
+
+      <h2 style="margin-top:18px">break &amp; continue</h2>
+      <div class="grid2">
+        <div class="mini">
+          <h3><code>break</code> — Exit the loop</h3>
+<pre><code><span class="keyword">for</span> i <span class="keyword">in</span> <span class="func">range</span>(<span class="number">10</span>):
+    <span class="keyword">if</span> i == <span class="number">5</span>:
+        <span class="keyword">break</span>
+    <span class="func">print</span>(i, end=<span class="string">" "</span>)
+<span class="output"># 0 1 2 3 4</span></code></pre>
+        </div>
+        <div class="mini">
+          <h3><code>continue</code> — Skip this iteration</h3>
+<pre><code><span class="keyword">for</span> i <span class="keyword">in</span> <span class="func">range</span>(<span class="number">6</span>):
+    <span class="keyword">if</span> i == <span class="number">3</span>:
+        <span class="keyword">continue</span>
+    <span class="func">print</span>(i, end=<span class="string">" "</span>)
+<span class="output"># 0 1 2 4 5</span></code></pre>
+        </div>
+      </div>
+
+      <div class="callout" style="margin-top:12px">
+        <p style="margin:0">💡 <b>Real-world analogy:</b> <code>for</code> loop = "Do this for each student in the class." <code>while</code> loop = "Keep studying until you pass the exam."</p>
+      </div>
+    </div>
+    </section>
+
+    <!-- ───────────── FUNCTIONS ───────────── -->
+    <section id="functions" data-label="Section 10">
+    <div class="sec-header" onclick="this.parentElement.classList.toggle('collapsed')">
+      <h2>🧩 Functions — Reusable Code Blocks</h2>
+      <span class="sec-toggle">▼</span>
+    </div>
+    <div class="sec-body">
+      <p>Functions let you write code once and use it many times. They take <b>inputs (parameters)</b>, do something, and optionally <b>return</b> a result.</p>
+
+<pre><code><span class="comment"># Define a function</span>
+<span class="keyword">def</span> <span class="func">greet</span>(name):
+    <span class="keyword">return</span> <span class="string">f"Hello, {name}! 👋"</span>
+
+<span class="comment"># Call the function</span>
+message = <span class="func">greet</span>(<span class="string">"Alice"</span>)
+<span class="func">print</span>(message)
+<span class="output"># Hello, Alice! 👋</span></code></pre>
+
+      <h2 style="margin-top:18px">Parameters &amp; Default Values</h2>
+<pre><code><span class="keyword">def</span> <span class="func">introduce</span>(name, age, city=<span class="string">"Unknown"</span>):
+    <span class="func">print</span>(<span class="string">f"{name} is {age} years old, from {city}"</span>)
+
+<span class="func">introduce</span>(<span class="string">"Alice"</span>, <span class="number">25</span>, <span class="string">"Mumbai"</span>)
+<span class="output"># Alice is 25 years old, from Mumbai</span>
+
+<span class="func">introduce</span>(<span class="string">"Bob"</span>, <span class="number">30</span>)
+<span class="output"># Bob is 30 years old, from Unknown</span></code></pre>
+
+      <h2 style="margin-top:18px">Multiple Return Values</h2>
+<pre><code><span class="keyword">def</span> <span class="func">calculate</span>(a, b):
+    <span class="keyword">return</span> a + b, a - b, a * b
+
+sum_val, diff, product = <span class="func">calculate</span>(<span class="number">10</span>, <span class="number">3</span>)
+<span class="func">print</span>(<span class="string">f"Sum: {sum_val}, Diff: {diff}, Product: {product}"</span>)
+<span class="output"># Sum: 13, Diff: 7, Product: 30</span></code></pre>
+
+      <details>
+        <summary>🔍 Scope — Local vs Global Variables</summary>
+<pre><code>x = <span class="number">10</span>  <span class="comment"># Global variable</span>
+
+<span class="keyword">def</span> <span class="func">my_func</span>():
+    x = <span class="number">5</span>  <span class="comment"># Local variable (different from global x)</span>
+    <span class="func">print</span>(<span class="string">f"Inside function: {x}"</span>)
+
+<span class="func">my_func</span>()
+<span class="func">print</span>(<span class="string">f"Outside function: {x}"</span>)
+<span class="output"># Inside function: 5
+# Outside function: 10</span></code></pre>
+        <p class="muted">The local <code>x</code> inside the function doesn't affect the global <code>x</code>.</p>
+      </details>
+    </div>
+    </section>
+
+    <!-- Lists & Dictionaries sections moved into Data Structures above -->
+
+    <!-- ───────────── FILE HANDLING ───────────── -->
+    <section id="file-handling" data-label="Section 11">
+    <div class="sec-header" onclick="this.parentElement.classList.toggle('collapsed')">
+      <h2>📁 File Handling — Read &amp; Write Files</h2>
+      <span class="sec-toggle">▼</span>
+    </div>
+    <div class="sec-body">
+      <p>Python can read from and write to files on your computer. This is how you save data, load datasets, generate reports, and process logs.</p>
+
+      <h2>Opening Files — The <code>with</code> Statement</h2>
+      <p>Always use <code>with</code> to open files — it <b>automatically closes</b> the file when done, even if an error occurs.</p>
+
+      <div style="overflow:auto">
+        <table style="font-size:13px">
+          <thead>
+            <tr style="background:rgba(122,162,255,.12)">
+              <th>Mode</th>
+              <th>Meaning</th>
+              <th>Creates file?</th>
+              <th>Overwrites?</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td><code>"r"</code></td><td>Read (default)</td><td>❌ No — error if missing</td><td>—</td></tr>
+            <tr><td><code>"w"</code></td><td>Write</td><td>✅ Yes</td><td>⚠️ Yes — erases old content!</td></tr>
+            <tr><td><code>"a"</code></td><td>Append</td><td>✅ Yes</td><td>❌ No — adds to end</td></tr>
+            <tr><td><code>"r+"</code></td><td>Read + Write</td><td>❌ No</td><td>Partial</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h2 style="margin-top:18px">Writing to a File</h2>
+<pre><code><span class="comment"># Create and write to a file</span>
+<span class="keyword">with</span> <span class="func">open</span>(<span class="string">"notes.txt"</span>, <span class="string">"w"</span>) <span class="keyword">as</span> f:
+    f.<span class="func">write</span>(<span class="string">"Hello from Python!\n"</span>)
+    f.<span class="func">write</span>(<span class="string">"This is line 2.\n"</span>)
+    f.<span class="func">write</span>(<span class="string">"This is line 3.\n"</span>)
+
+<span class="comment"># Append (add to end without erasing)</span>
+<span class="keyword">with</span> <span class="func">open</span>(<span class="string">"notes.txt"</span>, <span class="string">"a"</span>) <span class="keyword">as</span> f:
+    f.<span class="func">write</span>(<span class="string">"This line was appended.\n"</span>)</code></pre>
+
+      <h2 style="margin-top:18px">Reading from a File</h2>
+<pre><code><span class="comment"># Read entire file as one string</span>
+<span class="keyword">with</span> <span class="func">open</span>(<span class="string">"notes.txt"</span>, <span class="string">"r"</span>) <span class="keyword">as</span> f:
+    content = f.<span class="func">read</span>()
+    <span class="func">print</span>(content)
+
+<span class="comment"># Read line by line (memory efficient for big files)</span>
+<span class="keyword">with</span> <span class="func">open</span>(<span class="string">"notes.txt"</span>, <span class="string">"r"</span>) <span class="keyword">as</span> f:
+    <span class="keyword">for</span> line <span class="keyword">in</span> f:
+        <span class="func">print</span>(line.<span class="func">strip</span>())   <span class="comment"># strip() removes \n</span>
+
+<span class="comment"># Read all lines into a list</span>
+<span class="keyword">with</span> <span class="func">open</span>(<span class="string">"notes.txt"</span>, <span class="string">"r"</span>) <span class="keyword">as</span> f:
+    lines = f.<span class="func">readlines</span>()
+    <span class="func">print</span>(lines)
+<span class="output"># ['Hello from Python!\n', 'This is line 2.\n', ...]</span></code></pre>
+
+      <details>
+        <summary>📝 Practical Example — CSV-like Data</summary>
+<pre><code><span class="comment"># Write student scores</span>
+<span class="keyword">with</span> <span class="func">open</span>(<span class="string">"scores.csv"</span>, <span class="string">"w"</span>) <span class="keyword">as</span> f:
+    f.<span class="func">write</span>(<span class="string">"Name,Math,Science\n"</span>)
+    f.<span class="func">write</span>(<span class="string">"Alice,90,85\n"</span>)
+    f.<span class="func">write</span>(<span class="string">"Bob,78,92\n"</span>)
+    f.<span class="func">write</span>(<span class="string">"Charlie,88,76\n"</span>)
+
+<span class="comment"># Read and process</span>
+<span class="keyword">with</span> <span class="func">open</span>(<span class="string">"scores.csv"</span>, <span class="string">"r"</span>) <span class="keyword">as</span> f:
+    header = f.<span class="func">readline</span>()  <span class="comment"># skip header</span>
+    <span class="keyword">for</span> line <span class="keyword">in</span> f:
+        parts = line.<span class="func">strip</span>().<span class="func">split</span>(<span class="string">","</span>)
+        name = parts[<span class="number">0</span>]
+        avg = (<span class="func">int</span>(parts[<span class="number">1</span>]) + <span class="func">int</span>(parts[<span class="number">2</span>])) / <span class="number">2</span>
+        <span class="func">print</span>(<span class="string">f"{name}: average = {avg}"</span>)
+
+<span class="output"># Alice: average = 87.5
+# Bob: average = 85.0
+# Charlie: average = 82.0</span></code></pre>
+      </details>
+
+      <div class="callout warn" style="margin-top:12px">
+        <p style="margin:0">⚠️ <b>Be careful with <code>"w"</code> mode</b> — it <b>erases everything</b> in the file before writing. Use <code>"a"</code> (append) if you want to add to an existing file without losing data.</p>
+      </div>
+
+      <div class="callout info" style="margin-top:10px">
+        <p style="margin:0">💡 <b>Do I need to create the file first?</b> <b>No!</b> When you use <code>"w"</code> or <code>"a"</code> mode, Python <b>creates the file automatically</b> if it doesn't exist. Only <code>"r"</code> (read) mode requires the file to already exist — otherwise you get a <code>FileNotFoundError</code>.</p>
+      </div>
+    </div>
+    </section>
+
+    <!-- ───────────── ERROR HANDLING ───────────── -->
+    <section id="error-handling" data-label="Section 12">
+    <div class="sec-header" onclick="this.parentElement.classList.toggle('collapsed')">
+      <h2>🛡️ Error Handling — try / except</h2>
+      <span class="sec-toggle">▼</span>
+    </div>
+    <div class="sec-body">
+      <p>Errors (exceptions) happen — a file might not exist, a user might type "abc" instead of a number, or a network call might fail. <b>Error handling</b> lets your program recover gracefully instead of crashing.</p>
+
+      <h2>Basic try / except</h2>
+<pre><code><span class="comment"># Without error handling — CRASHES</span>
+<span class="comment"># num = int("hello")  → ValueError!</span>
+
+<span class="comment"># With error handling — recovers gracefully</span>
+<span class="keyword">try</span>:
+    num = <span class="func">int</span>(<span class="func">input</span>(<span class="string">"Enter a number: "</span>))
+    <span class="func">print</span>(<span class="string">f"You entered: {num}"</span>)
+<span class="keyword">except</span> <span class="builtin">ValueError</span>:
+    <span class="func">print</span>(<span class="string">"That's not a valid number! ❌"</span>)</code></pre>
+
+      <h2 style="margin-top:18px">How It Works</h2>
+      <div class="grid2">
+        <div class="mini">
+          <h3>🔄 Flow</h3>
+          <ol>
+            <li>Python <b>tries</b> the code in the <code>try</code> block</li>
+            <li>If an error occurs, it <b>jumps</b> to the matching <code>except</code> block</li>
+            <li>If no error, <code>except</code> is skipped</li>
+            <li><code>finally</code> always runs (optional)</li>
+          </ol>
+        </div>
+        <div class="mini">
+          <h3>🧱 Structure</h3>
+<pre style="margin:0"><code><span class="keyword">try</span>:
+    <span class="comment"># risky code</span>
+<span class="keyword">except</span> ErrorType:
+    <span class="comment"># handle that error</span>
+<span class="keyword">else</span>:
+    <span class="comment"># runs if NO error</span>
+<span class="keyword">finally</span>:
+    <span class="comment"># ALWAYS runs</span></code></pre>
+        </div>
+      </div>
+
+      <h2 style="margin-top:18px">Common Exception Types</h2>
+      <div style="overflow:auto">
+        <table style="font-size:13px">
+          <thead>
+            <tr style="background:rgba(122,162,255,.12)">
+              <th>Exception</th>
+              <th>When It Happens</th>
+              <th>Example</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td><code>ValueError</code></td><td>Wrong value for conversion</td><td><code>int("abc")</code></td></tr>
+            <tr><td><code>TypeError</code></td><td>Wrong type in operation</td><td><code>"hello" + 5</code></td></tr>
+            <tr><td><code>ZeroDivisionError</code></td><td>Dividing by zero</td><td><code>10 / 0</code></td></tr>
+            <tr><td><code>FileNotFoundError</code></td><td>File doesn't exist</td><td><code>open("missing.txt")</code></td></tr>
+            <tr><td><code>IndexError</code></td><td>List index out of range</td><td><code>[1,2,3][10]</code></td></tr>
+            <tr><td><code>KeyError</code></td><td>Dict key doesn't exist</td><td><code>{"a":1}["b"]</code></td></tr>
+            <tr><td><code>NameError</code></td><td>Variable not defined</td><td><code>print(xyz)</code></td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h2 style="margin-top:18px">Catching Multiple Exceptions</h2>
+<pre><code><span class="keyword">try</span>:
+    x = <span class="func">int</span>(<span class="func">input</span>(<span class="string">"Enter a number: "</span>))
+    result = <span class="number">100</span> / x
+    <span class="func">print</span>(<span class="string">f"Result: {result}"</span>)
+<span class="keyword">except</span> <span class="builtin">ValueError</span>:
+    <span class="func">print</span>(<span class="string">"Not a number!"</span>)
+<span class="keyword">except</span> <span class="builtin">ZeroDivisionError</span>:
+    <span class="func">print</span>(<span class="string">"Can't divide by zero!"</span>)
+<span class="keyword">except</span> <span class="builtin">Exception</span> <span class="keyword">as</span> e:
+    <span class="func">print</span>(<span class="string">f"Something went wrong: {e}"</span>)
+<span class="keyword">else</span>:
+    <span class="func">print</span>(<span class="string">"Everything worked! ✅"</span>)
+<span class="keyword">finally</span>:
+    <span class="func">print</span>(<span class="string">"This always runs (cleanup)"</span>)</code></pre>
+
+      <details>
+        <summary>📝 Practical Example — Safe File Reading</summary>
+<pre><code><span class="keyword">def</span> <span class="func">read_file_safe</span>(filename):
+    <span class="keyword">try</span>:
+        <span class="keyword">with</span> <span class="func">open</span>(filename, <span class="string">"r"</span>) <span class="keyword">as</span> f:
+            <span class="keyword">return</span> f.<span class="func">read</span>()
+    <span class="keyword">except</span> <span class="builtin">FileNotFoundError</span>:
+        <span class="func">print</span>(<span class="string">f"❌ File '{filename}' not found"</span>)
+        <span class="keyword">return</span> <span class="keyword">None</span>
+
+content = <span class="func">read_file_safe</span>(<span class="string">"data.txt"</span>)
+<span class="keyword">if</span> content:
+    <span class="func">print</span>(content)
+<span class="keyword">else</span>:
+    <span class="func">print</span>(<span class="string">"Using default data instead"</span>)</code></pre>
+      </details>
+
+      <div class="callout" style="margin-top:12px">
+        <p style="margin:0">💡 <b>Best practice:</b> Catch <b>specific</b> exceptions (like <code>ValueError</code>), not just bare <code>except:</code>. A bare except hides bugs and makes debugging harder.</p>
+      </div>
+    </div>
+    </section>
+
+    <!-- ───────────── MODULES & PACKAGES ───────────── -->
+    <section id="modules" data-label="Section 13">
+    <div class="sec-header" onclick="this.parentElement.classList.toggle('collapsed')">
+      <h2>📦 Modules &amp; Packages — Reusing Code</h2>
+      <span class="sec-toggle">▼</span>
+    </div>
+    <div class="sec-body">
+      <p>A <b>module</b> is a Python file containing functions, classes, and variables that you can <b>import</b> and reuse. Packages are folders of modules. Python comes with hundreds of built-in modules, and you can install thousands more.</p>
+
+      <h2>Importing Modules</h2>
+<pre><code><span class="comment"># Import entire module</span>
+<span class="keyword">import</span> math
+<span class="func">print</span>(math.<span class="func">sqrt</span>(<span class="number">144</span>))     <span class="output"># 12.0</span>
+<span class="func">print</span>(math.pi)              <span class="output"># 3.141592653589793</span>
+
+<span class="comment"># Import specific function</span>
+<span class="keyword">from</span> math <span class="keyword">import</span> sqrt, pi
+<span class="func">print</span>(<span class="func">sqrt</span>(<span class="number">64</span>))             <span class="output"># 8.0</span>
+<span class="func">print</span>(pi)                   <span class="output"># 3.14...</span>
+
+<span class="comment"># Import with alias</span>
+<span class="keyword">import</span> math <span class="keyword">as</span> m
+<span class="func">print</span>(m.<span class="func">floor</span>(<span class="number">3.7</span>))         <span class="output"># 3</span>
+<span class="func">print</span>(m.<span class="func">ceil</span>(<span class="number">3.2</span>))          <span class="output"># 4</span></code></pre>
+
+      <h2 style="margin-top:18px">Useful Built-in Modules</h2>
+      <div style="overflow:auto">
+        <table style="font-size:13px">
+          <thead>
+            <tr style="background:rgba(122,162,255,.12)">
+              <th>Module</th>
+              <th>What It Does</th>
+              <th>Example</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td><code>math</code></td><td>Math functions</td><td><code>math.sqrt(25)</code> → <code>5.0</code></td></tr>
+            <tr><td><code>random</code></td><td>Random numbers</td><td><code>random.randint(1, 10)</code></td></tr>
+            <tr><td><code>datetime</code></td><td>Dates &amp; times</td><td><code>datetime.datetime.now()</code></td></tr>
+            <tr><td><code>os</code></td><td>File system ops</td><td><code>os.listdir(".")</code></td></tr>
+            <tr><td><code>json</code></td><td>Read/write JSON</td><td><code>json.loads(text)</code></td></tr>
+            <tr><td><code>csv</code></td><td>Read/write CSV</td><td><code>csv.reader(file)</code></td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h2 style="margin-top:18px">The <code>random</code> Module — Examples</h2>
+<pre><code><span class="keyword">import</span> random
+
+<span class="comment"># Random integer between 1 and 10</span>
+<span class="func">print</span>(random.<span class="func">randint</span>(<span class="number">1</span>, <span class="number">10</span>))
+
+<span class="comment"># Random float between 0 and 1</span>
+<span class="func">print</span>(random.<span class="func">random</span>())
+
+<span class="comment"># Pick a random item from a list</span>
+colors = [<span class="string">"red"</span>, <span class="string">"blue"</span>, <span class="string">"green"</span>]
+<span class="func">print</span>(random.<span class="func">choice</span>(colors))
+
+<span class="comment"># Shuffle a list in place</span>
+cards = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>]
+random.<span class="func">shuffle</span>(cards)
+<span class="func">print</span>(cards)  <span class="output"># e.g. [3, 1, 5, 2, 4]</span></code></pre>
+
+      <h2 style="margin-top:18px">Installing External Packages (pip)</h2>
+<pre><code><span class="comment"># Install a package from PyPI (Python Package Index)</span>
+pip install requests
+pip install pandas numpy matplotlib
+
+<span class="comment"># Then use in your code</span>
+<span class="keyword">import</span> requests
+response = requests.<span class="func">get</span>(<span class="string">"https://api.github.com"</span>)
+<span class="func">print</span>(response.<span class="func">json</span>())</code></pre>
+
+      <details>
+        <summary>📝 Creating Your Own Module</summary>
+        <p>In Jupyter Notebook, use the <code>%%writefile</code> magic command to create a <code>.py</code> file directly from a cell:</p>
+<pre><code><span class="comment">%%writefile myutils.py</span>
+<span class="comment"># myutils.py — your custom module</span>
+
+<span class="keyword">def</span> <span class="func">greet</span>(name):
+    <span class="keyword">return</span> <span class="string">f"Hello, {name}! 👋"</span>
+
+<span class="keyword">def</span> <span class="func">add</span>(a, b):
+    <span class="keyword">return</span> a + b
+
+PI = <span class="number">3.14159</span></code></pre>
+        <p class="muted">Running that cell creates <code>myutils.py</code> in your notebook's directory. Then import it in the next cell:</p>
+
+<pre><code><span class="comment"># Import and use your module</span>
+<span class="keyword">from</span> myutils <span class="keyword">import</span> greet, add, PI
+
+<span class="func">print</span>(<span class="func">greet</span>(<span class="string">"Alice"</span>))   <span class="output"># Hello, Alice! 👋</span>
+<span class="func">print</span>(<span class="func">add</span>(<span class="number">10</span>, <span class="number">20</span>))       <span class="output"># 30</span>
+<span class="func">print</span>(PI)                <span class="output"># 3.14159</span></code></pre>
+        <p class="muted">Any <code>.py</code> file can be a module — just import it by filename (without <code>.py</code>).</p>
+      </details>
+
+      <div class="callout" style="margin-top:12px">
+        <p style="margin:0">💡 <b>Rule of thumb:</b> Before writing something from scratch, search "python module for ___". There's probably a package for it already!</p>
+      </div>
+    </div>
+    </section>
+
+    <!-- ───────────── NUMPY & PANDAS ───────────── -->
+    <section id="numpy-pandas" data-label="Section 14">
+    <div class="sec-header" onclick="this.parentElement.classList.toggle('collapsed')">
+      <h2>📊 NumPy &amp; Pandas — Data Science Essentials</h2>
+      <span class="sec-toggle">▼</span>
+    </div>
+    <div class="sec-body">
+      <p>These two libraries are the foundation of Data Science in Python. <b>NumPy</b> handles numerical arrays, and <b>Pandas</b> handles tabular data (like Excel/CSV).</p>
+
+      <div class="callout" style="margin-top:10px">
+        <p style="margin:0"><b>Install first:</b> <code>pip install numpy pandas</code></p>
+      </div>
+
+      <!-- NUMPY -->
+      <h2 style="margin-top:18px">🔢 NumPy — Numerical Python</h2>
+      <p>NumPy gives you <b>arrays</b> — like lists but much faster for math. All elements must be the same type.</p>
+
+<pre><code><span class="keyword">import</span> numpy <span class="keyword">as</span> np
+
+<span class="comment"># Create arrays</span>
+a = np.<span class="func">array</span>([<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>])
+<span class="func">print</span>(a)           <span class="output"># [1 2 3 4 5]</span>
+<span class="func">print</span>(<span class="func">type</span>(a))      <span class="output"># &lt;class 'numpy.ndarray'&gt;</span>
+
+<span class="comment"># Math on entire array at once (vectorized — no loops needed!)</span>
+<span class="func">print</span>(a * <span class="number">2</span>)        <span class="output"># [ 2  4  6  8 10]</span>
+<span class="func">print</span>(a + <span class="number">10</span>)       <span class="output"># [11 12 13 14 15]</span>
+<span class="func">print</span>(a ** <span class="number">2</span>)       <span class="output"># [ 1  4  9 16 25]</span>
+
+<span class="comment"># Useful functions</span>
+<span class="func">print</span>(np.<span class="func">mean</span>(a))    <span class="output"># 3.0   (average)</span>
+<span class="func">print</span>(np.<span class="func">sum</span>(a))     <span class="output"># 15    (total)</span>
+<span class="func">print</span>(np.<span class="func">std</span>(a))     <span class="output"># 1.41  (standard deviation)</span>
+<span class="func">print</span>(np.<span class="func">max</span>(a))     <span class="output"># 5</span>
+<span class="func">print</span>(np.<span class="func">min</span>(a))     <span class="output"># 1</span></code></pre>
+
+      <h3 style="margin-top:14px">Creating Special Arrays</h3>
+<pre><code><span class="func">print</span>(np.<span class="func">zeros</span>(<span class="number">5</span>))          <span class="output"># [0. 0. 0. 0. 0.]</span>
+<span class="func">print</span>(np.<span class="func">ones</span>(<span class="number">3</span>))           <span class="output"># [1. 1. 1.]</span>
+<span class="func">print</span>(np.<span class="func">arange</span>(<span class="number">0</span>, <span class="number">10</span>, <span class="number">2</span>))  <span class="output"># [0 2 4 6 8]</span>
+<span class="func">print</span>(np.<span class="func">linspace</span>(<span class="number">0</span>, <span class="number">1</span>, <span class="number">5</span>)) <span class="output"># [0. 0.25 0.5 0.75 1.]</span>
+<span class="func">print</span>(np.<span class="func">random</span>.<span class="func">randint</span>(<span class="number">1</span>, <span class="number">100</span>, <span class="number">5</span>))  <span class="output"># 5 random ints</span></code></pre>
+
+      <h3 style="margin-top:14px">2D Arrays (Matrices)</h3>
+<pre><code>matrix = np.<span class="func">array</span>([
+    [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>],
+    [<span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>],
+    [<span class="number">7</span>, <span class="number">8</span>, <span class="number">9</span>]
+])
+
+<span class="func">print</span>(matrix.shape)       <span class="output"># (3, 3)  — 3 rows, 3 cols</span>
+<span class="func">print</span>(matrix[<span class="number">0</span>])          <span class="output"># [1 2 3]  — first row</span>
+<span class="func">print</span>(matrix[<span class="number">1</span>, <span class="number">2</span>])       <span class="output"># 6  — row 1, col 2</span>
+<span class="func">print</span>(matrix.<span class="func">sum</span>())       <span class="output"># 45  — sum of all</span>
+<span class="func">print</span>(matrix.<span class="func">sum</span>(axis=<span class="number">0</span>))  <span class="output"># [12 15 18]  — column sums</span>
+<span class="func">print</span>(matrix.<span class="func">sum</span>(axis=<span class="number">1</span>))  <span class="output"># [ 6 15 24]  — row sums</span></code></pre>
+
+      <div class="callout info" style="margin-top:12px">
+        <p style="margin:0">💡 <b>Why NumPy over lists?</b> NumPy is <b>50x faster</b> for math because it's written in C under the hood and operates on entire arrays at once (no Python loops).</p>
+      </div>
+
+      <!-- PANDAS -->
+      <h2 style="margin-top:24px">🐼 Pandas — DataFrames for Tabular Data</h2>
+      <p>Pandas gives you <b>DataFrames</b> — like Excel spreadsheets in Python. Each column is a <b>Series</b>, and the whole table is a <b>DataFrame</b>.</p>
+
+<pre><code><span class="keyword">import</span> pandas <span class="keyword">as</span> pd
+
+<span class="comment"># Create a DataFrame from a dictionary</span>
+data = {
+    <span class="string">"Name"</span>: [<span class="string">"Alice"</span>, <span class="string">"Bob"</span>, <span class="string">"Charlie"</span>, <span class="string">"Diana"</span>],
+    <span class="string">"Age"</span>: [<span class="number">25</span>, <span class="number">30</span>, <span class="number">22</span>, <span class="number">28</span>],
+    <span class="string">"City"</span>: [<span class="string">"Mumbai"</span>, <span class="string">"Delhi"</span>, <span class="string">"Hyderabad"</span>, <span class="string">"Chennai"</span>],
+    <span class="string">"Score"</span>: [<span class="number">92</span>, <span class="number">78</span>, <span class="number">88</span>, <span class="number">95</span>]
+}
+
+df = pd.<span class="func">DataFrame</span>(data)
+<span class="func">print</span>(df)</code></pre>
+<pre><code><span class="output">      Name  Age       City  Score
+0    Alice   25     Mumbai     92
+1      Bob   30      Delhi     78
+2  Charlie   22  Hyderabad     88
+3    Diana   28    Chennai     95</span></code></pre>
+
+      <h3 style="margin-top:14px">Exploring Data</h3>
+<pre><code><span class="func">print</span>(df.<span class="func">head</span>())          <span class="comment"># first 5 rows</span>
+<span class="func">print</span>(df.<span class="func">tail</span>(<span class="number">2</span>))         <span class="comment"># last 2 rows</span>
+<span class="func">print</span>(df.shape)            <span class="comment"># (4, 4) — 4 rows, 4 cols</span>
+<span class="func">print</span>(df.columns)          <span class="comment"># column names</span>
+<span class="func">print</span>(df.<span class="func">describe</span>())      <span class="comment"># statistics (mean, std, min, max)</span>
+<span class="func">print</span>(df.<span class="func">info</span>())           <span class="comment"># data types and null counts</span></code></pre>
+
+      <h3 style="margin-top:14px">Selecting Data</h3>
+<pre><code><span class="comment"># Select a column (returns a Series)</span>
+<span class="func">print</span>(df[<span class="string">"Name"</span>])
+
+<span class="comment"># Select multiple columns</span>
+<span class="func">print</span>(df[[<span class="string">"Name"</span>, <span class="string">"Score"</span>]])
+
+<span class="comment"># Filter rows — students with score > 85</span>
+top_students = df[df[<span class="string">"Score"</span>] > <span class="number">85</span>]
+<span class="func">print</span>(top_students)
+<span class="output">#       Name  Age       City  Score
+# 0    Alice   25     Mumbai     92
+# 2  Charlie   22  Hyderabad     88
+# 3    Diana   28    Chennai     95</span></code></pre>
+
+      <h3 style="margin-top:14px">Adding &amp; Modifying Columns</h3>
+<pre><code><span class="comment"># Add a new column</span>
+df[<span class="string">"Pass"</span>] = df[<span class="string">"Score"</span>] >= <span class="number">80</span>
+
+<span class="comment"># Calculated column</span>
+df[<span class="string">"Grade"</span>] = df[<span class="string">"Score"</span>].<span class="func">apply</span>(
+    <span class="keyword">lambda</span> x: <span class="string">"A"</span> <span class="keyword">if</span> x >= <span class="number">90</span> <span class="keyword">else</span> <span class="string">"B"</span> <span class="keyword">if</span> x >= <span class="number">80</span> <span class="keyword">else</span> <span class="string">"C"</span>
+)
+
+<span class="func">print</span>(df)</code></pre>
+<pre><code><span class="output">      Name  Age       City  Score   Pass Grade
+0    Alice   25     Mumbai     92   True     A
+1      Bob   30      Delhi     78  False     C
+2  Charlie   22  Hyderabad     88   True     B
+3    Diana   28    Chennai     95   True     A</span></code></pre>
+
+      <details>
+        <summary>📝 Reading CSV Files — The Most Common Use</summary>
+        <p>First, create the CSV file using <code>%%writefile</code> in a Jupyter cell:</p>
+<pre><code><span class="comment">%%writefile students.csv</span>
+Name,Age,City,Score,Subject
+Alice,25,Mumbai,92,Math
+Bob,30,Delhi,78,Science
+Charlie,22,Hyderabad,88,Math
+Diana,28,Chennai,95,Science
+Eve,24,Mumbai,67,English
+Frank,26,Delhi,91,Math
+Grace,21,Hyderabad,83,English
+Hiro,29,Chennai,74,Science
+Ivy,23,Mumbai,96,Math
+Jay,27,Delhi,59,English
+Kavya,22,Hyderabad,88,Science
+Leo,25,Chennai,72,Math
+Meera,24,Mumbai,85,English
+Nikhil,28,Delhi,93,Science
+Olivia,21,Hyderabad,77,Math</code></pre>
+        <p class="muted">Running this cell creates <code>students.csv</code> with 15 students. Now load and explore it:</p>
+
+<pre><code><span class="keyword">import</span> pandas <span class="keyword">as</span> pd
+
+<span class="comment"># Read the CSV file into a DataFrame</span>
+df = pd.<span class="func">read_csv</span>(<span class="string">"students.csv"</span>)
+
+<span class="comment"># Quick look</span>
+<span class="func">print</span>(df.<span class="func">head</span>())          <span class="comment"># first 5 rows</span>
+<span class="func">print</span>(df.shape)            <span class="comment"># (15, 5) — 15 rows, 5 columns</span>
+<span class="func">print</span>(df.<span class="func">describe</span>())      <span class="comment"># statistics for numeric columns</span>
+<span class="func">print</span>(df.<span class="func">info</span>())           <span class="comment"># data types and null check</span>
+
+<span class="comment"># Filter — students who scored above 90</span>
+toppers = df[df[<span class="string">"Score"</span>] > <span class="number">90</span>]
+<span class="func">print</span>(toppers)
+
+<span class="comment"># Sort by score (highest first)</span>
+sorted_df = df.<span class="func">sort_values</span>(<span class="string">"Score"</span>, ascending=<span class="keyword">False</span>)
+<span class="func">print</span>(sorted_df.<span class="func">head</span>())
+
+<span class="comment"># Save filtered results to a new CSV</span>
+toppers.<span class="func">to_csv</span>(<span class="string">"toppers.csv"</span>, index=<span class="keyword">False</span>)</code></pre>
+        <p class="muted">This is the core Data Science workflow: <b>create/load data → explore → filter → analyze → save results</b>.</p>
+      </details>
+
+      <details>
+        <summary>📊 Basic Statistics with Pandas</summary>
+<pre><code><span class="func">print</span>(df[<span class="string">"Score"</span>].<span class="func">mean</span>())    <span class="output"># 88.25  (average)</span>
+<span class="func">print</span>(df[<span class="string">"Score"</span>].<span class="func">median</span>())  <span class="output"># 90.0   (middle value)</span>
+<span class="func">print</span>(df[<span class="string">"Score"</span>].<span class="func">std</span>())     <span class="output"># 7.27   (spread)</span>
+<span class="func">print</span>(df[<span class="string">"Score"</span>].<span class="func">max</span>())     <span class="output"># 95</span>
+<span class="func">print</span>(df[<span class="string">"Score"</span>].<span class="func">min</span>())     <span class="output"># 78</span>
+
+<span class="comment"># Group by city and get average score</span>
+<span class="func">print</span>(df.<span class="func">groupby</span>(<span class="string">"City"</span>)[<span class="string">"Score"</span>].<span class="func">mean</span>())
+
+<span class="comment"># Value counts — how many from each city?</span>
+<span class="func">print</span>(df[<span class="string">"City"</span>].<span class="func">value_counts</span>())</code></pre>
+      </details>
+
+      <div class="callout" style="margin-top:12px">
+        <p style="margin:0">💡 <b>NumPy vs Pandas:</b> Use <b>NumPy</b> for raw number crunching (arrays, matrices, math). Use <b>Pandas</b> for structured/tabular data (CSV, Excel, databases). Pandas actually uses NumPy under the hood!</p>
+      </div>
+    </div>
+    </section>
+
+
+    <!-- ───────────── MINI PROJECT ───────────── -->
+    <section id="mini-project" data-label="🎬 Mini Project">
+    <div class="sec-header" onclick="this.parentElement.classList.toggle('collapsed')">
+      <h2>🎬 Mini Project — Movies Recommendation System</h2>
+      <span class="sec-toggle">▼</span>
+    </div>
+    <div class="sec-body">
+      <p>Let's put everything together! You'll build a <b>simple movie recommendation system</b> using Python, Pandas, and everything you've learned. We'll create a movie dataset, explore it, filter it, and build a basic recommender.</p>
+
+      <div class="callout" style="margin-top:10px">
+        <p style="margin:0">🎯 <b>What you'll practice:</b> File I/O, DataFrames, filtering, sorting, functions, loops, dictionaries, and string operations — all in one project!</p>
+      </div>
+
+      <!-- STEP 1 -->
+      <h2 style="margin-top:24px">📦 Step 1 — Create the Movie Dataset</h2>
+      <p>Run this cell in Jupyter to create a CSV file with 20 movies:</p>
+<pre><code><span class="comment">%%writefile movies.csv</span>
+Title,Genre,Rating,Runtime,Year,Director
+The Shawshank Redemption,Drama,9.3,142,1994,Frank Darabont
+The Dark Knight,Action,9.0,152,2008,Christopher Nolan
+Inception,Sci-Fi,8.8,148,2010,Christopher Nolan
+Pulp Fiction,Crime,8.9,154,1994,Quentin Tarantino
+Forrest Gump,Drama,8.8,142,1994,Robert Zemeckis
+The Matrix,Sci-Fi,8.7,136,1999,Wachowski Sisters
+Interstellar,Sci-Fi,8.6,169,2014,Christopher Nolan
+The Godfather,Crime,9.2,175,1972,Francis Ford Coppola
+Fight Club,Drama,8.8,139,1999,David Fincher
+The Lion King,Animation,8.5,88,1994,Roger Allers
+Toy Story,Animation,8.3,81,1995,John Lasseter
+Avengers: Endgame,Action,8.4,181,2019,Russo Brothers
+Joker,Drama,8.4,122,2019,Todd Phillips
+Parasite,Thriller,8.5,132,2019,Bong Joon-ho
+Spider-Man: No Way Home,Action,8.3,148,2021,Jon Watts
+Dune,Sci-Fi,8.0,155,2021,Denis Villeneuve
+Coco,Animation,8.4,105,2017,Lee Unkrich
+The Prestige,Thriller,8.5,130,2006,Christopher Nolan
+Whiplash,Drama,8.5,107,2014,Damien Chazelle
+Up,Animation,8.3,96,2009,Pete Docter</code></pre>
+      <p class="muted">This creates <code>movies.csv</code> with 20 movies, 6 columns. Now let's explore!</p>
+
+      <!-- STEP 2 -->
+      <h2 style="margin-top:24px">🔍 Step 2 — Load &amp; Explore the Data</h2>
+<pre><code><span class="keyword">import</span> pandas <span class="keyword">as</span> pd
+
+df = pd.<span class="func">read_csv</span>(<span class="string">"movies.csv"</span>)
+
+<span class="comment"># First look</span>
+<span class="func">print</span>(df.<span class="func">head</span>())
+<span class="func">print</span>(<span class="string">f"\nTotal movies: {len(df)}"</span>)
+<span class="func">print</span>(<span class="string">f"Columns: {list(df.columns)}"</span>)
+<span class="func">print</span>(<span class="string">f"\nData types:\n{df.dtypes}"</span>)
+<span class="func">print</span>(<span class="string">f"\nBasic stats:\n{df.describe()}"</span>)</code></pre>
+
+      <div class="callout info" style="margin-top:10px">
+        <p style="margin:0">💡 <b>Always start by exploring!</b> Before any analysis, check: How many rows? What columns? Any missing data? What are the data types? This is called <b>EDA (Exploratory Data Analysis)</b>.</p>
+      </div>
+
+      <!-- STEP 3 -->
+      <h2 style="margin-top:24px">❓ Step 3 — Answer Questions with Code</h2>
+      <p>Now let's answer real questions about our movies. Try each one yourself before looking at the solution!</p>
+
+      <details>
+        <summary>🎬 Q1: Get all movies with runtime more than 90 minutes</summary>
+        <p>Filter the DataFrame to show only movies longer than 90 minutes.</p>
+<pre><code><span class="comment"># Filter: runtime &gt; 90 minutes</span>
+long_movies = df[df[<span class="string">"Runtime"</span>] &gt; <span class="number">90</span>]
+<span class="func">print</span>(<span class="string">f"Movies longer than 90 min: {len(long_movies)} out of {len(df)}"</span>)
+<span class="func">print</span>(long_movies[[<span class="string">"Title"</span>, <span class="string">"Runtime"</span>, <span class="string">"Genre"</span>]])</code></pre>
+<pre><code><span class="output">Movies longer than 90 min: 17 out of 20
+
+                         Title  Runtime    Genre
+0   The Shawshank Redemption      142    Drama
+1           The Dark Knight      152   Action
+2                 Inception      148   Sci-Fi
+...  (and 14 more)</span></code></pre>
+        <p class="muted">Only The Lion King (88 min) and Toy Story (81 min) are under 90 minutes.</p>
+      </details>
+
+      <details>
+        <summary>⭐ Q2: Which movies have a rating above 8.5?</summary>
+<pre><code><span class="comment"># Top-rated movies (rating &gt; 8.5)</span>
+top_rated = df[df[<span class="string">"Rating"</span>] &gt; <span class="number">8.5</span>].<span class="func">sort_values</span>(<span class="string">"Rating"</span>, ascending=<span class="keyword">False</span>)
+<span class="func">print</span>(top_rated[[<span class="string">"Title"</span>, <span class="string">"Rating"</span>, <span class="string">"Year"</span>]])</code></pre>
+<pre><code><span class="output">                       Title  Rating  Year
+The Shawshank Redemption      9.3  1994
+The Godfather                 9.2  1972
+The Dark Knight               9.0  2008
+Pulp Fiction                  8.9  1994
+Inception                     8.8  2010
+Forrest Gump                  8.8  1994
+Fight Club                    8.8  1999
+The Matrix                    8.7  1999
+Interstellar                  8.6  2014</span></code></pre>
+      </details>
+
+      <details>
+        <summary>🎬 Q3: How many movies per genre?</summary>
+<pre><code><span class="comment"># Count movies by genre</span>
+genre_counts = df[<span class="string">"Genre"</span>].<span class="func">value_counts</span>()
+<span class="func">print</span>(genre_counts)</code></pre>
+<pre><code><span class="output">Drama        5
+Sci-Fi       4
+Animation    4
+Action       3
+Crime        2
+Thriller     2</span></code></pre>
+      </details>
+
+      <details>
+        <summary>🎥 Q4: Find all Christopher Nolan movies</summary>
+<pre><code><span class="comment"># Filter by director</span>
+nolan = df[df[<span class="string">"Director"</span>] == <span class="string">"Christopher Nolan"</span>]
+<span class="func">print</span>(<span class="string">f"Nolan has {len(nolan)} movies in our dataset:\n"</span>)
+<span class="func">print</span>(nolan[[<span class="string">"Title"</span>, <span class="string">"Genre"</span>, <span class="string">"Rating"</span>, <span class="string">"Year"</span>]])</code></pre>
+<pre><code><span class="output">Nolan has 4 movies in our dataset:
+
+              Title    Genre  Rating  Year
+The Dark Knight      Action    9.0  2008
+Inception            Sci-Fi    8.8  2010
+Interstellar         Sci-Fi    8.6  2014
+The Prestige       Thriller    8.5  2006</span></code></pre>
+      </details>
+
+      <details>
+        <summary>📅 Q5: Movies from the 90s (1990–1999) sorted by rating</summary>
+<pre><code><span class="comment"># Filter by year range</span>
+movies_90s = df[(df[<span class="string">"Year"</span>] &gt;= <span class="number">1990</span>) &amp; (df[<span class="string">"Year"</span>] &lt;= <span class="number">1999</span>)]
+movies_90s = movies_90s.<span class="func">sort_values</span>(<span class="string">"Rating"</span>, ascending=<span class="keyword">False</span>)
+<span class="func">print</span>(<span class="string">f"90s movies ({len(movies_90s)} found):\n"</span>)
+<span class="func">print</span>(movies_90s[[<span class="string">"Title"</span>, <span class="string">"Rating"</span>, <span class="string">"Year"</span>]])</code></pre>
+<pre><code><span class="output">90s movies (6 found):
+
+                       Title  Rating  Year
+The Shawshank Redemption      9.3  1994
+Pulp Fiction                  8.9  1994
+Forrest Gump                  8.8  1994
+Fight Club                    8.8  1999
+The Matrix                    8.7  1999
+Toy Story                     8.3  1995</span></code></pre>
+      </details>
+
+      <details>
+        <summary>📊 Q6: Average rating per genre</summary>
+<pre><code><span class="comment"># Group by genre, calculate average rating</span>
+avg_by_genre = df.<span class="func">groupby</span>(<span class="string">"Genre"</span>)[<span class="string">"Rating"</span>].<span class="func">mean</span>().<span class="func">sort_values</span>(ascending=<span class="keyword">False</span>)
+<span class="func">print</span>(<span class="string">"Average rating by genre:\n"</span>)
+<span class="keyword">for</span> genre, avg <span class="keyword">in</span> avg_by_genre.<span class="func">items</span>():
+    <span class="func">print</span>(<span class="string">f"  {genre:12s} → {avg:.2f}"</span>)</code></pre>
+<pre><code><span class="output">Average rating by genre:
+
+  Crime        → 9.05
+  Drama        → 8.76
+  Action       → 8.57
+  Sci-Fi       → 8.53
+  Thriller     → 8.50
+  Animation    → 8.38</span></code></pre>
+      </details>
+
+      <details>
+        <summary>⏱️ Q7: Longest and shortest movies</summary>
+<pre><code><span class="comment"># Find extremes</span>
+longest = df.<span class="func">loc</span>[df[<span class="string">"Runtime"</span>].<span class="func">idxmax</span>()]
+shortest = df.<span class="func">loc</span>[df[<span class="string">"Runtime"</span>].<span class="func">idxmin</span>()]
+
+<span class="func">print</span>(<span class="string">f"🏆 Longest:  {longest['Title']} ({longest['Runtime']} min)"</span>)
+<span class="func">print</span>(<span class="string">f"⚡ Shortest: {shortest['Title']} ({shortest['Runtime']} min)"</span>)
+<span class="func">print</span>(<span class="string">f"\n📏 Average runtime: {df['Runtime'].mean():.0f} min"</span>)</code></pre>
+<pre><code><span class="output">🏆 Longest:  Avengers: Endgame (181 min)
+⚡ Shortest: Toy Story (81 min)
+
+📏 Average runtime: 133 min</span></code></pre>
+      </details>
+
+      <details>
+        <summary>🌟 Q8: Add a "Category" column based on rating</summary>
+<pre><code><span class="comment"># Categorize movies by rating</span>
+<span class="keyword">def</span> <span class="func">categorize</span>(rating):
+    <span class="keyword">if</span> rating &gt;= <span class="number">9.0</span>:
+        <span class="keyword">return</span> <span class="string">"🏆 Masterpiece"</span>
+    <span class="keyword">elif</span> rating &gt;= <span class="number">8.5</span>:
+        <span class="keyword">return</span> <span class="string">"⭐ Excellent"</span>
+    <span class="keyword">elif</span> rating &gt;= <span class="number">8.0</span>:
+        <span class="keyword">return</span> <span class="string">"👍 Great"</span>
+    <span class="keyword">else</span>:
+        <span class="keyword">return</span> <span class="string">"👌 Good"</span>
+
+df[<span class="string">"Category"</span>] = df[<span class="string">"Rating"</span>].<span class="func">apply</span>(categorize)
+<span class="func">print</span>(df[[<span class="string">"Title"</span>, <span class="string">"Rating"</span>, <span class="string">"Category"</span>]].<span class="func">head</span>(<span class="number">10</span>))</code></pre>
+<pre><code><span class="output">                       Title  Rating        Category
+The Shawshank Redemption      9.3  🏆 Masterpiece
+The Dark Knight               9.0  🏆 Masterpiece
+Inception                     8.8  ⭐ Excellent
+Pulp Fiction                  8.9  ⭐ Excellent
+Forrest Gump                  8.8  ⭐ Excellent
+The Matrix                    8.7  ⭐ Excellent
+Interstellar                  8.6  ⭐ Excellent
+The Godfather                 9.2  🏆 Masterpiece
+Fight Club                    8.8  ⭐ Excellent
+The Lion King                 8.5  ⭐ Excellent</span></code></pre>
+      </details>
+
+      <!-- STEP 4 -->
+      <h2 style="margin-top:24px">🤖 Step 4 — Build a Simple Recommender</h2>
+      <p>Now let's build a function that recommends movies based on what the user likes!</p>
+
+<pre><code><span class="comment"># Read the dataset first</span>
+df = pd.<span class="func">read_csv</span>(<span class="string">"movies.csv"</span>)
+
+<span class="keyword">def</span> <span class="func">recommend_movies</span>(df, genre=<span class="keyword">None</span>, min_rating=<span class="number">8.0</span>, max_runtime=<span class="number">999</span>, top_n=<span class="number">5</span>):
+    <span class="string">"""Recommend movies based on filters."""</span>
+    result = df.<span class="func">copy</span>()
+
+    <span class="comment"># Apply filters</span>
+    <span class="keyword">if</span> genre:
+        result = result[result[<span class="string">"Genre"</span>].<span class="func">str</span>.<span class="func">lower</span>() == genre.<span class="func">lower</span>()]
+    result = result[result[<span class="string">"Rating"</span>] &gt;= min_rating]
+    result = result[result[<span class="string">"Runtime"</span>] &lt;= max_runtime]
+
+    <span class="comment"># Sort by rating and return top N</span>
+    result = result.<span class="func">sort_values</span>(<span class="string">"Rating"</span>, ascending=<span class="keyword">False</span>).<span class="func">head</span>(top_n)
+
+    <span class="keyword">if</span> <span class="func">len</span>(result) == <span class="number">0</span>:
+        <span class="func">print</span>(<span class="string">"No movies found matching your criteria 😞"</span>)
+        <span class="keyword">return</span>
+
+    <span class="func">print</span>(<span class="string">f"\n🎬 Recommended Movies ({len(result)} found):\n"</span>)
+    <span class="keyword">for</span> i, (_, movie) <span class="keyword">in</span> <span class="func">enumerate</span>(result.<span class="func">iterrows</span>(), <span class="number">1</span>):
+        <span class="func">print</span>(<span class="string">f"  {i}. {movie['Title']}"</span>)
+        <span class="func">print</span>(<span class="string">f"     ⭐ {movie['Rating']} | ⏱️ {movie['Runtime']} min | 🎨 {movie['Genre']} | 📅 {movie['Year']}"</span>)
+        <span class="func">print</span>()</code></pre>
+
+      <h3 style="margin-top:14px">Try It Out!</h3>
+<pre><code><span class="comment"># 🌟 Show me the best Sci-Fi movies</span>
+<span class="func">recommend_movies</span>(df, genre=<span class="string">"Sci-Fi"</span>)</code></pre>
+<pre><code><span class="output">🎬 Recommended Movies (4 found):
+
+  1. Inception
+     ⭐ 8.8 | ⏱️ 148 min | 🎨 Sci-Fi | 📅 2010
+
+  2. The Matrix
+     ⭐ 8.7 | ⏱️ 136 min | 🎨 Sci-Fi | 📅 1999
+
+  3. Interstellar
+     ⭐ 8.6 | ⏱️ 169 min | 🎨 Sci-Fi | 📅 2014
+
+  4. Dune
+     ⭐ 8.0 | ⏱️ 155 min | 🎨 Sci-Fi | 📅 2021</span></code></pre>
+
+<pre><code><span class="comment"># 🎥 Short movies (under 2 hours) with great ratings</span>
+<span class="func">recommend_movies</span>(df, min_rating=<span class="number">8.3</span>, max_runtime=<span class="number">120</span>)</code></pre>
+<pre><code><span class="output">🎬 Recommended Movies (4 found):
+
+  1. The Lion King
+     ⭐ 8.5 | ⏱️ 88 min | 🎨 Animation | 📅 1994
+
+  2. Whiplash
+     ⭐ 8.5 | ⏱️ 107 min | 🎨 Drama | 📅 2014
+
+  3. Coco
+     ⭐ 8.4 | ⏱️ 105 min | 🎨 Animation | 📅 2017
+
+  4. Up
+     ⭐ 8.3 | ⏱️ 96 min | 🎨 Animation | 📅 2009</span></code></pre>
+
+<pre><code><span class="comment"># 🤠 Best Action movies</span>
+<span class="func">recommend_movies</span>(df, genre=<span class="string">"Action"</span>, top_n=<span class="number">3</span>)</code></pre>
+<pre><code><span class="output">🎬 Recommended Movies (3 found):
+
+  1. The Dark Knight
+     ⭐ 9.0 | ⏱️ 152 min | 🎨 Action | 📅 2008
+
+  2. Avengers: Endgame
+     ⭐ 8.4 | ⏱️ 181 min | 🎨 Action | 📅 2019
+
+  3. Spider-Man: No Way Home
+     ⭐ 8.3 | ⏱️ 148 min | 🎨 Action | 📅 2021</span></code></pre>
+
+      <!-- STEP 5 -->
+      <h2 style="margin-top:24px">🎯 Step 5 — Challenges (Try Yourself!)</h2>
+      <p>These are <b>open-ended</b> — try solving them before peeking at the hints.</p>
+
+      <details>
+        <summary>🚨 Challenge 1: Find movies where the title contains "The"</summary>
+<pre><code>the_movies = df[df[<span class="string">"Title"</span>].<span class="func">str</span>.<span class="func">contains</span>(<span class="string">"The"</span>)]
+<span class="func">print</span>(<span class="string">f"Movies with 'The' in title: {len(the_movies)}\n"</span>)
+<span class="func">print</span>(the_movies[<span class="string">"Title"</span>].<span class="func">tolist</span>())</code></pre>
+      </details>
+
+      <details>
+        <summary>🚨 Challenge 2: Which director has the highest average rating?</summary>
+<pre><code>director_avg = df.<span class="func">groupby</span>(<span class="string">"Director"</span>)[<span class="string">"Rating"</span>].<span class="func">mean</span>().<span class="func">sort_values</span>(ascending=<span class="keyword">False</span>)
+<span class="func">print</span>(<span class="string">"Directors by average rating:\n"</span>)
+<span class="func">print</span>(director_avg.<span class="func">head</span>(<span class="number">10</span>))</code></pre>
+      </details>
+
+      <details>
+        <summary>🚨 Challenge 3: Create a "Decade" column (1970s, 1990s, 2000s…)</summary>
+<pre><code>df[<span class="string">"Decade"</span>] = (df[<span class="string">"Year"</span>] // <span class="number">10</span>) * <span class="number">10</span>
+df[<span class="string">"Decade"</span>] = df[<span class="string">"Decade"</span>].<span class="func">apply</span>(<span class="keyword">lambda</span> d: <span class="string">f"{d}s"</span>)
+<span class="func">print</span>(df[[<span class="string">"Title"</span>, <span class="string">"Year"</span>, <span class="string">"Decade"</span>]])
+
+<span class="comment"># Movies per decade</span>
+<span class="func">print</span>(<span class="string">"\nMovies per decade:"</span>)
+<span class="func">print</span>(df[<span class="string">"Decade"</span>].<span class="func">value_counts</span>().<span class="func">sort_index</span>())</code></pre>
+      </details>
+
+      <details>
+        <summary>🚨 Challenge 4: Interactive recommendation (ask user for input)</summary>
+<pre><code><span class="comment"># Interactive version</span>
+<span class="func">print</span>(<span class="string">"\n🎬 Movie Recommender \n"</span>)
+<span class="func">print</span>(<span class="string">"Available genres:"</span>, <span class="func">sorted</span>(df[<span class="string">"Genre"</span>].<span class="func">unique</span>()))
+
+genre = <span class="func">input</span>(<span class="string">"\nEnter genre (or press Enter for all): "</span>).<span class="func">strip</span>()
+min_r = <span class="func">input</span>(<span class="string">"Minimum rating (default 8.0): "</span>).<span class="func">strip</span>()
+max_t = <span class="func">input</span>(<span class="string">"Max runtime in minutes (default any): "</span>).<span class="func">strip</span>()
+
+<span class="func">recommend_movies</span>(df,
+    genre=genre <span class="keyword">if</span> genre <span class="keyword">else</span> <span class="keyword">None</span>,
+    min_rating=<span class="func">float</span>(min_r) <span class="keyword">if</span> min_r <span class="keyword">else</span> <span class="number">8.0</span>,
+    max_runtime=<span class="func">int</span>(max_t) <span class="keyword">if</span> max_t <span class="keyword">else</span> <span class="number">999</span>
+)</code></pre>
+      </details>
+
+      <details>
+        <summary>🚨 Challenge 5: Export your analysis to a report file</summary>
+<pre><code><span class="keyword">with</span> <span class="func">open</span>(<span class="string">"movie_report.txt"</span>, <span class="string">"w"</span>) <span class="keyword">as</span> f:
+    f.<span class="func">write</span>(<span class="string">"=== MOVIE ANALYSIS REPORT ===\n\n"</span>)
+    f.<span class="func">write</span>(<span class="string">f"Total movies: {len(df)}\n"</span>)
+    f.<span class="func">write</span>(<span class="string">f"Average rating: {df['Rating'].mean():.2f}\n"</span>)
+    f.<span class="func">write</span>(<span class="string">f"Average runtime: {df['Runtime'].mean():.0f} min\n\n"</span>)
+
+    f.<span class="func">write</span>(<span class="string">"Top 5 Movies:\n"</span>)
+    top5 = df.<span class="func">sort_values</span>(<span class="string">"Rating"</span>, ascending=<span class="keyword">False</span>).<span class="func">head</span>(<span class="number">5</span>)
+    <span class="keyword">for</span> _, m <span class="keyword">in</span> top5.<span class="func">iterrows</span>():
+        f.<span class="func">write</span>(<span class="string">f"  - {m['Title']} ({m['Rating']})\n"</span>)
+
+<span class="func">print</span>(<span class="string">"✅ Report saved to movie_report.txt"</span>)</code></pre>
+      </details>
+
+      <div class="callout" style="margin-top:14px">
+        <p style="margin:0">
+          🎓 <b>What you just built:</b>
+          <br/>✅ Loaded a real dataset with Pandas
+          <br/>✅ Explored data with <code>head()</code>, <code>describe()</code>, <code>value_counts()</code>
+          <br/>✅ Filtered, sorted, and grouped data
+          <br/>✅ Created new columns with <code>apply()</code>
+          <br/>✅ Built a recommendation function with parameters
+          <br/>✅ Exported results to files
+          <br/><br/>🚀 <b>You're now ready for Data Science!</b> Next, try adding <code>matplotlib</code> to visualize your data with charts.
+        </p>
+      </div>
+    </div>
+    </section>
+
+    <!-- ───────────── OOP ───────────── -->
+    <section id="oop" data-label="Section 16">
+    <div class="sec-header" onclick="this.parentElement.classList.toggle('collapsed')">
+      <h2>🏗️ Object-Oriented Programming (OOP) — Classes</h2>
+      <span class="sec-toggle">▼</span>
+    </div>
+    <div class="sec-body">
+      <p>OOP lets you create your own <b>data types</b> by bundling data (attributes) and behavior (methods) together into a <b>class</b>. Think of a class as a <b>blueprint</b>, and objects as the <b>actual things</b> built from that blueprint.</p>
+
+      <div class="callout" style="margin-top:10px">
+        <p style="margin:0"><b>Analogy:</b> A <b>class</b> is like a cookie cutter 🍪 — it defines the shape. An <b>object</b> is the actual cookie you make from it. You can make many cookies (objects) from one cutter (class).</p>
+      </div>
+
+      <h2 style="margin-top:18px">Your First Class</h2>
+<pre><code><span class="keyword">class</span> <span class="builtin">Student</span>:
+    <span class="keyword">def</span> <span class="func">__init__</span>(self, name, age, grade):
+        self.name = name
+        self.age = age
+        self.grade = grade
+
+    <span class="keyword">def</span> <span class="func">introduce</span>(self):
+        <span class="keyword">return</span> <span class="string">f"Hi, I'm {self.name}, age {self.age}, grade {self.grade}"</span>
+
+    <span class="keyword">def</span> <span class="func">is_passing</span>(self):
+        <span class="keyword">return</span> self.grade >= <span class="number">50</span>
+
+s1 = <span class="builtin">Student</span>(<span class="string">"Alice"</span>, <span class="number">25</span>, <span class="number">92</span>)
+s2 = <span class="builtin">Student</span>(<span class="string">"Bob"</span>, <span class="number">22</span>, <span class="number">45</span>)
+
+<span class="func">print</span>(s1.<span class="func">introduce</span>())    <span class="output"># Hi, I'm Alice, age 25, grade 92</span>
+<span class="func">print</span>(s2.<span class="func">is_passing</span>())   <span class="output"># False</span>
+<span class="func">print</span>(s1.name)            <span class="output"># Alice</span></code></pre>
+
+      <h2 style="margin-top:18px">Key Concepts</h2>
+      <div class="grid2">
+        <div class="mini">
+          <h3>📌 <code>self</code></h3>
+          <p style="margin:4px 0 0"><code>self</code> refers to the <b>current object</b>. Every method's first parameter must be <code>self</code>.</p>
+        </div>
+        <div class="mini">
+          <h3>🔧 <code>__init__</code></h3>
+          <p style="margin:4px 0 0">The <b>constructor</b> — runs automatically when you create a new object.</p>
+        </div>
+        <div class="mini">
+          <h3>📦 Attributes</h3>
+          <p style="margin:4px 0 0">Variables attached to an object (<code>self.name</code>). Each object has its own copy.</p>
+        </div>
+        <div class="mini">
+          <h3>⚡ Methods</h3>
+          <p style="margin:4px 0 0">Functions inside a class. Called with <code>object.method()</code>.</p>
+        </div>
+      </div>
+
+      <h2 style="margin-top:18px">Inheritance</h2>
+<pre><code><span class="keyword">class</span> <span class="builtin">Animal</span>:
+    <span class="keyword">def</span> <span class="func">__init__</span>(self, name, sound):
+        self.name = name
+        self.sound = sound
+
+    <span class="keyword">def</span> <span class="func">speak</span>(self):
+        <span class="keyword">return</span> <span class="string">f"{self.name} says {self.sound}!"</span>
+
+<span class="keyword">class</span> <span class="builtin">Dog</span>(<span class="builtin">Animal</span>):
+    <span class="keyword">def</span> <span class="func">__init__</span>(self, name, breed):
+        <span class="func">super</span>().<span class="func">__init__</span>(name, <span class="string">"Woof"</span>)
+        self.breed = breed
+
+    <span class="keyword">def</span> <span class="func">fetch</span>(self):
+        <span class="keyword">return</span> <span class="string">f"{self.name} fetches the ball! 🎾"</span>
+
+dog = <span class="builtin">Dog</span>(<span class="string">"Buddy"</span>, <span class="string">"Golden Retriever"</span>)
+<span class="func">print</span>(dog.<span class="func">speak</span>())    <span class="output"># Buddy says Woof!</span>
+<span class="func">print</span>(dog.<span class="func">fetch</span>())    <span class="output"># Buddy fetches the ball! 🎾</span></code></pre>
+
+      <details>
+        <summary>📝 Practical Example — Bank Account</summary>
+<pre><code><span class="keyword">class</span> <span class="builtin">BankAccount</span>:
+    <span class="keyword">def</span> <span class="func">__init__</span>(self, owner, balance=<span class="number">0</span>):
+        self.owner = owner
+        self.balance = balance
+
+    <span class="keyword">def</span> <span class="func">deposit</span>(self, amount):
+        <span class="keyword">if</span> amount > <span class="number">0</span>:
+            self.balance += amount
+            <span class="func">print</span>(<span class="string">f"✅ Deposited ₹{amount}. Balance: ₹{self.balance}"</span>)
+
+    <span class="keyword">def</span> <span class="func">withdraw</span>(self, amount):
+        <span class="keyword">if</span> amount > self.balance:
+            <span class="func">print</span>(<span class="string">"❌ Insufficient funds!"</span>)
+        <span class="keyword">else</span>:
+            self.balance -= amount
+            <span class="func">print</span>(<span class="string">f"✅ Withdrew ₹{amount}. Balance: ₹{self.balance}"</span>)
+
+acc = <span class="builtin">BankAccount</span>(<span class="string">"Alice"</span>, <span class="number">1000</span>)
+acc.<span class="func">deposit</span>(<span class="number">500</span>)     <span class="output"># ✅ Deposited ₹500. Balance: ₹1500</span>
+acc.<span class="func">withdraw</span>(<span class="number">200</span>)    <span class="output"># ✅ Withdrew ₹200. Balance: ₹1300</span>
+acc.<span class="func">withdraw</span>(<span class="number">5000</span>)   <span class="output"># ❌ Insufficient funds!</span></code></pre>
+      </details>
+
+      <div class="callout" style="margin-top:12px">
+        <p style="margin:0">💡 <b>When to use classes?</b> When you have <b>multiple related pieces of data + actions</b> that go together.</p>
+      </div>
+    </div>
+    </section>
+
+    <!-- ───────────── PRACTICE EXERCISES ───────────── -->
+    <section id="practice" data-label="Section 17">
+    <div class="sec-header" onclick="this.parentElement.classList.toggle('collapsed')">
+      <h2>🏋️ Practice Exercises</h2>
+      <span class="sec-toggle">▼</span>
+    </div>
+    <div class="sec-body">
+      <p>Try these exercises to test your understanding. Click each to reveal the solution.</p>
+
+      <details>
+        <summary>Exercise 1: Temperature Converter</summary>
+<pre><code><span class="keyword">def</span> <span class="func">celsius_to_fahrenheit</span>(celsius):
+    <span class="keyword">return</span> (celsius * <span class="number">9</span>/<span class="number">5</span>) + <span class="number">32</span>
+
+temp_c = <span class="func">float</span>(<span class="func">input</span>(<span class="string">"Enter temperature in Celsius: "</span>))
+<span class="func">print</span>(<span class="string">f"{temp_c}°C = {celsius_to_fahrenheit(temp_c)}°F"</span>)</code></pre>
+      </details>
+
+      <details>
+        <summary>Exercise 2: Even or Odd Checker</summary>
+<pre><code>num = <span class="func">int</span>(<span class="func">input</span>(<span class="string">"Enter a number: "</span>))
+<span class="func">print</span>(<span class="string">f"{num} is {'Even ✅' if num % 2 == 0 else 'Odd'}"</span>)</code></pre>
+      </details>
+
+      <details>
+        <summary>Exercise 3: FizzBuzz</summary>
+<pre><code><span class="keyword">for</span> i <span class="keyword">in</span> <span class="func">range</span>(<span class="number">1</span>, <span class="number">21</span>):
+    <span class="keyword">if</span> i % <span class="number">15</span> == <span class="number">0</span>: <span class="func">print</span>(<span class="string">"FizzBuzz"</span>)
+    <span class="keyword">elif</span> i % <span class="number">3</span> == <span class="number">0</span>: <span class="func">print</span>(<span class="string">"Fizz"</span>)
+    <span class="keyword">elif</span> i % <span class="number">5</span> == <span class="number">0</span>: <span class="func">print</span>(<span class="string">"Buzz"</span>)
+    <span class="keyword">else</span>: <span class="func">print</span>(i)</code></pre>
+      </details>
+
+      <details>
+        <summary>Exercise 4: List Statistics (without built-ins)</summary>
+<pre><code>numbers = [<span class="number">12</span>, <span class="number">5</span>, <span class="number">8</span>, <span class="number">23</span>, <span class="number">3</span>, <span class="number">17</span>, <span class="number">9</span>]
+total = <span class="number">0</span>
+minimum = maximum = numbers[<span class="number">0</span>]
+<span class="keyword">for</span> num <span class="keyword">in</span> numbers:
+    total += num
+    <span class="keyword">if</span> num &lt; minimum: minimum = num
+    <span class="keyword">if</span> num &gt; maximum: maximum = num
+<span class="func">print</span>(<span class="string">f"Sum:{total} Avg:{total/len(numbers)} Min:{minimum} Max:{maximum}"</span>)</code></pre>
+      </details>
+
+      <details>
+        <summary>Exercise 5: Student Grade Dictionary</summary>
+<pre><code>students = {<span class="string">"Alice"</span>: <span class="number">92</span>, <span class="string">"Bob"</span>: <span class="number">78</span>, <span class="string">"Charlie"</span>: <span class="number">95</span>}
+topper = <span class="func">max</span>(students, key=students.get)
+<span class="func">print</span>(<span class="string">f"🏆 Topper: {topper} with {students[topper]} marks"</span>)</code></pre>
+      </details>
+
+      <details>
+        <summary>Exercise 6: Word Counter</summary>
+<pre><code>sentence = <span class="string">"the cat sat on the mat the cat smiled"</span>
+word_count = {}
+<span class="keyword">for</span> word <span class="keyword">in</span> sentence.<span class="func">split</span>():
+    word_count[word] = word_count.<span class="func">get</span>(word, <span class="number">0</span>) + <span class="number">1</span>
+<span class="keyword">for</span> w, c <span class="keyword">in</span> word_count.<span class="func">items</span>():
+    <span class="func">print</span>(<span class="string">f"{w}: {c}"</span>)</code></pre>
+      </details>
+
+      <h2 style="margin-top:18px">Quick Cheat Sheet</h2>
+      <table>
+        <thead>
+          <tr style="background:rgba(122,162,255,.12)">
+            <th>Concept</th>
+            <th>Syntax</th>
+            <th>Example</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>Variable</td><td><code>name = value</code></td><td><code>age = 25</code></td></tr>
+          <tr><td>Print</td><td><code>print()</code></td><td><code>print("Hello")</code></td></tr>
+          <tr><td>Input</td><td><code>input()</code></td><td><code>name = input("Name: ")</code></td></tr>
+          <tr><td>If/Else</td><td><code>if condition:</code></td><td><code>if x > 0: print("+")</code></td></tr>
+          <tr><td>For loop</td><td><code>for x in seq:</code></td><td><code>for i in range(5):</code></td></tr>
+          <tr><td>While loop</td><td><code>while cond:</code></td><td><code>while x < 10:</code></td></tr>
+          <tr><td>Function</td><td><code>def name():</code></td><td><code>def greet(n): return f"Hi {n}"</code></td></tr>
+          <tr><td>List</td><td><code>[a, b, c]</code></td><td><code>nums = [1, 2, 3]</code></td></tr>
+          <tr><td>Dict</td><td><code>{k: v}</code></td><td><code>d = {"name": "Alice"}</code></td></tr>
+          <tr><td>f-String</td><td><code>f"text {var}"</code></td><td><code>f"Age: {age}"</code></td></tr>
+        </tbody>
+      </table>
+
+      <div class="callout" style="margin-top:14px">
+        <p style="margin:0">
+          🎉 <b>Congratulations!</b> You've covered all the Python fundamentals!
+          <br/><br/>🚀 <b>You made it!</b> From variables to a full movie recommendation system.
+        </p>
+      </div>
+    </div>
+    </section>
+
+    <div class="muted" style="margin-top:12px;border-top:1px solid var(--b);padding-top:10px">
+      Note: Navigation works without JavaScript. Search highlighting uses JavaScript.
+    </div>
+  </main>
+</div>
+
+<script>
+  // Search highlighter
+  const q = document.getElementById('q');
+  const clear = document.getElementById('clear');
+  const sections = [...document.querySelectorAll('main section')];
+
+  function clearHighlights(){
+    sections.forEach(s => s.innerHTML = s.innerHTML.replaceAll('<span class="hl">','').replaceAll('</span>',''));
+  }
+
+  function highlight(term){
+    if(!term) return;
+    const re = new RegExp(term.replace(/[.*+?^${}()|[\]\\]/g,'\\$&'), 'gi');
+    sections.forEach(s=>{
+      s.innerHTML = s.innerHTML.replace(re, m => `<span class="hl">${m}</span>`);
+    });
+  }
+
+  q.addEventListener('input', ()=>{
+    clearHighlights();
+    const term = q.value.trim();
+    if(term) highlight(term);
+  });
+
+  clear.addEventListener('click', ()=>{
+    q.value = '';
+    clearHighlights();
+    q.focus();
+  });
+
+  // Active nav styling
+  const navLinks = [...document.querySelectorAll('#nav a')];
+  window.addEventListener('hashchange', ()=>{
+    navLinks.forEach(a => a.classList.toggle('active', a.getAttribute('href') === location.hash));
+  });
+</script>
+</body>
+</html>

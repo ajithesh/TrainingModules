@@ -1,0 +1,2141 @@
+
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Data Science with AI — Teaching UI</title>
+  <style>
+    :root{--bg:#0b1220;--panel:#0f1a33;--text:#e8eefc;--muted:#a9b7da;--b:#ffffff1a;--brand:#7aa2ff;--brand2:#66e3c4;--r:16px;}
+    *{box-sizing:border-box}
+    body{margin:0;font-family:system-ui,Segoe UI,Roboto,Arial;background:var(--bg);color:var(--text)}
+    .app{display:grid;grid-template-columns:320px 1fr;min-height:100vh;transition:grid-template-columns .3s ease}
+    .app.collapsed{grid-template-columns:0px 1fr}
+    @media(max-width:980px){.app{grid-template-columns:1fr}}
+    .side{padding:14px;border-right:1px solid var(--b);background:linear-gradient(180deg,rgba(15,26,51,.85),rgba(15,26,51,.35));position:sticky;top:0;height:100vh;overflow-y:auto;overflow-x:hidden;transition:padding .3s ease,opacity .3s ease;white-space:nowrap}
+    .app.collapsed .side{padding:0;opacity:0;pointer-events:none}
+    .toggle-nav{position:fixed;top:12px;left:12px;z-index:100;width:36px;height:36px;border-radius:10px;border:1px solid var(--b);background:rgba(15,26,51,.85);color:var(--text);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:18px;transition:left .3s ease}
+    .app.collapsed .toggle-nav{left:12px}
+    main{overflow-y:auto;height:100vh}
+    .card{border:1px solid var(--b);border-radius:var(--r);padding:14px;background:rgba(15,26,51,.7)}
+    h1,h2{margin:0 0 10px 0}
+    h1{font-size:20px}
+    h2{font-size:18px;margin-top:18px}
+    p{line-height:1.6;color:var(--text)}
+    .muted{color:var(--muted);font-size:12px}
+    .nav a{
+      display:block;text-decoration:none;color:var(--text);
+      padding:10px 12px;border-radius:12px;margin:6px 0;border:1px solid transparent
+    }
+    .nav a:hover{background:rgba(255,255,255,.06)}
+    .nav a.active{border-color:rgba(122,162,255,.35);background:rgba(38, 59, 106, 0.1)}
+    main{padding:16px}
+    .top{display:flex;gap:10px;align-items:center;margin-bottom:10px;flex-wrap:wrap}
+    input{width:100%;max-width:520px;padding:10px 12px;border-radius:12px;border:1px solid var(--b);background:#0b1220;color:var(--text)}
+    button{padding:10px 12px;border-radius:12px;border:1px solid var(--b);background:rgba(102,227,196,.10);color:var(--text);cursor:pointer}
+    button:hover{background:rgba(102,227,196,.16)}
+    section{border:1px solid var(--b);border-radius:var(--r);padding:14px;background:rgba(15,26,51,.55);margin-bottom:12px}
+    .callout{border-left:4px solid var(--brand2);padding:10px 12px;background:rgba(102,227,196,.08);border-radius:12px}
+    .hl{background:rgba(255,214,102,.22);padding:0 3px;border-radius:6px}
+    .pill{display:inline-block;border:1px solid var(--b);border-radius:999px;padding:6px 10px;margin:4px 6px 0 0;font-size:12px}
+    .pill b{color:var(--brand2)}
+    details{border:1px solid var(--b);border-radius:12px;padding:10px 12px;margin:10px 0;background:rgba(255,255,255,.04)}
+    summary{cursor:pointer;font-weight:700}
+    .grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+    @media(max-width:700px){.grid{grid-template-columns:1fr}}
+    ul{margin:8px 0 0 18px}
+    .grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:10px 0}
+    .mini{border:1px solid var(--b);border-radius:var(--r);padding:14px;background:rgba(15,26,51,.7)}
+    .mini h3{margin:0 0 4px 0;font-size:16px}
+    table{color:var(--text)}
+    th{color:var(--brand);font-weight:600}
+    .venn-wrapper{display:flex;justify-content:center;margin:20px 0}
+    .venn{position:relative;width:420px;height:380px}
+    .venn .circle{position:absolute;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px;text-align:center;transition:transform .2s}
+    .venn .circle:hover{transform:scale(1.04)}
+    .venn .c-ds{width:260px;height:260px;background:rgba(122,162,255,.15);border:2px solid rgba(122,162,255,.5);top:60px;left:0}
+    .venn .c-ai{width:240px;height:240px;background:rgba(102,227,196,.12);border:2px solid rgba(102,227,196,.45);top:20px;right:0}
+    .venn .c-ml{width:160px;height:160px;background:rgba(255,214,102,.12);border:2px solid rgba(255,214,102,.45);top:80px;left:155px}
+    .venn .c-dl{width:100px;height:100px;background:rgba(255,130,130,.15);border:2px solid rgba(255,130,130,.45);top:110px;left:185px}
+    .venn .label{position:absolute;font-size:11px;color:var(--muted);pointer-events:none}
+    .venn .l-ds{bottom:10px;left:30px}
+    .venn .l-ai{top:0;right:30px}
+    .venn .l-ml{bottom:85px;right:55px}
+    .venn .l-dl{bottom:60px;right:80px}
+    @media(max-width:500px){.venn{transform:scale(.75);transform-origin:top center}}
+  </style>
+</head>
+<body>
+<div class="app" id="app">
+  <button class="toggle-nav" id="toggleNav" title="Toggle navigation">☰</button>
+  <aside class="side">
+    <div class="card">
+      <h1>Data Science with AI</h1>
+      <div class="muted">Navigation works even if JavaScript is blocked.</div>
+
+      <div style="margin-top:12px" class="nav" id="nav">
+        <a href="#overview" class="active">📌 Overview</a>
+        <a href="#definitions">📘 Definitions</a>
+        <a href="#relationship">🤝 Relationship</a>
+        <a href="#ml-types">🧠 ML Types</a>
+        <a href="#linear-regression">📈 Linear Regression</a>
+        <a href="#lr-lab">🧪 LR Lab</a>
+        <a href="#lifecycle">🔄 Lifecycle</a>
+        <a href="#examples">🧩 Examples</a>
+      </div>
+
+      <div class="muted" style="margin-top:12px">
+        If you’re viewing this inside Teams/Outlook preview, JavaScript may be blocked.
+        Save as <b>.html</b> and open in a browser for best experience.
+      </div>
+    </div>
+  </aside>
+  <script>
+    document.getElementById('toggleNav').addEventListener('click',function(){
+      document.getElementById('app').classList.toggle('collapsed');
+    });
+  </script>
+  <main>
+    <div class="top">
+      <input id="q" placeholder="Search inside the page (e.g., EDA, deployment, model)"/>
+      <button id="clear">Clear</button>
+    </div>
+
+    <section id="overview">
+      <h2>Overview</h2>
+      <p class="muted">Simple story: Data → Insights → AI Model → Decisions</p>
+      <span class="pill"><b>Data Science</b> = Understand & predict using data</span>
+      <span class="pill"><b>AI</b> = Learn & act automatically</span>
+      <span class="pill"><b>ML</b> = Overlap (learning from data)</span>
+
+      <div class="callout" style="margin-top:12px">
+        <p style="margin:0"><b>Teaching hook:</b> “How does Netflix know what you’ll like next?”</p>
+      </div>
+    </section>
+
+    <section id="definitions">
+      <h2>Definitions</h2>
+      <p><b>Data Science</b> = Collect, clean, analyze data → find patterns → make predictions → communicate insights.</p>
+      <p><b>AI</b> = Systems that learn from data and make decisions (e.g., language, vision, recommendations).</p>
+      <p><b>ML</b> = A subset of AI often used inside Data Science to learn patterns from data.</p>
+    </section>
+
+    <section id="relationship">
+      <h2>Relationship</h2>
+      <p>AI needs good data. Data Science prepares the data so AI models can learn reliably.</p>
+      <div class="callout">
+        <p style="margin:0"><b>One-liner:</b> Data Science prepares the fuel; AI is the engine.</p>
+      </div>
+
+      <h2 style="margin-top:18px">How they relate (Venn Diagram)</h2>
+      <div class="venn-wrapper">
+        <div class="venn">
+          <div class="circle c-ds" title="Data Science: statistics, EDA, visualization, domain expertise"></div>
+          <div class="circle c-ai" title="AI: NLP, computer vision, robotics, expert systems"></div>
+          <div class="circle c-ml" title="ML: supervised, unsupervised, reinforcement learning"></div>
+          <div class="circle c-dl" title="Deep Learning: neural networks, CNNs, transformers"></div>
+          <span class="label l-ds"><b style="color:#7aa2ff">Data Science</b><br/>Stats · EDA · Viz</span>
+          <span class="label l-ai"><b style="color:#66e3c4">AI</b><br/>NLP · Vision · Robotics</span>
+          <span class="label l-ml"><b style="color:#ffd666">ML</b><br/>Learn from data</span>
+          <span class="label l-dl"><b style="color:#ff8282">Deep Learning</b><br/>Neural nets</span>
+        </div>
+      </div>
+      <div class="callout" style="margin-top:6px">
+        <p style="margin:0">
+          🔵 <strong>Data Science</strong> overlaps with AI through <strong>Machine Learning</strong><br/>
+          🟡 <strong>ML</strong> is a subset of AI — it learns patterns from data<br/>
+          🔴 <strong>Deep Learning</strong> is a subset of ML — uses neural networks for complex tasks
+        </p>
+      </div>
+
+      <h2 style="margin-top:18px">🗣️ How to explain each circle</h2>
+
+      <h2 style="margin-top:18px">🍕 The Zomato Story — One example, all four concepts</h2>
+      <div class="callout" style="margin-bottom:14px">
+        <p style="margin:0"><b>Set the scene:</b> You open Zomato to order dinner. Behind that simple tap, all four fields are working together. Let's follow your order…</p>
+      </div>
+
+      <details open>
+        <summary style="color:#7aa2ff">📊 Chapter 1 — Data Science: "What do people eat?"</summary>
+        <p>Zomato's data team collects <b>millions of orders</b> — timestamps, locations, ratings, cuisine type, weather, festivals, and more.</p>
+        <p>A data scientist cleans this data (removing duplicates, fixing missing pincodes) and runs an analysis:</p>
+        <div class="callout">
+          <p style="margin:0">💡 <em>"Biryani orders spike 40% on Sundays in Hyderabad, and 60% during rain."</em></p>
+        </div>
+        <p>They build dashboards showing trends city-by-city, cuisine-by-cuisine. The operations team uses this to plan restaurant partnerships and delivery fleet allocation.</p>
+        <p><b>Tools used:</b> Python, Pandas, SQL, Matplotlib, Power BI</p>
+        <p><b>Key takeaway:</b> Data Science answers <strong>"What happened?"</strong> and <strong>"Why?"</strong></p>
+      </details>
+
+      <details>
+        <summary style="color:#ffd666">📈 Chapter 2 — Machine Learning: "What will they order next?"</summary>
+        <p>Now Zomato wants to <b>predict</b>, not just report. The ML team takes the cleaned data and trains a model:</p>
+        <div class="callout">
+          <p style="margin:0">💡 <em>"Users who order biryani on Sunday also order gulab jamun 70% of the time → show gulab jamun as a combo suggestion."</em></p>
+        </div>
+        <p>The model learns patterns <b>without being explicitly programmed</b> — it figures out rules on its own from thousands of order histories.</p>
+
+        <h3 style="margin-top:14px">🏷️ Features vs Labels</h3>
+        <p>Before training a model, you split your data into two parts:</p>
+        <div class="grid2">
+          <div class="mini">
+            <h3>Features (Input — X)</h3>
+            <p class="muted" style="margin:0 0 6px">The information the model uses to make a prediction</p>
+            <p style="margin:0"><b>Zomato example:</b></p>
+            <ul style="margin:4px 0 0 18px">
+              <li>Distance to restaurant</li>
+              <li>Time of day</li>
+              <li>Day of week</li>
+              <li>Weather</li>
+              <li>Restaurant prep time</li>
+            </ul>
+          </div>
+          <div class="mini">
+            <h3>Label (Output — Y)</h3>
+            <p class="muted" style="margin:0 0 6px">The answer the model is trying to predict</p>
+            <p style="margin:0"><b>Zomato example:</b></p>
+            <ul style="margin:4px 0 0 18px">
+              <li>Delivery time (e.g., 35 minutes)</li>
+            </ul>
+            <div class="callout" style="margin-top:8px">
+              <p style="margin:0">💡 <em>In supervised learning the label is known during training. In unsupervised learning there is no label — the model discovers patterns on its own.</em></p>
+            </div>
+          </div>
+        </div>
+
+        <h3 style="margin-top:14px">✂️ Training Data vs Testing Data</h3>
+        <p>You <b>never</b> test a model on the same data it was trained on — that's like giving a student the exact same exam they practiced with. Instead, you split:</p>
+        <div class="grid2">
+          <div class="mini">
+            <h3>Training Set (~70-80%)</h3>
+            <p style="margin:0">The model <b>learns</b> from this data. It sees both features and labels, and adjusts itself to find patterns.</p>
+            <p class="muted" style="margin:6px 0 0">📚 Like studying from a textbook</p>
+          </div>
+          <div class="mini">
+            <h3>Testing Set (~20-30%)</h3>
+            <p style="margin:0">The model is <b>evaluated</b> on this data. It only sees features and must predict the label — we compare its predictions to the real answers.</p>
+            <p class="muted" style="margin:6px 0 0">📝 Like taking the final exam</p>
+          </div>
+        </div>
+        <div class="callout" style="margin-top:10px">
+          <p style="margin:0">💡 <b>Zomato example:</b> Out of 1 lakh past delivery records, 80,000 are used to train the model (it learns that rain + long distance = slower delivery). The remaining 20,000 are used to test — did the model predict delivery time accurately on orders it never saw before?</p>
+        </div>
+        <div style="margin-top:10px;text-align:center">
+          <div style="display:inline-block;width:100%;max-width:500px;border:1px solid var(--b);border-radius:14px;overflow:hidden">
+            <div style="display:flex">
+              <div style="flex:4;background:rgba(122,162,255,.18);padding:12px;text-align:center">
+                <b style="color:#7aa2ff">Training (80%)</b><br/><span class="muted">Model learns here</span>
+              </div>
+              <div style="flex:1;background:rgba(102,227,196,.18);padding:12px;text-align:center">
+                <b style="color:#66e3c4">Test (20%)</b><br/><span class="muted">Evaluate here</span>
+              </div>
+            </div>
+          </div>
+          <p class="muted" style="margin:4px 0 0">Full dataset split</p>
+        </div>
+
+        <p style="margin-top:14px"><b>Types at play:</b></p>
+        <ul>
+          <li><b>Supervised ML:</b> Predict delivery time (labeled data: past delivery times)</li>
+          <li><b>Unsupervised ML:</b> Group users into segments (budget eaters, health-conscious, party orderers)</li>
+          <li><b>Reinforcement:</b> Optimize delivery routes — the system tries different paths and learns which are fastest</li>
+        </ul>
+        <p><b>Tools used:</b> Scikit-learn, XGBoost, feature engineering on order data</p>
+        <p><b>Key takeaway:</b> ML answers <strong>"What will happen?"</strong> — it learns patterns and makes predictions.</p>
+      </details>
+
+      <details>
+        <summary style="color:#ff8282">🧠 Chapter 3 — Deep Learning: "Understand photos, reviews &amp; speech"</summary>
+        <p>Some problems are too complex for traditional ML. Zomato needs to:</p>
+        <ul>
+          <li>📸 <b>Analyze food photos</b> users upload — is it biryani or pulao? Is the presentation good? (Computer Vision using CNNs)</li>
+          <li>💬 <b>Understand reviews</b> — "The butter chicken was to die for but the naan was stale" → extract sentiment per dish, not just per restaurant (NLP using Transformers)</li>
+          <li>🎙️ <b>Voice ordering</b> — "Order my usual from Paradise Biryani" → understand spoken Hindi/English and map it to an order (Speech Recognition using RNNs)</li>
+        </ul>
+        <div class="callout">
+          <p style="margin:0">💡 <em>"A neural network with millions of parameters reads 10 lakh reviews and learns that 'fire' means great when talking about food, but bad when talking about delivery."</em></p>
+        </div>
+        <p><b>Tools used:</b> PyTorch, TensorFlow, Hugging Face Transformers, CNNs, BERT</p>
+        <p><b>Key takeaway:</b> Deep Learning handles <strong>unstructured data</strong> (images, text, audio) that traditional ML can't.</p>
+      </details>
+
+      <details>
+        <summary style="color:#66e3c4">🤖 Chapter 4 — AI: "The whole system, acting smart"</summary>
+        <p>Now put it all together. When you open Zomato at 8 PM on a rainy Sunday in Hyderabad:</p>
+        <ol>
+          <li>📊 <b>Data Science</b> already found that biryani + rain + Sunday = peak demand</li>
+          <li>📈 <b>ML</b> predicts you'll order biryani (based on your past orders) and suggests a gulab jamun combo</li>
+          <li>🧠 <b>Deep Learning</b> shows you restaurants with the best food photos and filters out places with negative review sentiment</li>
+          <li>🤖 <b>AI orchestrates everything:</b> personalizes your home screen, estimates delivery in 35 min, assigns the nearest rider, adjusts pricing based on demand, and sends you a push notification: <em>"Craving biryani? Paradise has 20% off tonight!"</em></li>
+        </ol>
+        <div class="callout">
+          <p style="margin:0">💡 <em>AI is the umbrella — it's the system that makes intelligent decisions by combining Data Science insights, ML predictions, and Deep Learning understanding.</em></p>
+        </div>
+        <p><b>Key takeaway:</b> AI is not just one technique — it's the <strong>intelligent system</strong> that ties DS + ML + DL together to act automatically.</p>
+      </details>
+
+      <h2 style="margin-top:18px">📊 The Zomato comparison table</h2>
+      <div style="overflow:auto">
+        <table style="width:100%; border-collapse:separate; border-spacing:0; border:1px solid rgba(255,255,255,.10); border-radius:14px; overflow:hidden;">
+          <thead>
+            <tr style="background:rgba(122,162,255,.12);">
+              <th style="text-align:left; padding:12px; border-bottom:1px solid rgba(255,255,255,.10);"></th>
+              <th style="text-align:left; padding:12px; border-bottom:1px solid rgba(255,255,255,.10); color:#7aa2ff;">Data Science</th>
+              <th style="text-align:left; padding:12px; border-bottom:1px solid rgba(255,255,255,.10); color:#ffd666;">ML</th>
+              <th style="text-align:left; padding:12px; border-bottom:1px solid rgba(255,255,255,.10); color:#ff8282;">Deep Learning</th>
+              <th style="text-align:left; padding:12px; border-bottom:1px solid rgba(255,255,255,.10); color:#66e3c4;">AI</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td style="padding:12px; border-bottom:1px solid rgba(255,255,255,.08);"><b>Question</b></td>
+              <td style="padding:12px; border-bottom:1px solid rgba(255,255,255,.08);">What happened?</td>
+              <td style="padding:12px; border-bottom:1px solid rgba(255,255,255,.08);">What will happen?</td>
+              <td style="padding:12px; border-bottom:1px solid rgba(255,255,255,.08);">What does this image/text mean?</td>
+              <td style="padding:12px; border-bottom:1px solid rgba(255,255,255,.08);">What should we do?</td>
+            </tr>
+            <tr>
+              <td style="padding:12px; border-bottom:1px solid rgba(255,255,255,.08);"><b>Zomato does</b></td>
+              <td style="padding:12px; border-bottom:1px solid rgba(255,255,255,.08);">Biryani spikes on Sundays</td>
+              <td style="padding:12px; border-bottom:1px solid rgba(255,255,255,.08);">You'll likely order biryani + gulab jamun</td>
+              <td style="padding:12px; border-bottom:1px solid rgba(255,255,255,.08);">This photo is biryani; this review is positive</td>
+              <td style="padding:12px; border-bottom:1px solid rgba(255,255,255,.08);">Show biryani first, send discount notification</td>
+            </tr>
+            <tr>
+              <td style="padding:12px; border-bottom:1px solid rgba(255,255,255,.08);"><b>Data type</b></td>
+              <td style="padding:12px; border-bottom:1px solid rgba(255,255,255,.08);">Structured (orders, CSV)</td>
+              <td style="padding:12px; border-bottom:1px solid rgba(255,255,255,.08);">Structured (features)</td>
+              <td style="padding:12px; border-bottom:1px solid rgba(255,255,255,.08);">Unstructured (photos, text)</td>
+              <td style="padding:12px; border-bottom:1px solid rgba(255,255,255,.08);">All types combined</td>
+            </tr>
+            <tr>
+              <td style="padding:12px;"><b>Tools</b></td>
+              <td style="padding:12px;">Python, SQL, Power BI</td>
+              <td style="padding:12px;">Scikit-learn, XGBoost</td>
+              <td style="padding:12px;">PyTorch, TensorFlow</td>
+              <td style="padding:12px;">Azure AI, OpenAI, full stack</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h2 style="margin-top:18px">🎯 Classroom recap — one sentence each</h2>
+      <div class="callout">
+        <p style="margin:0">
+          📊 <strong>Data Science</strong> = Zomato's analyst finds that biryani sells most on rainy Sundays.<br/>
+          📈 <strong>ML</strong> = The app learns your taste and predicts you'll want gulab jamun with it.<br/>
+          🧠 <strong>Deep Learning</strong> = It reads your review "butter chicken was fire 🔥" and knows that's a 5-star compliment.<br/>
+          🤖 <strong>AI</strong> = It puts it all together — personalizes your screen, estimates delivery, and nudges you with a discount at the perfect moment.
+        </p>
+      </div>
+
+      <h2 style="margin-top:18px">📊 Side-by-side comparison</h2>
+      <div style="overflow:auto">
+        <table style="width:100%; border-collapse:separate; border-spacing:0; border:1px solid rgba(255,255,255,.10); border-radius:14px; overflow:hidden;">
+          <thead>
+            <tr style="background:rgba(122,162,255,.12);">
+              <th style="text-align:left; padding:12px; border-bottom:1px solid rgba(255,255,255,.10);">Aspect</th>
+              <th style="text-align:left; padding:12px; border-bottom:1px solid rgba(255,255,255,.10); color:#7aa2ff;">Data Science</th>
+              <th style="text-align:left; padding:12px; border-bottom:1px solid rgba(255,255,255,.10); color:#66e3c4;">AI</th>
+              <th style="text-align:left; padding:12px; border-bottom:1px solid rgba(255,255,255,.10); color:#ffd666;">ML</th>
+              <th style="text-align:left; padding:12px; border-bottom:1px solid rgba(255,255,255,.10); color:#ff8282;">Deep Learning</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td style="padding:12px; border-bottom:1px solid rgba(255,255,255,.08);"><b>Goal</b></td>
+              <td style="padding:12px; border-bottom:1px solid rgba(255,255,255,.08);">Extract insights</td>
+              <td style="padding:12px; border-bottom:1px solid rgba(255,255,255,.08);">Simulate intelligence</td>
+              <td style="padding:12px; border-bottom:1px solid rgba(255,255,255,.08);">Learn from data</td>
+              <td style="padding:12px; border-bottom:1px solid rgba(255,255,255,.08);">Learn complex patterns</td>
+            </tr>
+            <tr>
+              <td style="padding:12px; border-bottom:1px solid rgba(255,255,255,.08);"><b>Data needed</b></td>
+              <td style="padding:12px; border-bottom:1px solid rgba(255,255,255,.08);">Structured / small OK</td>
+              <td style="padding:12px; border-bottom:1px solid rgba(255,255,255,.08);">Varies</td>
+              <td style="padding:12px; border-bottom:1px solid rgba(255,255,255,.08);">Medium datasets</td>
+              <td style="padding:12px; border-bottom:1px solid rgba(255,255,255,.08);">Massive datasets</td>
+            </tr>
+            <tr>
+              <td style="padding:12px; border-bottom:1px solid rgba(255,255,255,.08);"><b>Output</b></td>
+              <td style="padding:12px; border-bottom:1px solid rgba(255,255,255,.08);">Reports, dashboards</td>
+              <td style="padding:12px; border-bottom:1px solid rgba(255,255,255,.08);">Decisions, actions</td>
+              <td style="padding:12px; border-bottom:1px solid rgba(255,255,255,.08);">Predictions</td>
+              <td style="padding:12px; border-bottom:1px solid rgba(255,255,255,.08);">Images, text, speech</td>
+            </tr>
+            <tr>
+              <td style="padding:12px; border-bottom:1px solid rgba(255,255,255,.08);"><b>Tools</b></td>
+              <td style="padding:12px; border-bottom:1px solid rgba(255,255,255,.08);">Python, SQL, Excel</td>
+              <td style="padding:12px; border-bottom:1px solid rgba(255,255,255,.08);">OpenAI, Azure AI</td>
+              <td style="padding:12px; border-bottom:1px solid rgba(255,255,255,.08);">Scikit-learn, XGBoost</td>
+              <td style="padding:12px; border-bottom:1px solid rgba(255,255,255,.08);">PyTorch, TensorFlow</td>
+            </tr>
+            <tr>
+              <td style="padding:12px;"><b>Everyday example</b></td>
+              <td style="padding:12px;">Excel pivot table</td>
+              <td style="padding:12px;">Alexa answering you</td>
+              <td style="padding:12px;">Email spam filter</td>
+              <td style="padding:12px;">ChatGPT writing text</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h2 style="margin-top:18px">🎯 Quick classroom activity</h2>
+      <div class="callout">
+        <p style="margin:0">
+          Ask learners to pick <b>any other app</b> (Swiggy, Amazon, Instagram, Spotify) and map the same four chapters:<br/><br/>
+          1️⃣ What data is collected? → <b>Data Science</b><br/>
+          2️⃣ What prediction is made? → <b>ML</b><br/>
+          3️⃣ What unstructured data is understood? → <b>Deep Learning</b><br/>
+          4️⃣ What smart decision is automated? → <b>AI</b>
+        </p>
+      </div>
+
+      <div class="grid" style="margin-top:14px">
+        <div>
+          <p><b>Data Science contributes</b></p>
+          <ul>
+            <li>Data pipelines & quality</li>
+            <li>EDA and insights</li>
+            <li>Feature engineering</li>
+            <li>Evaluation and interpretation</li>
+          </ul>
+        </div>
+        <div>
+          <p><b>AI contributes</b></p>
+          <ul>
+            <li>Learning patterns from data</li>
+            <li>Automation and decisions</li>
+            <li>NLP / Vision capabilities</li>
+            <li>Continuous improvement via feedback</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section id="ml-types">
+      <h2>🧠 Types of Machine Learning</h2>
+      <p>Machine Learning is divided into three main types based on <b>how the model learns</b> from data.</p>
+
+      <div class="callout" style="margin-bottom:14px">
+        <p style="margin:0"><b>Think of it this way:</b><br/>
+        🎓 <b>Supervised</b> = Teacher gives you questions <em>and</em> answers → you learn the pattern<br/>
+        🔍 <b>Unsupervised</b> = No answers given → you find hidden groups on your own<br/>
+        🎮 <b>Reinforcement</b> = You learn by trial and error → rewards for good moves, penalties for bad ones</p>
+      </div>
+
+      <!-- ─── SUPERVISED ─── -->
+      <details open>
+        <summary style="color:#7aa2ff;font-size:16px">🎓 Supervised Learning — "Learning with a teacher"</summary>
+
+        <h3 style="margin-top:12px">What is it?</h3>
+        <p>The model is trained on <b>labeled data</b> — every input comes with the correct output (the "answer"). The model learns the mapping from input → output, then predicts answers for new, unseen data.</p>
+
+        <div class="callout">
+          <p style="margin:0">💡 <em>Like a student studying past exam papers <b>with</b> answer keys — they learn the pattern and can answer new questions.</em></p>
+        </div>
+
+        <h3 style="margin-top:12px">Two sub-types</h3>
+        <div class="grid2">
+          <div class="mini">
+            <h3>Classification</h3>
+            <p class="muted" style="margin:0 0 6px">Predict a <b>category</b></p>
+            <ul style="margin:0">
+              <li>Is this email spam or not?</li>
+              <li>Is this tumor malignant or benign?</li>
+              <li>Will the customer churn? (Yes/No)</li>
+            </ul>
+          </div>
+          <div class="mini">
+            <h3>Regression</h3>
+            <p class="muted" style="margin:0 0 6px">Predict a <b>number</b></p>
+            <ul style="margin:0">
+              <li>What will the house price be?</li>
+              <li>How many units will sell next month?</li>
+              <li>What's the expected delivery time?</li>
+            </ul>
+          </div>
+        </div>
+
+        <h3 style="margin-top:12px">Real-world examples</h3>
+        <div style="overflow:auto">
+          <table style="width:100%; border-collapse:separate; border-spacing:0; border:1px solid rgba(255,255,255,.10); border-radius:14px; overflow:hidden;">
+            <thead>
+              <tr style="background:rgba(122,162,255,.12)">
+                <th style="text-align:left; padding:10px; border-bottom:1px solid rgba(255,255,255,.10);">App / Domain</th>
+                <th style="text-align:left; padding:10px; border-bottom:1px solid rgba(255,255,255,.10);">Input (Features)</th>
+                <th style="text-align:left; padding:10px; border-bottom:1px solid rgba(255,255,255,.10);">Output (Label)</th>
+                <th style="text-align:left; padding:10px; border-bottom:1px solid rgba(255,255,255,.10);">Type</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td style="padding:10px; border-bottom:1px solid rgba(255,255,255,.08);">Gmail</td><td style="padding:10px; border-bottom:1px solid rgba(255,255,255,.08);">Email text, sender, links</td><td style="padding:10px; border-bottom:1px solid rgba(255,255,255,.08);">Spam / Not Spam</td><td style="padding:10px; border-bottom:1px solid rgba(255,255,255,.08);">Classification</td></tr>
+              <tr><td style="padding:10px; border-bottom:1px solid rgba(255,255,255,.08);">Zomato</td><td style="padding:10px; border-bottom:1px solid rgba(255,255,255,.08);">Distance, traffic, restaurant prep time</td><td style="padding:10px; border-bottom:1px solid rgba(255,255,255,.08);">Delivery time (minutes)</td><td style="padding:10px; border-bottom:1px solid rgba(255,255,255,.08);">Regression</td></tr>
+              <tr><td style="padding:10px; border-bottom:1px solid rgba(255,255,255,.08);">Hospital</td><td style="padding:10px; border-bottom:1px solid rgba(255,255,255,.08);">Scan image, patient history</td><td style="padding:10px; border-bottom:1px solid rgba(255,255,255,.08);">Disease / No Disease</td><td style="padding:10px; border-bottom:1px solid rgba(255,255,255,.08);">Classification</td></tr>
+              <tr><td style="padding:10px;">Real Estate</td><td style="padding:10px;">Area, location, bedrooms, age</td><td style="padding:10px;">Price (₹)</td><td style="padding:10px;">Regression</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3 style="margin-top:12px">Common algorithms</h3>
+        <span class="pill">Linear Regression</span>
+        <span class="pill">Logistic Regression</span>
+        <span class="pill">Decision Trees</span>
+        <span class="pill">Random Forest</span>
+        <span class="pill">SVM</span>
+        <span class="pill">KNN</span>
+        <span class="pill">XGBoost</span>
+        <span class="pill">Neural Networks</span>
+      </details>
+
+      <!-- ─── UNSUPERVISED ─── -->
+      <details>
+        <summary style="color:#66e3c4;font-size:16px">🔍 Unsupervised Learning — "Learning without answers"</summary>
+
+        <h3 style="margin-top:12px">What is it?</h3>
+        <p>The model is given <b>data without labels</b> — no correct answers. It must find <b>hidden patterns, groupings, or structure</b> on its own.</p>
+
+        <div class="callout">
+          <p style="margin:0">💡 <em>Like dumping a pile of mixed Lego bricks on a table and asking someone to group them — nobody told them the categories, they figure it out by shape, color, and size.</em></p>
+        </div>
+
+        <h3 style="margin-top:12px">Key techniques</h3>
+        <div class="grid2">
+          <div class="mini">
+            <h3>Clustering</h3>
+            <p class="muted" style="margin:0 0 6px">Group similar items together</p>
+            <ul style="margin:0">
+              <li>Customer segmentation (budget vs premium shoppers)</li>
+              <li>Grouping news articles by topic</li>
+              <li>Identifying patient groups with similar symptoms</li>
+            </ul>
+          </div>
+          <div class="mini">
+            <h3>Dimensionality Reduction</h3>
+            <p class="muted" style="margin:0 0 6px">Simplify data while keeping meaning</p>
+            <ul style="margin:0">
+              <li>Compress 100 features down to 5 key ones</li>
+              <li>Visualize high-dimensional data in 2D</li>
+              <li>Speed up other ML models</li>
+            </ul>
+          </div>
+        </div>
+        <div class="grid2">
+          <div class="mini">
+            <h3>Association Rules</h3>
+            <p class="muted" style="margin:0 0 6px">Find items that occur together</p>
+            <ul style="margin:0">
+              <li>"People who buy bread also buy butter" (Market Basket)</li>
+              <li>Recommend products on Amazon</li>
+            </ul>
+          </div>
+          <div class="mini">
+            <h3>Anomaly Detection</h3>
+            <p class="muted" style="margin:0 0 6px">Spot unusual data points</p>
+            <ul style="margin:0">
+              <li>Credit card fraud detection</li>
+              <li>Network intrusion detection</li>
+            </ul>
+          </div>
+        </div>
+
+        <h3 style="margin-top:12px">Real-world examples</h3>
+        <div style="overflow:auto">
+          <table style="width:100%; border-collapse:separate; border-spacing:0; border:1px solid rgba(255,255,255,.10); border-radius:14px; overflow:hidden;">
+            <thead>
+              <tr style="background:rgba(102,227,196,.12)">
+                <th style="text-align:left; padding:10px; border-bottom:1px solid rgba(255,255,255,.10);">App / Domain</th>
+                <th style="text-align:left; padding:10px; border-bottom:1px solid rgba(255,255,255,.10);">What it does</th>
+                <th style="text-align:left; padding:10px; border-bottom:1px solid rgba(255,255,255,.10);">Technique</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td style="padding:10px; border-bottom:1px solid rgba(255,255,255,.08);">Spotify</td><td style="padding:10px; border-bottom:1px solid rgba(255,255,255,.08);">Groups listeners with similar music tastes → "Discover Weekly"</td><td style="padding:10px; border-bottom:1px solid rgba(255,255,255,.08);">Clustering</td></tr>
+              <tr><td style="padding:10px; border-bottom:1px solid rgba(255,255,255,.08);">Amazon</td><td style="padding:10px; border-bottom:1px solid rgba(255,255,255,.08);">"Customers who bought X also bought Y"</td><td style="padding:10px; border-bottom:1px solid rgba(255,255,255,.08);">Association Rules</td></tr>
+              <tr><td style="padding:10px; border-bottom:1px solid rgba(255,255,255,.08);">Bank</td><td style="padding:10px; border-bottom:1px solid rgba(255,255,255,.08);">Flags unusual transactions at 3 AM from a new country</td><td style="padding:10px; border-bottom:1px solid rgba(255,255,255,.08);">Anomaly Detection</td></tr>
+              <tr><td style="padding:10px;">Marketing</td><td style="padding:10px;">Segments customers into: budget, mid-range, premium</td><td style="padding:10px;">Clustering (K-Means)</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3 style="margin-top:12px">Common algorithms</h3>
+        <span class="pill">K-Means</span>
+        <span class="pill">DBSCAN</span>
+        <span class="pill">Hierarchical Clustering</span>
+        <span class="pill">PCA</span>
+        <span class="pill">t-SNE</span>
+        <span class="pill">Apriori</span>
+        <span class="pill">Isolation Forest</span>
+
+        <h3 style="margin-top:18px">🎓 Easy examples to explain in class</h3>
+
+        <details open>
+          <summary style="color:#66e3c4">🍎 Example 1 — Sorting a fruit basket (Clustering)</summary>
+          <p>Imagine you dump 100 mixed fruits on a table — apples, bananas, oranges, grapes. Nobody tells you the names.</p>
+          <p>You'd naturally group them by <b>color, shape, and size</b>:</p>
+          <ul>
+            <li>🔴 Round + red → one pile</li>
+            <li>🟡 Long + yellow → another pile</li>
+            <li>🟠 Round + orange → another pile</li>
+            <li>🟣 Tiny + purple → another pile</li>
+          </ul>
+          <div class="callout">
+            <p style="margin:0">💡 That's <b>K-Means Clustering</b> — the algorithm does exactly this with data points instead of fruits. You tell it "make 4 groups" and it figures out the best grouping.</p>
+          </div>
+        </details>
+
+        <details>
+          <summary style="color:#66e3c4">👕 Example 2 — Organizing your wardrobe (Clustering)</summary>
+          <p>You have 200 clothes thrown in a pile. No labels. You start grouping:</p>
+          <ul>
+            <li>Formal shirts → one section</li>
+            <li>Casual t-shirts → another</li>
+            <li>Jeans → another</li>
+            <li>Winter jackets → another</li>
+          </ul>
+          <p>Nobody told you these categories — you <b>discovered</b> them by looking at fabric, style, and season.</p>
+          <div class="callout">
+            <p style="margin:0">💡 This is exactly what unsupervised learning does with customer data, documents, or images — it finds natural groups.</p>
+          </div>
+        </details>
+
+        <details>
+          <summary style="color:#66e3c4">🛒 Example 3 — Supermarket shopping patterns (Association Rules)</summary>
+          <p>A supermarket notices from millions of receipts:</p>
+          <ul>
+            <li>🍞 People who buy <b>bread</b> usually also buy <b>butter</b> (82% of the time)</li>
+            <li>🍼 People who buy <b>diapers</b> on Friday nights also buy <b>beer</b> (famous real case!)</li>
+            <li>☕ People who buy <b>coffee</b> also buy <b>sugar + milk</b></li>
+          </ul>
+          <div class="callout">
+            <p style="margin:0">💡 Nobody programmed these rules — the <b>Apriori algorithm</b> discovered them from transaction data. That's why supermarkets place bread near butter!</p>
+          </div>
+        </details>
+
+        <details>
+          <summary style="color:#66e3c4">🏦 Example 4 — Catching a thief (Anomaly Detection)</summary>
+          <p>Your bank knows your normal pattern:</p>
+          <ul>
+            <li>📍 You usually shop in Hyderabad</li>
+            <li>💰 You spend ₹500–₹5,000 per transaction</li>
+            <li>🕐 You shop between 10 AM–10 PM</li>
+          </ul>
+          <p>Suddenly: <b>₹95,000 spent at 3 AM in Romania</b> 🚨</p>
+          <div class="callout">
+            <p style="margin:0">💡 The model was never told what "fraud" looks like — it just knows this transaction is <b>very different</b> from your normal behavior. That's <b>Anomaly Detection</b> using Isolation Forest.</p>
+          </div>
+        </details>
+
+        <details>
+          <summary style="color:#66e3c4">📱 Example 5 — Instagram "Explore" page (Clustering + Association)</summary>
+          <p>Instagram doesn't ask you "Do you like travel photos?" — it watches your behavior:</p>
+          <ul>
+            <li>You liked 50 sunset photos, 30 food reels, 20 cricket highlights</li>
+            <li>It groups you with users who have similar likes → <b>Clustering</b></li>
+            <li>It notices that people in your group also like mountain trek videos → <b>Association</b></li>
+            <li>Result: Your Explore page fills with sunsets, food, cricket, and treks 🎯</li>
+          </ul>
+          <div class="callout">
+            <p style="margin:0">💡 No labels were needed — Instagram <b>discovered</b> your interests purely from behavior patterns.</p>
+          </div>
+        </details>
+
+        <details>
+          <summary style="color:#66e3c4">🎓 Example 6 — Classroom analogy (for students)</summary>
+          <p>Imagine a teacher has 40 students and wants to form study groups, but doesn't know anyone yet:</p>
+          <ol>
+            <li>She collects data: marks in Math, Science, English, attendance, participation</li>
+            <li>She runs clustering and finds 4 natural groups:
+              <ul>
+                <li>🟢 <b>All-rounders</b> — high marks everywhere</li>
+                <li>🔵 <b>Science stars</b> — great at science, average elsewhere</li>
+                <li>🟡 <b>Creative writers</b> — excel in English and projects</li>
+                <li>🔴 <b>Need support</b> — low marks, low attendance</li>
+              </ul>
+            </li>
+            <li>She didn't pre-define these groups — the <b>algorithm found them</b></li>
+          </ol>
+          <div class="callout">
+            <p style="margin:0">💡 Ask students: <em>"If I gave you the class data in a spreadsheet, could you find these groups without any labels? That's what unsupervised learning does — automatically."</em></p>
+          </div>
+        </details>
+      </details>
+
+      <!-- ─── WHEN TO USE ─── -->
+      <h2 style="margin-top:18px">🤔 When to use Supervised vs Unsupervised?</h2>
+
+      <details open>
+        <summary style="font-size:15px">📋 Decision Table — Ask yourself these questions</summary>
+        <p>The choice depends on one simple question: <b>Do you have labeled data (answers)?</b></p>
+        <div style="overflow:auto">
+          <table style="width:100%; border-collapse:separate; border-spacing:0; border:1px solid rgba(255,255,255,.10); border-radius:14px; overflow:hidden;">
+            <thead>
+              <tr style="background:rgba(122,162,255,.12)">
+                <th style="text-align:left; padding:12px; border-bottom:1px solid rgba(255,255,255,.10);">Ask yourself…</th>
+                <th style="text-align:left; padding:12px; border-bottom:1px solid rgba(255,255,255,.10); color:#7aa2ff;">→ Supervised</th>
+                <th style="text-align:left; padding:12px; border-bottom:1px solid rgba(255,255,255,.10); color:#66e3c4;">→ Unsupervised</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td style="padding:12px; border-bottom:1px solid rgba(255,255,255,.08);"><b>Do I have labeled data?</b></td>
+                <td style="padding:12px; border-bottom:1px solid rgba(255,255,255,.08);">✅ Yes — I have inputs AND correct answers</td>
+                <td style="padding:12px; border-bottom:1px solid rgba(255,255,255,.08);">❌ No — I only have raw data, no answers</td>
+              </tr>
+              <tr>
+                <td style="padding:12px; border-bottom:1px solid rgba(255,255,255,.08);"><b>What do I want?</b></td>
+                <td style="padding:12px; border-bottom:1px solid rgba(255,255,255,.08);">Predict a specific outcome</td>
+                <td style="padding:12px; border-bottom:1px solid rgba(255,255,255,.08);">Discover hidden patterns or groups</td>
+              </tr>
+              <tr>
+                <td style="padding:12px; border-bottom:1px solid rgba(255,255,255,.08);"><b>Can I define the output?</b></td>
+                <td style="padding:12px; border-bottom:1px solid rgba(255,255,255,.08);">✅ Yes — "spam/not spam", "price in ₹"</td>
+                <td style="padding:12px; border-bottom:1px solid rgba(255,255,255,.08);">❌ No — I don't know what groups exist yet</td>
+              </tr>
+              <tr>
+                <td style="padding:12px;"><b>Is labeling expensive?</b></td>
+                <td style="padding:12px;">I can afford to label data (or it's already labeled)</td>
+                <td style="padding:12px;">Labeling is too costly or impossible</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </details>
+
+      <details>
+        <summary style="font-size:15px">🗺️ Decision Flowchart</summary>
+        <div class="callout" style="margin-top:10px">
+          <p style="margin:0">
+            <b>Step 1:</b> Do you have labeled data?<br/>
+            &nbsp;&nbsp;→ <b>Yes</b> → Do you want to predict a category or a number?<br/>
+            &nbsp;&nbsp;&nbsp;&nbsp;→ Category → <span style="color:#7aa2ff"><b>Classification</b></span> (e.g., spam filter, disease detection)<br/>
+            &nbsp;&nbsp;&nbsp;&nbsp;→ Number → <span style="color:#7aa2ff"><b>Regression</b></span> (e.g., house price, delivery time)<br/><br/>
+            &nbsp;&nbsp;→ <b>No</b> → Do you want to group things or find oddities?<br/>
+            &nbsp;&nbsp;&nbsp;&nbsp;→ Group similar items → <span style="color:#66e3c4"><b>Clustering</b></span> (e.g., customer segments)<br/>
+            &nbsp;&nbsp;&nbsp;&nbsp;→ Find items that go together → <span style="color:#66e3c4"><b>Association</b></span> (e.g., bread + butter)<br/>
+            &nbsp;&nbsp;&nbsp;&nbsp;→ Spot unusual behavior → <span style="color:#66e3c4"><b>Anomaly Detection</b></span> (e.g., fraud)<br/><br/>
+            &nbsp;&nbsp;→ <b>Agent learns by doing?</b> → <span style="color:#ffd666"><b>Reinforcement Learning</b></span> (e.g., game AI, self-driving)
+          </p>
+        </div>
+      </details>
+
+      <details>
+        <summary style="font-size:15px">🍕 Real Scenarios — Which would you pick?</summary>
+        <div style="overflow:auto;margin-top:10px">
+          <table style="width:100%; border-collapse:separate; border-spacing:0; border:1px solid rgba(255,255,255,.10); border-radius:14px; overflow:hidden;">
+            <thead>
+              <tr style="background:rgba(122,162,255,.12)">
+                <th style="text-align:left; padding:10px; border-bottom:1px solid rgba(255,255,255,.10);">Scenario</th>
+                <th style="text-align:left; padding:10px; border-bottom:1px solid rgba(255,255,255,.10);">Best approach</th>
+                <th style="text-align:left; padding:10px; border-bottom:1px solid rgba(255,255,255,.10);">Why?</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td style="padding:10px; border-bottom:1px solid rgba(255,255,255,.08);">Predict if a student will pass or fail</td><td style="padding:10px; border-bottom:1px solid rgba(255,255,255,.08);"><span style="color:#7aa2ff"><b>Supervised</b></span> (Classification)</td><td style="padding:10px; border-bottom:1px solid rgba(255,255,255,.08);">You have past results (labels: pass/fail)</td></tr>
+              <tr><td style="padding:10px; border-bottom:1px solid rgba(255,255,255,.08);">Group customers for a new product launch</td><td style="padding:10px; border-bottom:1px solid rgba(255,255,255,.08);"><span style="color:#66e3c4"><b>Unsupervised</b></span> (Clustering)</td><td style="padding:10px; border-bottom:1px solid rgba(255,255,255,.08);">No predefined groups — discover them from behavior</td></tr>
+              <tr><td style="padding:10px; border-bottom:1px solid rgba(255,255,255,.08);">Estimate house price from area & location</td><td style="padding:10px; border-bottom:1px solid rgba(255,255,255,.08);"><span style="color:#7aa2ff"><b>Supervised</b></span> (Regression)</td><td style="padding:10px; border-bottom:1px solid rgba(255,255,255,.08);">You have past sale prices (labeled)</td></tr>
+              <tr><td style="padding:10px; border-bottom:1px solid rgba(255,255,255,.08);">Detect unusual login activity on a website</td><td style="padding:10px; border-bottom:1px solid rgba(255,255,255,.08);"><span style="color:#66e3c4"><b>Unsupervised</b></span> (Anomaly Detection)</td><td style="padding:10px; border-bottom:1px solid rgba(255,255,255,.08);">You don't have labeled "hack" data — spot outliers</td></tr>
+              <tr><td style="padding:10px; border-bottom:1px solid rgba(255,255,255,.08);">Recommend what to watch on Netflix</td><td style="padding:10px; border-bottom:1px solid rgba(255,255,255,.08);"><span style="color:#66e3c4"><b>Unsupervised</b></span> (Clustering + Association)</td><td style="padding:10px; border-bottom:1px solid rgba(255,255,255,.08);">Group similar viewers, find co-watched movies</td></tr>
+              <tr><td style="padding:10px;">Classify an email as spam or not</td><td style="padding:10px;"><span style="color:#7aa2ff"><b>Supervised</b></span> (Classification)</td><td style="padding:10px;">Millions of emails already labeled spam/not-spam</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="callout" style="margin-top:12px">
+          <p style="margin:0">
+            🎯 <b>Classroom tip:</b> Give students a list of 5 problems and ask them to decide: Supervised or Unsupervised? It's a great discussion starter!
+          </p>
+      </div>
+
+      <!-- ─── REINFORCEMENT ─── -->
+      <details>
+        <summary style="color:#ffd666;font-size:16px">🎮 Reinforcement Learning — "Learning by trial and error"</summary>
+
+        <h3 style="margin-top:12px">What is it?</h3>
+        <p>An <b>agent</b> interacts with an <b>environment</b>, takes <b>actions</b>, and receives <b>rewards</b> (positive) or <b>penalties</b> (negative). Over time, it learns a strategy (policy) that maximizes total reward.</p>
+
+        <div class="callout">
+          <p style="margin:0">💡 <em>Like training a dog — it tries something, gets a treat (reward) or a "no" (penalty), and gradually learns what to do.</em></p>
+        </div>
+
+        <h3 style="margin-top:12px">Key concepts</h3>
+        <div class="grid2">
+          <div class="mini">
+            <h3>Components</h3>
+            <ul style="margin:0">
+              <li><b>Agent</b> — the learner (e.g., a robot, game player)</li>
+              <li><b>Environment</b> — the world it interacts with</li>
+              <li><b>State</b> — current situation</li>
+              <li><b>Action</b> — what the agent does</li>
+              <li><b>Reward</b> — feedback signal (+/-)</li>
+            </ul>
+          </div>
+          <div class="mini">
+            <h3>Exploration vs Exploitation</h3>
+            <p style="margin:0 0 6px">The agent must balance:</p>
+            <ul style="margin:0">
+              <li><b>Explore</b> — try new actions to discover better rewards</li>
+              <li><b>Exploit</b> — use what it already knows works well</li>
+            </ul>
+            <p class="muted" style="margin:8px 0 0">Like choosing between your favorite restaurant (exploit) vs trying a new one (explore).</p>
+          </div>
+        </div>
+
+        <h3 style="margin-top:12px">Real-world examples</h3>
+        <div style="overflow:auto">
+          <table style="width:100%; border-collapse:separate; border-spacing:0; border:1px solid rgba(255,255,255,.10); border-radius:14px; overflow:hidden;">
+            <thead>
+              <tr style="background:rgba(255,214,102,.12)">
+                <th style="text-align:left; padding:10px; border-bottom:1px solid rgba(255,255,255,.10);">Application</th>
+                <th style="text-align:left; padding:10px; border-bottom:1px solid rgba(255,255,255,.10);">Agent</th>
+                <th style="text-align:left; padding:10px; border-bottom:1px solid rgba(255,255,255,.10);">Reward</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td style="padding:10px; border-bottom:1px solid rgba(255,255,255,.08);">AlphaGo (Google DeepMind)</td><td style="padding:10px; border-bottom:1px solid rgba(255,255,255,.08);">Go player AI</td><td style="padding:10px; border-bottom:1px solid rgba(255,255,255,.08);">+1 for winning, -1 for losing</td></tr>
+              <tr><td style="padding:10px; border-bottom:1px solid rgba(255,255,255,.08);">Self-driving cars</td><td style="padding:10px; border-bottom:1px solid rgba(255,255,255,.08);">Car navigation system</td><td style="padding:10px; border-bottom:1px solid rgba(255,255,255,.08);">+ for safe driving, - for collisions</td></tr>
+              <tr><td style="padding:10px; border-bottom:1px solid rgba(255,255,255,.08);">Zomato delivery routing</td><td style="padding:10px; border-bottom:1px solid rgba(255,255,255,.08);">Route optimizer</td><td style="padding:10px; border-bottom:1px solid rgba(255,255,255,.08);">+ for faster delivery, - for delays</td></tr>
+              <tr><td style="padding:10px; border-bottom:1px solid rgba(255,255,255,.08);">ChatGPT (RLHF)</td><td style="padding:10px; border-bottom:1px solid rgba(255,255,255,.08);">Language model</td><td style="padding:10px; border-bottom:1px solid rgba(255,255,255,.08);">Human thumbs up/down on responses</td></tr>
+              <tr><td style="padding:10px;">Robotic arms (factories)</td><td style="padding:10px;">Robot controller</td><td style="padding:10px;">+ for picking objects correctly</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3 style="margin-top:12px">Common algorithms</h3>
+        <span class="pill">Q-Learning</span>
+        <span class="pill">Deep Q-Network (DQN)</span>
+        <span class="pill">Policy Gradient</span>
+        <span class="pill">PPO</span>
+        <span class="pill">Actor-Critic</span>
+        <span class="pill">SARSA</span>
+      </details>
+
+      <!-- ─── COMPARISON ─── -->
+      <h2 style="margin-top:18px">📊 Side-by-side comparison</h2>
+      <div style="overflow:auto">
+        <table style="width:100%; border-collapse:separate; border-spacing:0; border:1px solid rgba(255,255,255,.10); border-radius:14px; overflow:hidden;">
+          <thead>
+            <tr style="background:rgba(122,162,255,.12)">
+              <th style="text-align:left; padding:12px; border-bottom:1px solid rgba(255,255,255,.10);">Aspect</th>
+              <th style="text-align:left; padding:12px; border-bottom:1px solid rgba(255,255,255,.10); color:#7aa2ff;">Supervised</th>
+              <th style="text-align:left; padding:12px; border-bottom:1px solid rgba(255,255,255,.10); color:#66e3c4;">Unsupervised</th>
+              <th style="text-align:left; padding:12px; border-bottom:1px solid rgba(255,255,255,.10); color:#ffd666;">Reinforcement</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td style="padding:12px; border-bottom:1px solid rgba(255,255,255,.08);"><b>Data</b></td>
+              <td style="padding:12px; border-bottom:1px solid rgba(255,255,255,.08);">Labeled (input + answer)</td>
+              <td style="padding:12px; border-bottom:1px solid rgba(255,255,255,.08);">Unlabeled (input only)</td>
+              <td style="padding:12px; border-bottom:1px solid rgba(255,255,255,.08);">No dataset — learns by interacting</td>
+            </tr>
+            <tr>
+              <td style="padding:12px; border-bottom:1px solid rgba(255,255,255,.08);"><b>Goal</b></td>
+              <td style="padding:12px; border-bottom:1px solid rgba(255,255,255,.08);">Predict output for new input</td>
+              <td style="padding:12px; border-bottom:1px solid rgba(255,255,255,.08);">Find hidden structure</td>
+              <td style="padding:12px; border-bottom:1px solid rgba(255,255,255,.08);">Maximize cumulative reward</td>
+            </tr>
+            <tr>
+              <td style="padding:12px; border-bottom:1px solid rgba(255,255,255,.08);"><b>Feedback</b></td>
+              <td style="padding:12px; border-bottom:1px solid rgba(255,255,255,.08);">Correct answer provided</td>
+              <td style="padding:12px; border-bottom:1px solid rgba(255,255,255,.08);">No feedback</td>
+              <td style="padding:12px; border-bottom:1px solid rgba(255,255,255,.08);">Reward / penalty after each action</td>
+            </tr>
+            <tr>
+              <td style="padding:12px; border-bottom:1px solid rgba(255,255,255,.08);"><b>Analogy</b></td>
+              <td style="padding:12px; border-bottom:1px solid rgba(255,255,255,.08);">Studying with answer key</td>
+              <td style="padding:12px; border-bottom:1px solid rgba(255,255,255,.08);">Sorting Lego by yourself</td>
+              <td style="padding:12px; border-bottom:1px solid rgba(255,255,255,.08);">Training a dog with treats</td>
+            </tr>
+            <tr>
+              <td style="padding:12px;"><b>Example</b></td>
+              <td style="padding:12px;">Spam filter, price prediction</td>
+              <td style="padding:12px;">Customer segmentation, fraud detection</td>
+              <td style="padding:12px;">Game AI, self-driving cars, ChatGPT</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h2 style="margin-top:18px">🎯 Quick classroom recap</h2>
+      <div class="callout">
+        <p style="margin:0">
+          🎓 <b>Supervised</b> = "I'll teach you with examples and answers" → Predict spam, prices, diseases<br/>
+          🔍 <b>Unsupervised</b> = "Here's raw data, find the patterns" → Group customers, detect fraud<br/>
+          🎮 <b>Reinforcement</b> = "Try things, I'll reward good moves" → Play games, drive cars, optimize routes
+        </p>
+      </div>
+    </section>
+
+    <section id="linear-regression">
+      <h2>📈 Linear Regression — In Depth</h2>
+      <p>The simplest and most important supervised learning algorithm. If you understand this, you understand the <b>foundation of all ML</b>.</p>
+
+      <div class="callout">
+        <p style="margin:0">🎯 <b>One-liner:</b> Linear Regression finds the <b>best straight line</b> through your data points to predict a number.</p>
+      </div>
+
+      <!-- WHAT IS IT -->
+      <details open>
+        <summary style="font-size:15px">📖 What is Linear Regression?</summary>
+        <p>Given some input (X), predict a <b>continuous number</b> (Y) by fitting a straight line through the data.</p>
+
+        <div class="grid2">
+          <div class="mini">
+            <h3>The Formula</h3>
+            <p style="margin:0;font-size:20px;text-align:center;padding:10px;background:rgba(122,162,255,.1);border-radius:10px">
+              <b>Y = mX + b</b>
+            </p>
+            <ul style="margin:8px 0 0">
+              <li><b>Y</b> = predicted value (what we want)</li>
+              <li><b>X</b> = input feature (what we know)</li>
+              <li><b>m</b> = slope (how much Y changes when X changes)</li>
+              <li><b>b</b> = intercept (value of Y when X = 0)</li>
+            </ul>
+          </div>
+          <div class="mini">
+            <h3>In Plain English</h3>
+            <p style="margin:0">🏠 <b>House price example:</b></p>
+            <p style="margin:6px 0"><em>"For every extra 100 sq ft of area, the price goes up by ₹5 lakh."</em></p>
+            <ul style="margin:0">
+              <li>X = area in sq ft (input)</li>
+              <li>Y = price in ₹ (prediction)</li>
+              <li>m = ₹5 lakh per 100 sq ft (slope)</li>
+              <li>b = base price (intercept)</li>
+            </ul>
+          </div>
+        </div>
+      </details>
+
+      <!-- INTUITION -->
+      <details>
+        <summary style="font-size:15px">🧠 Intuition — The "Best Fit Line"</summary>
+        <p>Imagine plotting student <b>study hours (X)</b> vs <b>exam marks (Y)</b> on a graph:</p>
+        <div style="text-align:center;margin:14px 0">
+          <div style="display:inline-block;background:rgba(15,26,51,.8);border:1px solid var(--b);border-radius:14px;padding:20px 30px;font-family:monospace;font-size:13px;line-height:1.8;text-align:left">
+            <span style="color:var(--muted)">Marks</span><br/>
+            90 │&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span style="color:#66e3c4">•</span><br/>
+            80 │&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span style="color:#66e3c4">•</span>&nbsp; <span style="color:#66e3c4">•</span><br/>
+            70 │&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span style="color:#66e3c4">•</span>&nbsp;&nbsp; <span style="color:#7aa2ff">/</span><br/>
+            60 │&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span style="color:#66e3c4">•</span>&nbsp; <span style="color:#7aa2ff">/</span><br/>
+            50 │&nbsp;&nbsp;&nbsp;&nbsp; <span style="color:#66e3c4">•</span> <span style="color:#7aa2ff">/</span><br/>
+            40 │&nbsp;&nbsp; <span style="color:#66e3c4">•</span><span style="color:#7aa2ff">/</span><br/>
+            30 │ <span style="color:#7aa2ff">/</span><span style="color:#66e3c4">•</span><br/>
+            &nbsp;&nbsp; └───────────────────────<br/>
+            &nbsp;&nbsp;&nbsp; 1 &nbsp; 2 &nbsp; 3 &nbsp; 4 &nbsp; 5 &nbsp; 6 &nbsp; 7<br/>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span style="color:var(--muted)">Study Hours</span>
+          </div>
+          <p class="muted" style="margin:6px 0 0"><span style="color:#66e3c4">•</span> = actual data points &nbsp;&nbsp; <span style="color:#7aa2ff">/</span> = best fit line</p>
+        </div>
+        <p>The <b>best fit line</b> is the one that is <b>closest to all the points</b> on average. Some points are above the line, some below — but the line minimizes the total error.</p>
+        <div class="callout">
+          <p style="margin:0">💡 <em>Now if a new student says "I studied 5 hours", you follow the line up and predict ~72 marks. That’s linear regression!</em></p>
+        </div>
+      </details>
+
+      <!-- HOW IT LEARNS -->
+      <details>
+        <summary style="font-size:15px">⚙️ How does it learn? (Training process)</summary>
+        <p>The model doesn't guess the line randomly. It uses a process called <b>Gradient Descent</b>:</p>
+        <ol>
+          <li><b>Start</b> with a random line (random m and b)</li>
+          <li><b>Predict</b> Y for every X in training data</li>
+          <li><b>Measure error</b> — how far are predictions from actual values?</li>
+          <li><b>Adjust</b> m and b slightly to reduce the error</li>
+          <li><b>Repeat</b> steps 2–4 hundreds/thousands of times until the line fits best</li>
+        </ol>
+
+        <h3 style="margin-top:12px">Error measurement (Cost Function)</h3>
+        <div class="mini" style="text-align:center;padding:16px">
+          <p style="margin:0 0 6px"><b>Mean Squared Error (MSE)</b></p>
+          <p style="margin:0;font-size:18px;background:rgba(122,162,255,.1);padding:10px;border-radius:10px">
+            MSE = (1/n) × Σ (actual - predicted)²
+          </p>
+          <p class="muted" style="margin:6px 0 0">Square the errors so negatives don’t cancel positives. Smaller MSE = better line.</p>
+        </div>
+
+        <div class="callout" style="margin-top:10px">
+          <p style="margin:0">💡 <em>Think of it like tuning a guitar — you pluck a string, hear it's off, tighten slightly, pluck again, repeat until it sounds right. That's gradient descent adjusting m and b.</em></p>
+        </div>
+      </details>
+
+      <!-- SIMPLE vs MULTIPLE -->
+      <details>
+        <summary style="font-size:15px">🔢 Simple vs Multiple Linear Regression</summary>
+        <div class="grid2">
+          <div class="mini">
+            <h3>Simple Linear Regression</h3>
+            <p class="muted" style="margin:0 0 6px">1 feature → 1 prediction</p>
+            <p style="margin:0;font-size:16px;text-align:center;padding:8px;background:rgba(122,162,255,.1);border-radius:10px"><b>Y = mX + b</b></p>
+            <p style="margin:8px 0 0"><b>Example:</b> Predict house price from <b>area alone</b></p>
+            <ul style="margin:4px 0 0">
+              <li>X = area (sq ft)</li>
+              <li>Y = price</li>
+            </ul>
+          </div>
+          <div class="mini">
+            <h3>Multiple Linear Regression</h3>
+            <p class="muted" style="margin:0 0 6px">Many features → 1 prediction</p>
+            <p style="margin:0;font-size:16px;text-align:center;padding:8px;background:rgba(102,227,196,.1);border-radius:10px"><b>Y = m₁X₁ + m₂X₂ + m₃X₃ + b</b></p>
+            <p style="margin:8px 0 0"><b>Example:</b> Predict house price from <b>area + bedrooms + location + age</b></p>
+            <ul style="margin:4px 0 0">
+              <li>X₁ = area, X₂ = bedrooms, X₃ = location score</li>
+              <li>Y = price</li>
+            </ul>
+          </div>
+        </div>
+        <div class="callout" style="margin-top:10px">
+          <p style="margin:0">💡 <em>In reality, predictions depend on many factors. Multiple regression is far more common in real projects.</em></p>
+        </div>
+      </details>
+
+      <!-- REAL EXAMPLES -->
+      <details>
+        <summary style="font-size:15px">🌍 Real-World Examples</summary>
+        <div style="overflow:auto;margin-top:10px">
+          <table style="width:100%; border-collapse:separate; border-spacing:0; border:1px solid rgba(255,255,255,.10); border-radius:14px; overflow:hidden;">
+            <thead>
+              <tr style="background:rgba(122,162,255,.12)">
+                <th style="text-align:left; padding:10px; border-bottom:1px solid rgba(255,255,255,.10);">Domain</th>
+                <th style="text-align:left; padding:10px; border-bottom:1px solid rgba(255,255,255,.10);">Input (X)</th>
+                <th style="text-align:left; padding:10px; border-bottom:1px solid rgba(255,255,255,.10);">Output (Y)</th>
+                <th style="text-align:left; padding:10px; border-bottom:1px solid rgba(255,255,255,.10);">Why Linear?</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td style="padding:10px; border-bottom:1px solid rgba(255,255,255,.08);">Real Estate</td><td style="padding:10px; border-bottom:1px solid rgba(255,255,255,.08);">Area, bedrooms, floor</td><td style="padding:10px; border-bottom:1px solid rgba(255,255,255,.08);">House price (₹)</td><td style="padding:10px; border-bottom:1px solid rgba(255,255,255,.08);">Price grows roughly linearly with area</td></tr>
+              <tr><td style="padding:10px; border-bottom:1px solid rgba(255,255,255,.08);">Salary Prediction</td><td style="padding:10px; border-bottom:1px solid rgba(255,255,255,.08);">Years of experience</td><td style="padding:10px; border-bottom:1px solid rgba(255,255,255,.08);">Salary (₹)</td><td style="padding:10px; border-bottom:1px solid rgba(255,255,255,.08);">More experience ≈ higher salary</td></tr>
+              <tr><td style="padding:10px; border-bottom:1px solid rgba(255,255,255,.08);">Sales Forecasting</td><td style="padding:10px; border-bottom:1px solid rgba(255,255,255,.08);">Ad spend, season, discounts</td><td style="padding:10px; border-bottom:1px solid rgba(255,255,255,.08);">Revenue</td><td style="padding:10px; border-bottom:1px solid rgba(255,255,255,.08);">More ads ≈ more sales (roughly)</td></tr>
+              <tr><td style="padding:10px; border-bottom:1px solid rgba(255,255,255,.08);">Medical</td><td style="padding:10px; border-bottom:1px solid rgba(255,255,255,.08);">Age, BMI, blood pressure</td><td style="padding:10px; border-bottom:1px solid rgba(255,255,255,.08);">Insurance cost</td><td style="padding:10px; border-bottom:1px solid rgba(255,255,255,.08);">Higher risk factors ≈ higher premiums</td></tr>
+              <tr><td style="padding:10px; border-bottom:1px solid rgba(255,255,255,.08);">Zomato</td><td style="padding:10px; border-bottom:1px solid rgba(255,255,255,.08);">Distance, traffic, prep time</td><td style="padding:10px; border-bottom:1px solid rgba(255,255,255,.08);">Delivery time (min)</td><td style="padding:10px; border-bottom:1px solid rgba(255,255,255,.08);">Longer distance ≈ longer delivery</td></tr>
+              <tr><td style="padding:10px;">Education</td><td style="padding:10px;">Study hours</td><td style="padding:10px;">Exam score</td><td style="padding:10px;">More study ≈ better marks</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </details>
+
+      <!-- ASSUMPTIONS -->
+      <details>
+        <summary style="font-size:15px">⚠️ Assumptions (When does it work well?)</summary>
+        <p>Linear regression works best when these conditions are <b>roughly true</b>:</p>
+        <div class="grid2">
+          <div class="mini">
+            <h3>1. Linearity</h3>
+            <p style="margin:0">The relationship between X and Y is approximately a <b>straight line</b>, not a curve.</p>
+            <p class="muted" style="margin:4px 0 0">✅ Study hours vs marks (linear) &nbsp; ❌ Age vs energy (curved)</p>
+          </div>
+          <div class="mini">
+            <h3>2. No Outliers</h3>
+            <p style="margin:0">Extreme values can <b>pull the line</b> away from the true pattern.</p>
+            <p class="muted" style="margin:4px 0 0">❌ One house sold for ₹100 crore in a ₹50 lakh neighborhood</p>
+          </div>
+        </div>
+        <div class="grid2">
+          <div class="mini">
+            <h3>3. Independence</h3>
+            <p style="margin:0">Each data point should be <b>independent</b> — one observation shouldn’t influence another.</p>
+          </div>
+          <div class="mini">
+            <h3>4. No Multicollinearity</h3>
+            <p style="margin:0">Input features shouldn’t be <b>too correlated</b> with each other (for multiple regression).</p>
+            <p class="muted" style="margin:4px 0 0">❌ Using both "area in sq ft" AND "area in sq m" (they’re the same thing)</p>
+          </div>
+        </div>
+        <div class="callout" style="margin-top:10px">
+          <p style="margin:0">💡 <em>Don’t worry about memorizing these — just remember: linear regression works when "more X ≈ proportionally more/less Y" holds roughly true.</em></p>
+        </div>
+      </details>
+
+      <!-- EVALUATION -->
+      <details>
+        <summary style="font-size:15px">📊 How to evaluate? (Is the line good?)</summary>
+        <p>After training, you need to measure <b>how good</b> the model is:</p>
+        <div style="overflow:auto">
+          <table style="width:100%; border-collapse:separate; border-spacing:0; border:1px solid rgba(255,255,255,.10); border-radius:14px; overflow:hidden;">
+            <thead>
+              <tr style="background:rgba(122,162,255,.12)">
+                <th style="text-align:left; padding:10px; border-bottom:1px solid rgba(255,255,255,.10);">Metric</th>
+                <th style="text-align:left; padding:10px; border-bottom:1px solid rgba(255,255,255,.10);">What it tells you</th>
+                <th style="text-align:left; padding:10px; border-bottom:1px solid rgba(255,255,255,.10);">Good value</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td style="padding:10px; border-bottom:1px solid rgba(255,255,255,.08);"><b>R² (R-squared)</b></td><td style="padding:10px; border-bottom:1px solid rgba(255,255,255,.08);">How much of the variation in Y is explained by X (0 to 1)</td><td style="padding:10px; border-bottom:1px solid rgba(255,255,255,.08);">Closer to 1 = great</td></tr>
+              <tr><td style="padding:10px; border-bottom:1px solid rgba(255,255,255,.08);"><b>MAE</b> (Mean Absolute Error)</td><td style="padding:10px; border-bottom:1px solid rgba(255,255,255,.08);">Average difference between predicted and actual</td><td style="padding:10px; border-bottom:1px solid rgba(255,255,255,.08);">Lower = better</td></tr>
+              <tr><td style="padding:10px; border-bottom:1px solid rgba(255,255,255,.08);"><b>MSE</b> (Mean Squared Error)</td><td style="padding:10px; border-bottom:1px solid rgba(255,255,255,.08);">Average squared difference (penalizes big errors more)</td><td style="padding:10px; border-bottom:1px solid rgba(255,255,255,.08);">Lower = better</td></tr>
+              <tr><td style="padding:10px;"><b>RMSE</b> (Root MSE)</td><td style="padding:10px;">MSE in original units (e.g., ₹ instead of ₹²)</td><td style="padding:10px;">Lower = better</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="callout" style="margin-top:10px">
+          <p style="margin:0">💡 <b>Analogy:</b> R² = 0.85 means your line explains 85% of why prices vary. The remaining 15% is due to things your model doesn’t know (like renovation quality, neighbor noise, etc.).</p>
+        </div>
+      </details>
+
+      <!-- PYTHON CODE -->
+      <details>
+        <summary style="font-size:15px">🐍 Python Code (Step by Step)</summary>
+        <div style="background:#0b1220;border:1px solid var(--b);border-radius:12px;padding:14px;overflow-x:auto;margin-top:10px">
+          <pre style="margin:0;color:var(--text);font-size:13px;line-height:1.7"><span style="color:#66e3c4"># Step 1: Import libraries</span>
+<span style="color:#ffd666">import</span> pandas <span style="color:#ffd666">as</span> pd
+<span style="color:#ffd666">from</span> sklearn.model_selection <span style="color:#ffd666">import</span> train_test_split
+<span style="color:#ffd666">from</span> sklearn.linear_model <span style="color:#ffd666">import</span> LinearRegression
+<span style="color:#ffd666">from</span> sklearn.metrics <span style="color:#ffd666">import</span> r2_score, mean_absolute_error
+
+<span style="color:#66e3c4"># Step 2: Load data</span>
+df = pd.read_csv(<span style="color:#ff8282">"houses.csv"</span>)
+<span style="color:#66e3c4"># Columns: area, bedrooms, age, price</span>
+
+<span style="color:#66e3c4"># Step 3: Define Features (X) and Label (Y)</span>
+X = df[[<span style="color:#ff8282">"area"</span>, <span style="color:#ff8282">"bedrooms"</span>, <span style="color:#ff8282">"age"</span>]]  <span style="color:#66e3c4"># inputs</span>
+y = df[<span style="color:#ff8282">"price"</span>]                          <span style="color:#66e3c4"># what we predict</span>
+
+<span style="color:#66e3c4"># Step 4: Split into Training and Testing (80/20)</span>
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y, test_size=<span style="color:#7aa2ff">0.2</span>, random_state=<span style="color:#7aa2ff">42</span>
+)
+
+<span style="color:#66e3c4"># Step 5: Create and Train the model</span>
+model = LinearRegression()
+model.fit(X_train, y_train)  <span style="color:#66e3c4"># ← this is where learning happens!</span>
+
+<span style="color:#66e3c4"># Step 6: Predict on test data</span>
+y_pred = model.predict(X_test)
+
+<span style="color:#66e3c4"># Step 7: Evaluate</span>
+<span style="color:#ffd666">print</span>(<span style="color:#ff8282">"R² Score:"</span>, r2_score(y_test, y_pred))
+<span style="color:#ffd666">print</span>(<span style="color:#ff8282">"MAE:"</span>, mean_absolute_error(y_test, y_pred))
+
+<span style="color:#66e3c4"># Step 8: See the learned formula</span>
+<span style="color:#ffd666">print</span>(<span style="color:#ff8282">"Coefficients (m):"</span>, model.coef_)
+<span style="color:#ffd666">print</span>(<span style="color:#ff8282">"Intercept (b):"</span>, model.intercept_)</pre>
+        </div>
+        <div class="callout" style="margin-top:10px">
+          <p style="margin:0">💡 <b>What each step maps to:</b><br/>
+          Steps 1–2 = Data Science (collect & load)<br/>
+          Step 3 = Feature engineering (Features vs Labels)<br/>
+          Step 4 = Train/Test split<br/>
+          Step 5 = ML training (gradient descent finds best m and b)<br/>
+          Steps 6–7 = Evaluation (how good is our model?)<br/>
+          Step 8 = Interpretability (what did the model learn?)</p>
+        </div>
+      </details>
+
+      <!-- WHEN TO USE / NOT USE -->
+      <details>
+        <summary style="font-size:15px">✅ When to use / ❌ When NOT to use</summary>
+        <div class="grid2">
+          <div class="mini">
+            <h3 style="color:#66e3c4">✅ Use Linear Regression when</h3>
+            <ul style="margin:0">
+              <li>You want to predict a <b>number</b> (not a category)</li>
+              <li>The relationship looks roughly <b>straight-line</b></li>
+              <li>You need a <b>simple, interpretable</b> model</li>
+              <li>You’re starting out and need a <b>baseline</b> model</li>
+              <li>You have <b>limited data</b> (it works with small datasets too)</li>
+            </ul>
+          </div>
+          <div class="mini">
+            <h3 style="color:#ff8282">❌ Don’t use when</h3>
+            <ul style="margin:0">
+              <li>The output is a <b>category</b> (use Logistic Regression instead)</li>
+              <li>The relationship is <b>curved</b> (use polynomial or tree-based models)</li>
+              <li>You have <b>lots of outliers</b> (they’ll skew the line)</li>
+              <li>Features are heavily <b>correlated</b> with each other</li>
+              <li>The data is <b>non-numeric</b> (images, text — use deep learning)</li>
+            </ul>
+          </div>
+        </div>
+      </details>
+
+      <!-- COMMON MISTAKES -->
+      <details>
+        <summary style="font-size:15px">🚨 Common mistakes beginners make</summary>
+        <div style="overflow:auto;margin-top:10px">
+          <table style="width:100%; border-collapse:separate; border-spacing:0; border:1px solid rgba(255,255,255,.10); border-radius:14px; overflow:hidden;">
+            <thead>
+              <tr style="background:rgba(255,130,130,.12)">
+                <th style="text-align:left; padding:10px; border-bottom:1px solid rgba(255,255,255,.10);">❌ Mistake</th>
+                <th style="text-align:left; padding:10px; border-bottom:1px solid rgba(255,255,255,.10);">✅ Fix</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td style="padding:10px; border-bottom:1px solid rgba(255,255,255,.08);">Testing on training data</td><td style="padding:10px; border-bottom:1px solid rgba(255,255,255,.08);">Always split into train/test first</td></tr>
+              <tr><td style="padding:10px; border-bottom:1px solid rgba(255,255,255,.08);">Not checking for linearity</td><td style="padding:10px; border-bottom:1px solid rgba(255,255,255,.08);">Plot a scatter plot first — does it look like a line?</td></tr>
+              <tr><td style="padding:10px; border-bottom:1px solid rgba(255,255,255,.08);">Ignoring outliers</td><td style="padding:10px; border-bottom:1px solid rgba(255,255,255,.08);">Remove or investigate extreme values before training</td></tr>
+              <tr><td style="padding:10px; border-bottom:1px solid rgba(255,255,255,.08);">Using it for Yes/No problems</td><td style="padding:10px; border-bottom:1px solid rgba(255,255,255,.08);">That’s classification — use Logistic Regression or Decision Tree</td></tr>
+              <tr><td style="padding:10px;">Too many correlated features</td><td style="padding:10px;">Drop duplicates or use PCA to reduce features</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </details>
+
+      <!-- SALARY WALKTHROUGH -->
+      <details open>
+        <summary style="font-size:15px">💼 Full Walkthrough — Predicting Salary from Experience (Y = mX + c)</summary>
+
+        <div class="callout" style="margin-top:10px">
+          <p style="margin:0">🎯 <b>Goal:</b> A company wants to predict <b>what salary to offer</b> a new hire based on their <b>years of experience</b>.</p>
+        </div>
+
+        <h3 style="margin-top:14px">Step 1: Collect the data</h3>
+        <p>HR pulls salary records of 10 current employees:</p>
+        <div style="overflow:auto">
+          <table style="width:100%;max-width:400px; border-collapse:separate; border-spacing:0; border:1px solid rgba(255,255,255,.10); border-radius:14px; overflow:hidden;">
+            <thead>
+              <tr style="background:rgba(122,162,255,.12)">
+                <th style="text-align:center; padding:10px; border-bottom:1px solid rgba(255,255,255,.10);">Experience (X) — years</th>
+                <th style="text-align:center; padding:10px; border-bottom:1px solid rgba(255,255,255,.10);">Salary (Y) — ₹ lakhs/yr</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td style="padding:8px;text-align:center; border-bottom:1px solid rgba(255,255,255,.08);">1</td><td style="padding:8px;text-align:center; border-bottom:1px solid rgba(255,255,255,.08);">3</td></tr>
+              <tr><td style="padding:8px;text-align:center; border-bottom:1px solid rgba(255,255,255,.08);">2</td><td style="padding:8px;text-align:center; border-bottom:1px solid rgba(255,255,255,.08);">5</td></tr>
+              <tr><td style="padding:8px;text-align:center; border-bottom:1px solid rgba(255,255,255,.08);">3</td><td style="padding:8px;text-align:center; border-bottom:1px solid rgba(255,255,255,.08);">6.5</td></tr>
+              <tr><td style="padding:8px;text-align:center; border-bottom:1px solid rgba(255,255,255,.08);">4</td><td style="padding:8px;text-align:center; border-bottom:1px solid rgba(255,255,255,.08);">8</td></tr>
+              <tr><td style="padding:8px;text-align:center; border-bottom:1px solid rgba(255,255,255,.08);">5</td><td style="padding:8px;text-align:center; border-bottom:1px solid rgba(255,255,255,.08);">11</td></tr>
+              <tr><td style="padding:8px;text-align:center; border-bottom:1px solid rgba(255,255,255,.08);">6</td><td style="padding:8px;text-align:center; border-bottom:1px solid rgba(255,255,255,.08);">13</td></tr>
+              <tr><td style="padding:8px;text-align:center; border-bottom:1px solid rgba(255,255,255,.08);">7</td><td style="padding:8px;text-align:center; border-bottom:1px solid rgba(255,255,255,.08);">14.5</td></tr>
+              <tr><td style="padding:8px;text-align:center; border-bottom:1px solid rgba(255,255,255,.08);">8</td><td style="padding:8px;text-align:center; border-bottom:1px solid rgba(255,255,255,.08);">16</td></tr>
+              <tr><td style="padding:8px;text-align:center; border-bottom:1px solid rgba(255,255,255,.08);">9</td><td style="padding:8px;text-align:center; border-bottom:1px solid rgba(255,255,255,.08);">18</td></tr>
+              <tr><td style="padding:8px;text-align:center;">10</td><td style="padding:8px;text-align:center;">20</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="muted">X = Feature (what we know) &nbsp;|&nbsp; Y = Label (what we want to predict)</p>
+
+        <h3 style="margin-top:14px">Step 2: Plot it — do we see a line?</h3>
+        <div style="text-align:center;margin:14px 0">
+          <div style="display:inline-block;background:rgba(15,26,51,.8);border:1px solid var(--b);border-radius:14px;padding:20px 30px;font-family:monospace;font-size:13px;line-height:1.7;text-align:left">
+            <span style="color:var(--muted)">Salary (₹ lakhs)</span><br/>
+            20 │                              <span style="color:#66e3c4">•</span><br/>
+            18 │                          <span style="color:#66e3c4">•</span> <span style="color:#7aa2ff">/</span><br/>
+            16 │                      <span style="color:#66e3c4">•</span> <span style="color:#7aa2ff">/</span><br/>
+            14 │                  <span style="color:#66e3c4">•</span> <span style="color:#7aa2ff">/</span><br/>
+            13 │              <span style="color:#66e3c4">•</span> <span style="color:#7aa2ff">/</span><br/>
+            11 │          <span style="color:#66e3c4">•</span> <span style="color:#7aa2ff">/</span><br/>
+             8 │        <span style="color:#66e3c4">•</span><span style="color:#7aa2ff">/</span><br/>
+           6.5 │      <span style="color:#66e3c4">•</span><span style="color:#7aa2ff">/</span><br/>
+             5 │    <span style="color:#66e3c4">•</span><span style="color:#7aa2ff">/</span><br/>
+             3 │  <span style="color:#66e3c4">•</span><span style="color:#7aa2ff">/</span><br/>
+               └──────────────────────────────────<br/>
+                 1   2   3   4   5   6   7   8   9  10<br/>
+                          <span style="color:var(--muted)">Years of Experience</span>
+          </div>
+          <p class="muted" style="margin:6px 0 0"><span style="color:#66e3c4">•</span> = actual data &nbsp;&nbsp; <span style="color:#7aa2ff">/</span> = best fit line</p>
+        </div>
+        <div class="callout">
+          <p style="margin:0">✅ The data points roughly follow a <b>straight line going upward</b> — perfect for linear regression!</p>
+        </div>
+
+        <h3 style="margin-top:14px">Step 3: Understand Y = mX + c</h3>
+        <div class="mini" style="text-align:center;padding:16px;margin:10px 0">
+          <p style="margin:0;font-size:22px;background:rgba(122,162,255,.12);padding:12px;border-radius:12px">
+            <b>Salary = m × Experience + c</b>
+          </p>
+        </div>
+        <div class="grid2">
+          <div class="mini">
+            <h3>What is <b>m</b>? (Slope)</h3>
+            <p style="margin:0">How much salary increases <b>for each extra year</b> of experience.</p>
+            <p style="margin:8px 0 0"><b>In our data:</b> m ≈ <span style="color:#66e3c4"><b>1.9</b></span></p>
+            <p class="muted" style="margin:4px 0 0">→ Every extra year adds roughly <b>₹1.9 lakhs</b> to salary</p>
+          </div>
+          <div class="mini">
+            <h3>What is <b>c</b>? (Intercept)</h3>
+            <p style="margin:0">The <b>starting salary</b> when experience = 0 (a fresher straight out of college).</p>
+            <p style="margin:8px 0 0"><b>In our data:</b> c ≈ <span style="color:#66e3c4"><b>1.2</b></span></p>
+            <p class="muted" style="margin:4px 0 0">→ A fresher would start at roughly <b>₹1.2 lakhs</b></p>
+          </div>
+        </div>
+
+        <div class="callout" style="margin-top:10px">
+          <p style="margin:0">📝 <b>Our learned formula:</b></p>
+          <p style="margin:6px 0 0;font-size:18px;text-align:center"><b>Salary = 1.9 × Experience + 1.2</b></p>
+        </div>
+
+        <h3 style="margin-top:14px">Step 4: Make predictions!</h3>
+        <p>Now a candidate walks in with <b>4 years</b> of experience. What salary should we offer?</p>
+        <div class="mini" style="padding:16px;margin:10px 0">
+          <p style="margin:0;font-size:15px">
+            Salary = 1.9 × <b>4</b> + 1.2<br/>
+            Salary = 7.6 + 1.2<br/>
+            <span style="font-size:18px"><b>Salary = ₹8.8 lakhs</b></span>
+          </p>
+        </div>
+        <p>Let's try a few more:</p>
+        <div style="overflow:auto">
+          <table style="width:100%;max-width:550px; border-collapse:separate; border-spacing:0; border:1px solid rgba(255,255,255,.10); border-radius:14px; overflow:hidden;">
+            <thead>
+              <tr style="background:rgba(102,227,196,.12)">
+                <th style="text-align:center; padding:10px; border-bottom:1px solid rgba(255,255,255,.10);">Experience (X)</th>
+                <th style="text-align:center; padding:10px; border-bottom:1px solid rgba(255,255,255,.10);">Calculation</th>
+                <th style="text-align:center; padding:10px; border-bottom:1px solid rgba(255,255,255,.10);">Predicted Salary (Y)</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td style="padding:10px;text-align:center; border-bottom:1px solid rgba(255,255,255,.08);">0 (fresher)</td><td style="padding:10px;text-align:center; border-bottom:1px solid rgba(255,255,255,.08);">1.9 × 0 + 1.2</td><td style="padding:10px;text-align:center; border-bottom:1px solid rgba(255,255,255,.08);"><b>₹1.2 lakhs</b></td></tr>
+              <tr><td style="padding:10px;text-align:center; border-bottom:1px solid rgba(255,255,255,.08);">3 years</td><td style="padding:10px;text-align:center; border-bottom:1px solid rgba(255,255,255,.08);">1.9 × 3 + 1.2</td><td style="padding:10px;text-align:center; border-bottom:1px solid rgba(255,255,255,.08);"><b>₹6.9 lakhs</b></td></tr>
+              <tr><td style="padding:10px;text-align:center; border-bottom:1px solid rgba(255,255,255,.08);">5 years</td><td style="padding:10px;text-align:center; border-bottom:1px solid rgba(255,255,255,.08);">1.9 × 5 + 1.2</td><td style="padding:10px;text-align:center; border-bottom:1px solid rgba(255,255,255,.08);"><b>₹10.7 lakhs</b></td></tr>
+              <tr><td style="padding:10px;text-align:center; border-bottom:1px solid rgba(255,255,255,.08);">8 years</td><td style="padding:10px;text-align:center; border-bottom:1px solid rgba(255,255,255,.08);">1.9 × 8 + 1.2</td><td style="padding:10px;text-align:center; border-bottom:1px solid rgba(255,255,255,.08);"><b>₹16.4 lakhs</b></td></tr>
+              <tr><td style="padding:10px;text-align:center;">12 years</td><td style="padding:10px;text-align:center;">1.9 × 12 + 1.2</td><td style="padding:10px;text-align:center;"><b>₹24.0 lakhs</b></td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3 style="margin-top:14px">Step 5: Check — is the prediction good?</h3>
+        <p>Compare predicted vs actual for data we already have:</p>
+        <div style="overflow:auto">
+          <table style="width:100%;max-width:550px; border-collapse:separate; border-spacing:0; border:1px solid rgba(255,255,255,.10); border-radius:14px; overflow:hidden;">
+            <thead>
+              <tr style="background:rgba(122,162,255,.12)">
+                <th style="text-align:center; padding:10px; border-bottom:1px solid rgba(255,255,255,.10);">Exp</th>
+                <th style="text-align:center; padding:10px; border-bottom:1px solid rgba(255,255,255,.10);">Actual Salary</th>
+                <th style="text-align:center; padding:10px; border-bottom:1px solid rgba(255,255,255,.10);">Predicted Salary</th>
+                <th style="text-align:center; padding:10px; border-bottom:1px solid rgba(255,255,255,.10);">Error</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td style="padding:8px;text-align:center; border-bottom:1px solid rgba(255,255,255,.08);">2</td><td style="padding:8px;text-align:center; border-bottom:1px solid rgba(255,255,255,.08);">₹5.0</td><td style="padding:8px;text-align:center; border-bottom:1px solid rgba(255,255,255,.08);">₹5.0</td><td style="padding:8px;text-align:center; border-bottom:1px solid rgba(255,255,255,.08);"><span style="color:#66e3c4">0.0 ✅</span></td></tr>
+              <tr><td style="padding:8px;text-align:center; border-bottom:1px solid rgba(255,255,255,.08);">5</td><td style="padding:8px;text-align:center; border-bottom:1px solid rgba(255,255,255,.08);">₹11.0</td><td style="padding:8px;text-align:center; border-bottom:1px solid rgba(255,255,255,.08);">₹10.7</td><td style="padding:8px;text-align:center; border-bottom:1px solid rgba(255,255,255,.08);"><span style="color:#ffd666">0.3</span></td></tr>
+              <tr><td style="padding:8px;text-align:center; border-bottom:1px solid rgba(255,255,255,.08);">7</td><td style="padding:8px;text-align:center; border-bottom:1px solid rgba(255,255,255,.08);">₹14.5</td><td style="padding:8px;text-align:center; border-bottom:1px solid rgba(255,255,255,.08);">₹14.5</td><td style="padding:8px;text-align:center; border-bottom:1px solid rgba(255,255,255,.08);"><span style="color:#66e3c4">0.0 ✅</span></td></tr>
+              <tr><td style="padding:8px;text-align:center;">10</td><td style="padding:8px;text-align:center;">₹20.0</td><td style="padding:8px;text-align:center;">₹20.2</td><td style="padding:8px;text-align:center;"><span style="color:#ffd666">0.2</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="callout" style="margin-top:10px">
+          <p style="margin:0">💡 Errors are tiny (₹0.2–0.3 lakh off) — our line is a <b>great fit</b>! In real-world terms, the model is off by just ₹20,000–30,000.</p>
+        </div>
+
+        <h3 style="margin-top:14px">Step 6: What does the slope and intercept MEAN?</h3>
+        <div class="grid2">
+          <div class="mini" style="border-left:4px solid #7aa2ff">
+            <h3>Slope (m = 1.9)</h3>
+            <p style="margin:0"><b>"For every 1 extra year of experience, salary increases by ₹1.9 lakhs."</b></p>
+            <p class="muted" style="margin:6px 0 0">This is the <b>rate of change</b> — steeper slope = salary grows faster per year</p>
+          </div>
+          <div class="mini" style="border-left:4px solid #66e3c4">
+            <h3>Intercept (c = 1.2)</h3>
+            <p style="margin:0"><b>"A fresher with 0 years would earn ₹1.2 lakhs."</b></p>
+            <p class="muted" style="margin:6px 0 0">This is the <b>starting point</b> — where the line crosses the Y-axis</p>
+          </div>
+        </div>
+
+        <h3 style="margin-top:14px">Step 7: What changes when m or c changes?</h3>
+        <div style="overflow:auto">
+          <table style="width:100%; border-collapse:separate; border-spacing:0; border:1px solid rgba(255,255,255,.10); border-radius:14px; overflow:hidden;">
+            <thead>
+              <tr style="background:rgba(255,214,102,.12)">
+                <th style="text-align:left; padding:10px; border-bottom:1px solid rgba(255,255,255,.10);">Change</th>
+                <th style="text-align:left; padding:10px; border-bottom:1px solid rgba(255,255,255,.10);">Effect on the line</th>
+                <th style="text-align:left; padding:10px; border-bottom:1px solid rgba(255,255,255,.10);">Real-world meaning</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td style="padding:10px; border-bottom:1px solid rgba(255,255,255,.08);"><b>m increases</b> (1.9 → 3.0)</td><td style="padding:10px; border-bottom:1px solid rgba(255,255,255,.08);">Line becomes steeper ↗️</td><td style="padding:10px; border-bottom:1px solid rgba(255,255,255,.08);">Salary grows faster per year (e.g., tech company)</td></tr>
+              <tr><td style="padding:10px; border-bottom:1px solid rgba(255,255,255,.08);"><b>m decreases</b> (1.9 → 0.8)</td><td style="padding:10px; border-bottom:1px solid rgba(255,255,255,.08);">Line becomes flatter →</td><td style="padding:10px; border-bottom:1px solid rgba(255,255,255,.08);">Salary grows slowly per year (e.g., govt job)</td></tr>
+              <tr><td style="padding:10px; border-bottom:1px solid rgba(255,255,255,.08);"><b>c increases</b> (1.2 → 5.0)</td><td style="padding:10px; border-bottom:1px solid rgba(255,255,255,.08);">Line shifts up ⬆️</td><td style="padding:10px; border-bottom:1px solid rgba(255,255,255,.08);">Higher starting salary (e.g., IIT graduate)</td></tr>
+              <tr><td style="padding:10px;"><b>c decreases</b> (1.2 → 0.5)</td><td style="padding:10px;">Line shifts down ⬇️</td><td style="padding:10px;">Lower starting salary (e.g., small-town startup)</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="callout" style="margin-top:10px">
+          <p style="margin:0">💡 <b>Classroom question:</b> <em>"If Company A offers m=3, c=5 vs Company B offers m=1.5, c=10 — which is better for a fresher? Which is better after 15 years?"</em><br/><br/>
+          🅰️ Company A: Salary = 3×0 + 5 = <b>₹5L</b> (fresher) → 3×15 + 5 = <b>₹50L</b> (15 yrs)<br/>
+          🅱️ Company B: Salary = 1.5×0 + 10 = <b>₹10L</b> (fresher) → 1.5×15 + 10 = <b>₹32.5L</b> (15 yrs)<br/><br/>
+          👉 B pays more initially, but A overtakes after ~3.3 years and pays much more long-term!</p>
+        </div>
+
+        <h3 style="margin-top:14px">📝 Summary</h3>
+        <div class="mini" style="padding:16px">
+          <p style="margin:0;font-size:15px;line-height:2">
+            📌 <b>Formula:</b> Salary = 1.9 × Experience + 1.2<br/>
+            📌 <b>m (slope) = 1.9</b> → salary rise per year<br/>
+            📌 <b>c (intercept) = 1.2</b> → fresher starting salary<br/>
+            📌 <b>Prediction:</b> 4 yrs → ₹8.8L, 8 yrs → ₹16.4L, 12 yrs → ₹24L<br/>
+            📌 <b>How it learned:</b> found the m and c that minimize prediction errors across all 10 employees
+          </p>
+        </div>
+      </details>
+
+      <!-- CLASSROOM RECAP -->
+      <div class="callout" style="margin-top:14px">
+        <p style="margin:0">
+          🎯 <b>Classroom recap — Linear Regression in 30 seconds:</b><br/><br/>
+          1️⃣ You have data with inputs (features) and a number to predict (label)<br/>
+          2️⃣ The algorithm finds the <b>best straight line</b> through the data<br/>
+          3️⃣ It uses that line to <b>predict</b> the number for new inputs<br/>
+          4️⃣ You measure how good it is with R² and MAE<br/>
+          5️⃣ It’s the <b>simplest ML algorithm</b> — start here, then try fancier models
+        </p>
+      </div>
+    </section>
+
+    <!-- ═══════════════  LINEAR REGRESSION LAB  ═══════════════ -->
+    <section id="lr-lab">
+      <h2>🧪 Linear Regression Lab — Step by Step</h2>
+      <p class="muted">Follow each step in Google Colab or Jupyter Notebook. Every command is explained line-by-line so you know <em>what</em> it does and <em>why</em>.</p>
+
+      <!-- STEP 1 -->
+      <details open>
+        <summary><span class="pill">Step 1</span> Import Libraries</summary>
+        <pre style="background:#111827;padding:16px;border-radius:10px;overflow-x:auto">
+<span style="color:#ffd666">import</span> numpy <span style="color:#ffd666">as</span> np
+<span style="color:#ffd666">import</span> pandas <span style="color:#ffd666">as</span> pd
+<span style="color:#ffd666">import</span> matplotlib.pyplot <span style="color:#ffd666">as</span> plt
+<span style="color:#ffd666">from</span> sklearn.model_selection <span style="color:#ffd666">import</span> train_test_split
+<span style="color:#ffd666">from</span> sklearn.linear_model <span style="color:#ffd666">import</span> LinearRegression
+<span style="color:#ffd666">from</span> sklearn.metrics <span style="color:#ffd666">import</span> mean_squared_error, r2_score</pre>
+        <table><thead><tr><th>Command</th><th>What It Does</th></tr></thead><tbody>
+          <tr><td><code>import numpy as np</code></td><td>Loads NumPy — gives us fast math on arrays (mean, sum, matrix ops)</td></tr>
+          <tr><td><code>import pandas as pd</code></td><td>Loads Pandas — lets us work with data in tables (DataFrames)</td></tr>
+          <tr><td><code>import matplotlib.pyplot as plt</code></td><td>Loads Matplotlib — draws graphs and charts</td></tr>
+          <tr><td><code>from sklearn…train_test_split</code></td><td>Function to split data into training &amp; testing sets</td></tr>
+          <tr><td><code>from sklearn…LinearRegression</code></td><td>The Linear Regression model class from scikit-learn</td></tr>
+          <tr><td><code>from sklearn…mean_squared_error, r2_score</code></td><td>Functions to measure how good our predictions are</td></tr>
+        </tbody></table>
+      </details>
+
+      <!-- STEP 2 — IQR & OUTLIER REMOVAL -->
+      <details open>
+        <summary><span class="pill">Step 2</span> Outlier Detection using IQR</summary>
+
+        <!-- ── WHAT IS IQR? ── -->
+        <h3 style="color:#66e3c4;margin-top:18px">📐 What is IQR (Interquartile Range)?</h3>
+        <p>Imagine you lined up all employee salaries from <b>lowest to highest</b>. Now split them into 4 equal groups:</p>
+
+        <table><thead><tr><th>Position</th><th>Lowest</th><th style="color:#ffd666">Q1 (25%)</th><th style="color:#ffd666">Median (50%)</th><th style="color:#ffd666">Q3 (75%)</th><th>Highest</th></tr></thead><tbody>
+          <tr><td>Salary</td><td>₹12,000</td><td style="color:#ffd666">₹25,000</td><td style="color:#ffd666">₹40,000</td><td style="color:#ffd666">₹60,000</td><td>₹95,000</td></tr>
+          <tr><td>Percentile</td><td>0%</td><td>25%</td><td>50%</td><td>75%</td><td>100%</td></tr>
+          <tr><td colspan="6" style="text-align:center;color:#66e3c4;font-size:16px;padding:10px">◄──────── <b>IQR = Q3 − Q1 = ₹60,000 − ₹25,000 = ₹35,000</b> ────────►</td></tr>
+        </tbody></table>
+
+        <table><thead><tr><th>Term</th><th>Meaning</th><th>Example (Salaries in ₹)</th></tr></thead><tbody>
+          <tr><td><b>Q1</b> (25th percentile)</td><td>25% of data falls below this value</td><td>₹25,000</td></tr>
+          <tr><td><b>Q3</b> (75th percentile)</td><td>75% of data falls below this value</td><td>₹60,000</td></tr>
+          <tr><td><b>IQR</b></td><td>The spread of the <em>middle 50%</em> of data (Q3 − Q1)</td><td>₹60,000 − ₹25,000 = <b>₹35,000</b></td></tr>
+          <tr><td><b>Lower Bound</b></td><td>Q1 − 1.5 × IQR — anything below is an outlier</td><td>₹25,000 − ₹52,500 = <b>−₹27,500</b></td></tr>
+          <tr><td><b>Upper Bound</b></td><td>Q3 + 1.5 × IQR — anything above is an outlier</td><td>₹60,000 + ₹52,500 = <b>₹1,12,500</b></td></tr>
+        </tbody></table>
+
+        <!-- ── WHY IS IQR NEEDED? ── -->
+        <h3 style="color:#66e3c4;margin-top:24px">🤔 Why do we need IQR?</h3>
+        <div class="callout" style="border-left:4px solid #ff8282">
+          <b>Problem:</b> Outliers are extreme values that don't follow the normal pattern.<br>
+          Example: If 99 employees earn ₹20K–₹80K but one CEO earns ₹50,00,000 — that one value <b>pulls the mean, distorts the model, and ruins predictions</b>.
+        </div>
+        <table><thead><tr><th>Without Outlier Removal</th><th>With IQR Outlier Removal</th></tr></thead><tbody>
+          <tr><td>Mean salary = ₹70,000 (inflated by CEO)</td><td>Mean salary = ₹42,000 (realistic)</td></tr>
+          <tr><td>Model tries to fit the extreme point</td><td>Model focuses on the real pattern</td></tr>
+          <tr><td>Best-fit line is tilted/wrong</td><td>Best-fit line is accurate</td></tr>
+          <tr><td>Poor predictions for normal employees</td><td>Good predictions for normal employees</td></tr>
+        </tbody></table>
+
+        <div class="callout">
+          💡 <b>Why 1.5 × IQR?</b> This is a standard statistical rule (Tukey's Fence). It catches extreme values while keeping normal variation. Think of it as: <em>"If a salary is more than 1.5 box-widths away from the middle box, it's suspicious."</em>
+        </div>
+
+        <!-- ── THE CODE ── -->
+        <h3 style="color:#66e3c4;margin-top:24px">💻 The Code</h3>
+        <pre style="background:#111827;padding:16px;border-radius:10px;overflow-x:auto">
+<span style="color:#66e3c4"># Calculate Q1 (25th percentile) and Q3 (75th percentile) for 'monthly_salary'</span>
+Q1 = df[<span style="color:#ff8282">'monthly_salary'</span>].quantile(<span style="color:#7aa2ff">0.25</span>)
+Q3 = df[<span style="color:#ff8282">'monthly_salary'</span>].quantile(<span style="color:#7aa2ff">0.75</span>)
+
+<span style="color:#66e3c4"># Calculate the Interquartile Range (IQR)</span>
+IQR = Q3 - Q1
+
+<span style="color:#66e3c4"># Define the lower and upper bounds for outlier detection</span>
+lower_bound = Q1 - <span style="color:#7aa2ff">1.5</span> * IQR
+upper_bound = Q3 + <span style="color:#7aa2ff">1.5</span> * IQR
+
+<span style="color:#ffd666">print</span>(<span style="color:#ff8282">f"Q1 (25th percentile): ₹{Q1:,.0f}"</span>)
+<span style="color:#ffd666">print</span>(<span style="color:#ff8282">f"Q3 (75th percentile): ₹{Q3:,.0f}"</span>)
+<span style="color:#ffd666">print</span>(<span style="color:#ff8282">f"IQR: ₹{IQR:,.0f}"</span>)
+<span style="color:#ffd666">print</span>(<span style="color:#ff8282">f"Lower Bound for Outliers: ₹{lower_bound:,.0f}"</span>)
+<span style="color:#ffd666">print</span>(<span style="color:#ff8282">f"Upper Bound for Outliers: ₹{upper_bound:,.0f}"</span>)</pre>
+
+        <table><thead><tr><th>Command</th><th>What It Does</th></tr></thead><tbody>
+          <tr><td><code>df['monthly_salary'].quantile(0.25)</code></td><td>Finds <b>Q1</b> — the salary at the 25th percentile (25% of employees earn less than this)</td></tr>
+          <tr><td><code>df['monthly_salary'].quantile(0.75)</code></td><td>Finds <b>Q3</b> — the salary at the 75th percentile (75% of employees earn less than this)</td></tr>
+          <tr><td><code>IQR = Q3 - Q1</code></td><td>Calculates the <b>spread of the middle 50%</b> of data</td></tr>
+          <tr><td><code>Q1 - 1.5 * IQR</code></td><td>Lower fence — salaries below this are <b>unusually low</b> (outliers)</td></tr>
+          <tr><td><code>Q3 + 1.5 * IQR</code></td><td>Upper fence — salaries above this are <b>unusually high</b> (outliers)</td></tr>
+          <tr><td><code>f"₹{Q1:,.0f}"</code></td><td>Formats the number with commas and ₹ symbol, no decimals (e.g., ₹25,000)</td></tr>
+        </tbody></table>
+
+        <!-- ── FILTER OUTLIERS ── -->
+        <h3 style="color:#66e3c4;margin-top:24px">🧹 Remove Outliers</h3>
+        <pre style="background:#111827;padding:16px;border-radius:10px;overflow-x:auto">
+<span style="color:#66e3c4"># Count rows before outlier removal</span>
+rows_before = <span style="color:#ffd666">len</span>(df)
+
+<span style="color:#66e3c4"># Filter out rows where 'monthly_salary' is outside the bounds</span>
+df = df[(df[<span style="color:#ff8282">'monthly_salary'</span>] >= lower_bound) & (df[<span style="color:#ff8282">'monthly_salary'</span>] <= upper_bound)]
+
+<span style="color:#66e3c4"># Count rows after outlier removal</span>
+rows_after = <span style="color:#ffd666">len</span>(df)
+rows_removed = rows_before - rows_after
+
+<span style="color:#66e3c4"># Print how many rows were removed and the threshold</span>
+<span style="color:#ffd666">print</span>(<span style="color:#ff8282">f"\nRemoved {rows_removed} rows with salary above ₹{upper_bound:,.0f} or below ₹{lower_bound:,.0f}"</span>)</pre>
+
+        <table><thead><tr><th>Command</th><th>What It Does</th></tr></thead><tbody>
+          <tr><td><code>len(df)</code></td><td>Counts total rows in the DataFrame — we save this <b>before</b> filtering</td></tr>
+          <tr><td><code>df[…] &gt;= lower_bound</code></td><td>Creates a True/False mask — True for rows where salary is <b>above</b> the lower fence</td></tr>
+          <tr><td><code>df[…] &lt;= upper_bound</code></td><td>Creates a True/False mask — True for rows where salary is <b>below</b> the upper fence</td></tr>
+          <tr><td><code>&amp;</code> (and operator)</td><td>Combines both conditions — keeps <b>only rows that satisfy BOTH</b></td></tr>
+          <tr><td><code>df = df[…]</code></td><td>Overwrites the DataFrame with only the clean rows (outliers are dropped)</td></tr>
+          <tr><td><code>rows_before - rows_after</code></td><td>Tells you exactly how many outlier rows were removed</td></tr>
+        </tbody></table>
+
+        <!-- ── VISUAL SUMMARY ── -->
+        <h3 style="color:#66e3c4;margin-top:24px">📊 Visual Summary — Box Plot View</h3>
+        <table><thead><tr><th>Zone</th><th>Range</th><th>What Happens</th></tr></thead><tbody>
+          <tr style="color:#ff8282"><td>✗ Below Lower Bound</td><td>Below ₹−27,500</td><td>❌ <b>OUTLIER — removed</b></td></tr>
+          <tr><td>Lower Bound → Q1</td><td>₹−27,500 → ₹25,000</td><td>✅ Normal (just low)</td></tr>
+          <tr style="color:#66e3c4"><td>Q1 → Median</td><td>₹25,000 → ₹40,000</td><td>✅ <b>Middle 50% (IQR zone)</b></td></tr>
+          <tr style="color:#66e3c4"><td>Median → Q3</td><td>₹40,000 → ₹60,000</td><td>✅ <b>Middle 50% (IQR zone)</b></td></tr>
+          <tr><td>Q3 → Upper Bound</td><td>₹60,000 → ₹1,12,500</td><td>✅ Normal (just high)</td></tr>
+          <tr style="color:#ff8282"><td>✗ Above Upper Bound</td><td>Above ₹1,12,500</td><td>❌ <b>OUTLIER — removed</b></td></tr>
+        </tbody></table>
+
+        <div class="callout">
+          🎯 <b>When to use IQR:</b><br>
+          ✅ Before training any ML model (Linear Regression, etc.) — outliers distort the best-fit line<br>
+          ✅ During data cleaning / EDA phase<br>
+          ✅ When you see suspiciously high or low values in <code>df.describe()</code><br>
+          ❌ Don't remove outliers blindly — sometimes they are real (e.g., a doctor's salary IS higher)
+        </div>
+
+      </details>
+
+      <!-- STEP 3 — ONE-HOT ENCODING -->
+      <details>
+        <summary><span class="pill">Step 3</span> One-Hot Encoding (Categorical → Numbers)</summary>
+
+        <!-- ── WHAT IS IT? ── -->
+        <h3 style="color:#66e3c4;margin-top:18px">🔤 What is One-Hot Encoding?</h3>
+        <p>Machine Learning models only understand <b>numbers</b>, not text. If your data has a column like <code>department</code> with values "HR", "IT", "Sales" — you <b>must convert it to numbers</b> before training.</p>
+
+        <p>One-Hot Encoding creates a <b>new column for each category</b> and fills it with <b>1</b> (yes, belongs) or <b>0</b> (no, doesn't belong):</p>
+
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:16px 0">
+          <div>
+            <p style="color:#ffd666;font-weight:bold;margin-bottom:6px">❌ Before (Text — ML can't use this)</p>
+            <table><thead><tr><th>Name</th><th>Department</th><th>Salary</th></tr></thead><tbody>
+              <tr><td>Ravi</td><td>HR</td><td>₹30,000</td></tr>
+              <tr><td>Priya</td><td>IT</td><td>₹50,000</td></tr>
+              <tr><td>Amit</td><td>Sales</td><td>₹35,000</td></tr>
+              <tr><td>Neha</td><td>HR</td><td>₹32,000</td></tr>
+            </tbody></table>
+          </div>
+          <div>
+            <p style="color:#66e3c4;font-weight:bold;margin-bottom:6px">✅ After (Numbers — ML ready!)</p>
+            <table><thead><tr><th>Name</th><th>Salary</th><th>dept_IT</th><th>dept_Sales</th></tr></thead><tbody>
+              <tr><td>Ravi</td><td>₹30,000</td><td>0</td><td>0</td></tr>
+              <tr><td>Priya</td><td>₹50,000</td><td>1</td><td>0</td></tr>
+              <tr><td>Amit</td><td>₹35,000</td><td>0</td><td>1</td></tr>
+              <tr><td>Neha</td><td>₹32,000</td><td>0</td><td>0</td></tr>
+            </tbody></table>
+          </div>
+        </div>
+        <div class="callout">👆 Notice: <b>HR has no column</b>! When dept_IT = 0 AND dept_Sales = 0, the model <em>knows</em> it must be HR. This is why we <b>drop the first</b> category.</div>
+
+        <!-- ── WHY DROP_FIRST? ── -->
+        <h3 style="color:#66e3c4;margin-top:24px">🗑️ Why <code>drop_first=True</code>? — The Multicollinearity Trap</h3>
+
+        <p><b>Multicollinearity</b> = when one column can be perfectly predicted from other columns. This confuses the model.</p>
+
+        <table><thead><tr><th>Employee</th><th>dept_HR</th><th>dept_IT</th><th>dept_Sales</th><th>Sum</th><th>Problem?</th></tr></thead><tbody>
+          <tr><td>Ravi</td><td>1</td><td>0</td><td>0</td><td style="color:#ffd666"><b>1</b></td><td rowspan="3" style="color:#ff8282;vertical-align:middle">Sum is <b>ALWAYS 1</b>!<br>dept_HR = 1 − dept_IT − dept_Sales<br>→ HR column adds <b>zero</b> new info<br>→ This is <b>multicollinearity</b></td></tr>
+          <tr><td>Priya</td><td>0</td><td>1</td><td>0</td><td style="color:#ffd666"><b>1</b></td></tr>
+          <tr><td>Amit</td><td>0</td><td>0</td><td>1</td><td style="color:#ffd666"><b>1</b></td></tr>
+        </tbody></table>
+        <div class="callout" style="border-left:4px solid #ff8282">
+          ❌ <b>Multicollinearity</b> = one column can be perfectly calculated from the others. Linear Regression gets confused: <em>"Should I give credit to dept_HR or split it between dept_IT &amp; dept_Sales?"</em> — coefficients become unstable &amp; unreliable.
+        </div>
+
+        <table><thead><tr><th>Scenario</th><th>What Happens</th></tr></thead><tbody>
+          <tr><td><code>drop_first=False</code> (keep all columns)</td><td>❌ Multicollinearity — model coefficients become <b>unstable &amp; unreliable</b>, small data changes cause wild swings in results</td></tr>
+          <tr><td><code>drop_first=True</code> (drop one column)</td><td>✅ No redundancy — each column provides <b>unique information</b>, model is stable</td></tr>
+        </tbody></table>
+
+        <div class="callout" style="border-left:4px solid #ffd666">
+          🎓 <b>Classroom Analogy:</b> Imagine a class has 3 houses: Red, Blue, Green. If you're told "Not Red, Not Blue" — you <b>automatically know</b> it's Green! You don't need a separate Green flag. Keeping it would be like writing the same answer twice on an exam — it wastes space and confuses the checker.
+        </div>
+
+        <!-- ── THE CODE ── -->
+        <h3 style="color:#66e3c4;margin-top:24px">💻 The Code</h3>
+        <pre style="background:#111827;padding:16px;border-radius:10px;overflow-x:auto">
+<span style="color:#66e3c4"># Apply one-hot encoding to the 'department' column</span>
+df = pd.get_dummies(df, columns=[<span style="color:#ff8282">'department'</span>], drop_first=<span style="color:#ffd666">True</span>)
+
+<span style="color:#66e3c4"># Print the new column names to show the encoded 'department' columns</span>
+<span style="color:#ffd666">print</span>(<span style="color:#ff8282">"New column names after encoding 'department':"</span>)
+<span style="color:#ffd666">print</span>(df.columns.tolist())</pre>
+
+        <table><thead><tr><th>Command</th><th>What It Does</th></tr></thead><tbody>
+          <tr><td><code>pd.get_dummies(df, …)</code></td><td>Pandas function that automatically converts categorical text columns into <b>0/1 numeric columns</b></td></tr>
+          <tr><td><code>columns=['department']</code></td><td>Tells Pandas <b>which column</b> to encode. You can pass multiple: <code>['department', 'city']</code></td></tr>
+          <tr><td><code>drop_first=True</code></td><td>Drops the <b>first category</b> (e.g., HR) to avoid multicollinearity. The dropped category becomes the <b>baseline/reference</b></td></tr>
+          <tr><td><code>df.columns.tolist()</code></td><td>Returns all column names as a list — verify the new dummy columns appeared</td></tr>
+        </tbody></table>
+
+        <!-- ── WHAT OUTPUT LOOKS LIKE ── -->
+        <h3 style="color:#66e3c4;margin-top:24px">📋 Expected Output</h3>
+        <pre style="background:#111827;padding:16px;border-radius:10px;overflow-x:auto;color:#e8eefc">
+New column names after encoding 'department':
+[<span style="color:#ff8282">'name'</span>, <span style="color:#ff8282">'monthly_salary'</span>, <span style="color:#ff8282">'department_IT'</span>, <span style="color:#ff8282">'department_Sales'</span>]
+
+<span style="color:#66e3c4"># 'department_HR' is gone — it's the baseline (drop_first dropped it)</span>
+<span style="color:#66e3c4"># When department_IT=0 AND department_Sales=0 → the employee is in HR</span></pre>
+
+        <!-- ── WHEN TO USE ── -->
+        <div class="callout">
+          🎯 <b>When to use One-Hot Encoding:</b><br>
+          ✅ When a column has <b>categories with no natural order</b> (department, city, colour)<br>
+          ✅ Before training Linear Regression, Logistic Regression, or Neural Networks<br>
+          ❌ Don't use for <b>ordered categories</b> like "Low → Medium → High" — use Label Encoding (0, 1, 2) instead<br>
+          ❌ Don't use if a column has <b>100+ unique values</b> (too many new columns!) — use target encoding or embeddings
+        </div>
+
+      </details>
+
+      <!-- STEP 4 — TRAIN/TEST SPLIT -->
+      <details>
+        <summary><span class="pill">Step 4</span> Split Data into Training &amp; Testing</summary>
+
+        <!-- ── WHY SPLIT? ── -->
+        <h3 style="color:#66e3c4;margin-top:18px">🤔 Why do we split data?</h3>
+        <p>Imagine a student who <b>memorises</b> all the answers but can't solve a new question. That's what happens when a model trains AND tests on the <b>same data</b> — it just memorises, it doesn't learn.</p>
+
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:16px 0">
+          <div style="background:#111827;border-radius:12px;padding:16px;text-align:center">
+            <p style="color:#7aa2ff;font-size:32px;margin:0">📚 80%</p>
+            <p style="color:#ffd666;font-weight:bold;margin:4px 0">Training Set</p>
+            <p style="color:#e8eefc;margin:0">The model <b>learns</b> from this data — finds patterns, builds the equation</p>
+          </div>
+          <div style="background:#111827;border-radius:12px;padding:16px;text-align:center">
+            <p style="color:#7aa2ff;font-size:32px;margin:0">🧪 20%</p>
+            <p style="color:#ffd666;font-weight:bold;margin:4px 0">Testing Set</p>
+            <p style="color:#e8eefc;margin:0">The model is <b>tested</b> on this — data it has <b>never seen</b> before</p>
+          </div>
+        </div>
+
+        <div class="callout" style="border-left:4px solid #ffd666">
+          🎓 <b>Classroom Analogy:</b> You study from Chapters 1–8 (training). The exam has questions from Chapters 9–10 (testing). If you score well on the exam, it means you <em>truly understood</em> the subject — not just memorised.
+        </div>
+
+        <!-- ── FEATURES VS TARGET ── -->
+        <h3 style="color:#66e3c4;margin-top:24px">🎯 Features (X) vs Target (y)</h3>
+        <table><thead><tr><th>Term</th><th>Meaning</th><th>In Our Data</th></tr></thead><tbody>
+          <tr><td><b>X (Features)</b></td><td>The <b>input columns</b> — what the model uses to make predictions</td><td>Experience, department_IT, department_Sales, etc.</td></tr>
+          <tr><td><b>y (Target)</b></td><td>The <b>output column</b> — what we want to predict</td><td>monthly_salary</td></tr>
+          <tr><td><code>df.drop('monthly_salary', axis=1)</code></td><td>Takes <b>all columns EXCEPT</b> salary → those become features</td><td>Everything except monthly_salary</td></tr>
+          <tr><td><code>df['monthly_salary']</code></td><td>Picks <b>only</b> the salary column → this is the target</td><td>monthly_salary</td></tr>
+        </tbody></table>
+
+        <p style="color:#ffd666;font-weight:bold;margin-bottom:6px">Full DataFrame (df):</p>
+        <table><thead><tr><th>experience</th><th>department_IT</th><th>department_Sales</th><th style="color:#ff8282">monthly_salary</th></tr></thead><tbody>
+          <tr><td>5</td><td>1</td><td>0</td><td style="color:#ff8282">₹50,000</td></tr>
+          <tr><td>3</td><td>0</td><td>1</td><td style="color:#ff8282">₹35,000</td></tr>
+        </tbody></table>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:12px 0">
+          <div>
+            <p style="color:#66e3c4;font-weight:bold;margin-bottom:6px">↓ df.drop('monthly_salary') → X (Features)</p>
+            <table><thead><tr><th>experience</th><th>department_IT</th><th>department_Sales</th></tr></thead><tbody>
+              <tr><td>5</td><td>1</td><td>0</td></tr>
+              <tr><td>3</td><td>0</td><td>1</td></tr>
+            </tbody></table>
+          </div>
+          <div>
+            <p style="color:#ff8282;font-weight:bold;margin-bottom:6px">↓ df['monthly_salary'] → y (Target)</p>
+            <table><thead><tr><th>monthly_salary</th></tr></thead><tbody>
+              <tr><td>₹50,000</td></tr>
+              <tr><td>₹35,000</td></tr>
+            </tbody></table>
+          </div>
+        </div>
+
+        <!-- ── THE CODE ── -->
+        <h3 style="color:#66e3c4;margin-top:24px">💻 The Code</h3>
+        <pre style="background:#111827;padding:16px;border-radius:10px;overflow-x:auto">
+<span style="color:#ffd666">from</span> sklearn.model_selection <span style="color:#ffd666">import</span> train_test_split
+
+<span style="color:#66e3c4"># Define features (X) as all columns except 'monthly_salary'</span>
+X = df.drop(<span style="color:#ff8282">'monthly_salary'</span>, axis=<span style="color:#7aa2ff">1</span>)
+
+<span style="color:#66e3c4"># Define the target variable (y) as 'monthly_salary'</span>
+y = df[<span style="color:#ff8282">'monthly_salary'</span>]
+
+<span style="color:#66e3c4"># Split the data into training and testing sets</span>
+<span style="color:#66e3c4"># 80% for training, 20% for testing</span>
+<span style="color:#66e3c4"># random_state ensures reproducibility of the split</span>
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y, test_size=<span style="color:#7aa2ff">0.2</span>, random_state=<span style="color:#7aa2ff">42</span>
+)
+
+<span style="color:#66e3c4"># Print the shapes of the resulting datasets</span>
+<span style="color:#ffd666">print</span>(<span style="color:#ff8282">f"Shape of X_train (training features): {X_train.shape}"</span>)
+<span style="color:#ffd666">print</span>(<span style="color:#ff8282">f"Shape of X_test (testing features): {X_test.shape}"</span>)
+<span style="color:#ffd666">print</span>(<span style="color:#ff8282">f"Shape of y_train (training target): {y_train.shape}"</span>)
+<span style="color:#ffd666">print</span>(<span style="color:#ff8282">f"Shape of y_test (testing target): {y_test.shape}"</span>)</pre>
+
+        <table><thead><tr><th>Command</th><th>What It Does</th></tr></thead><tbody>
+          <tr><td><code>from sklearn…import train_test_split</code></td><td>Imports the splitting function from scikit-learn</td></tr>
+          <tr><td><code>df.drop('monthly_salary', axis=1)</code></td><td>Removes the salary column and keeps <b>everything else</b> as features. <code>axis=1</code> means "drop a column" (axis=0 would drop a row)</td></tr>
+          <tr><td><code>df['monthly_salary']</code></td><td>Selects only the salary column as the <b>target</b> variable</td></tr>
+          <tr><td><code>train_test_split(X, y, …)</code></td><td>Randomly shuffles the data and splits it into 4 parts: X_train, X_test, y_train, y_test</td></tr>
+          <tr><td><code>test_size=0.2</code></td><td><b>20%</b> goes to testing, <b>80%</b> goes to training. Common choices: 0.2, 0.25, 0.3</td></tr>
+          <tr><td><code>random_state=42</code></td><td>Fixes the random shuffle — so <b>every student gets the same split</b>. Without this, each run gives different results</td></tr>
+          <tr><td><code>X_train, X_test</code></td><td>Training features &amp; Testing features (the input columns, split into two groups)</td></tr>
+          <tr><td><code>y_train, y_test</code></td><td>Training target &amp; Testing target (the salary column, split into two groups)</td></tr>
+          <tr><td><code>.shape</code></td><td>Shows (rows, columns) — verify the split worked correctly</td></tr>
+        </tbody></table>
+
+        <!-- ── WHAT THE 4 VARIABLES CONTAIN ── -->
+        <h3 style="color:#66e3c4;margin-top:24px">📦 What do the 4 variables contain?</h3>
+        <table><thead><tr><th>Variable</th><th>Contains</th><th>Used For</th><th>Example Shape</th></tr></thead><tbody>
+          <tr><td><code>X_train</code></td><td>80% of feature rows</td><td>Model <b>learns</b> from these inputs</td><td>(800, 5)</td></tr>
+          <tr><td><code>y_train</code></td><td>80% of salary values</td><td>Model <b>learns</b> the correct answers</td><td>(800,)</td></tr>
+          <tr><td><code>X_test</code></td><td>20% of feature rows</td><td>Model <b>predicts</b> on these (unseen)</td><td>(200, 5)</td></tr>
+          <tr><td><code>y_test</code></td><td>20% of salary values</td><td>We <b>compare</b> predictions vs these actual answers</td><td>(200,)</td></tr>
+        </tbody></table>
+
+        <table><thead><tr><th></th><th style="color:#66e3c4">Training (80%)</th><th style="color:#ff8282">Testing (20%)</th></tr></thead><tbody>
+          <tr><td><b>Features</b></td><td style="color:#66e3c4"><b>X_train</b><br>Input columns for LEARNING</td><td style="color:#ff8282"><b>X_test</b><br>Input columns for TESTING</td></tr>
+          <tr><td><b>Target</b></td><td style="color:#66e3c4"><b>y_train</b><br>Correct salary answers for LEARNING</td><td style="color:#ff8282"><b>y_test</b><br>Correct answers to CHECK predictions against</td></tr>
+        </tbody></table>
+
+        <div class="callout">
+          ⚠️ <b>Common Mistakes:</b><br>
+          ❌ Forgetting <code>random_state</code> — each run gives different results, making debugging hard<br>
+          ❌ Using too small a test set (5%) — not enough data to reliably evaluate<br>
+          ❌ Using too large a test set (50%) — not enough data for the model to learn<br>
+          ✅ Sweet spot: <b>test_size = 0.2 to 0.3</b> (20–30% testing)
+        </div>
+
+      </details>
+
+      <!-- STEP 5 — TRAIN & PREDICT -->
+      <details>
+        <summary><span class="pill">Step 5</span> Train the Model &amp; Predict</summary>
+
+        <!-- ── WHAT IS TRAINING? ── -->
+        <h3 style="color:#66e3c4;margin-top:18px">🏋️ What does "Training" mean?</h3>
+        <p>Training = the model looks at <b>X_train</b> (features) and <b>y_train</b> (correct salaries) and figures out the <b>best equation</b> that connects them.</p>
+
+        <p style="font-weight:bold;margin-bottom:6px"><code>model.fit(X_train, y_train)</code> — What the model sees during training:</p>
+        <table><thead><tr><th style="color:#66e3c4">X_train (Features)</th><th></th><th style="color:#ff8282">y_train (Correct Answer)</th></tr></thead><tbody>
+          <tr><td>exp=5, IT=1, Sales=0</td><td>→</td><td>₹50,000</td></tr>
+          <tr><td>exp=3, IT=0, Sales=1</td><td>→</td><td>₹35,000</td></tr>
+          <tr><td>exp=8, IT=0, Sales=0</td><td>→</td><td>₹72,000</td></tr>
+          <tr><td colspan="3" style="text-align:center;color:#ffd666;padding:10px">⬇️ Model learns the equation:<br><b>Salary = m₁×Experience + m₂×IT + m₃×Sales + c</b></td></tr>
+        </tbody></table>
+
+        <div class="callout" style="border-left:4px solid #ffd666">
+          🎓 <b>Analogy:</b> Think of <code>.fit()</code> as a student <b>studying</b>. The model reads hundreds of examples (X_train + y_train) and figures out the pattern. After <code>.fit()</code> completes, the model has "learned" — it now knows the slope, intercept, and coefficients.
+        </div>
+
+        <!-- ── WHAT IS PREDICT? ── -->
+        <h3 style="color:#66e3c4;margin-top:24px">🔮 What does "Predict" mean?</h3>
+        <p><code>model.predict(X_test)</code> = give the model <b>new inputs it has never seen</b>, and it uses the learned equation to <b>guess the salary</b>.</p>
+
+        <p style="font-weight:bold;margin-bottom:6px"><code>y_pred = model.predict(X_test)</code> — Model predicts on unseen data:</p>
+        <table><thead><tr><th style="color:#66e3c4">X_test (Unseen Features)</th><th></th><th style="color:#7aa2ff">y_pred (Model's Guess)</th><th style="color:#ff8282">y_test (Actual Answer)</th><th>Close?</th></tr></thead><tbody>
+          <tr><td>exp=4, IT=0, Sales=0</td><td>→</td><td style="color:#7aa2ff">₹38,500</td><td style="color:#ff8282">₹40,000</td><td style="color:#66e3c4">✅ Off by ₹1,500</td></tr>
+          <tr><td>exp=7, IT=0, Sales=1</td><td>→</td><td style="color:#7aa2ff">₹61,200</td><td style="color:#ff8282">₹58,000</td><td style="color:#ffd666">⚠️ Off by ₹3,200</td></tr>
+          <tr><td colspan="5" style="text-align:center;color:#66e3c4;padding:10px">→ Compare <b>y_pred vs y_test</b> to measure how good the model is!</td></tr>
+        </tbody></table>
+
+        <!-- ── THE CODE ── -->
+        <h3 style="color:#66e3c4;margin-top:24px">💻 The Code</h3>
+        <pre style="background:#111827;padding:16px;border-radius:10px;overflow-x:auto">
+<span style="color:#ffd666">from</span> sklearn.linear_model <span style="color:#ffd666">import</span> LinearRegression
+<span style="color:#ffd666">import</span> pandas <span style="color:#ffd666">as</span> pd
+
+<span style="color:#66e3c4"># Create an instance of the Linear Regression model</span>
+model = LinearRegression()
+
+<span style="color:#66e3c4"># Train the model using the training features (X_train) and target (y_train)</span>
+model.fit(X_train, y_train)
+
+<span style="color:#66e3c4"># Make predictions on the test set using the trained model</span>
+y_pred = model.predict(X_test)
+
+<span style="color:#ffd666">print</span>(y_pred)</pre>
+
+        <table><thead><tr><th>Command</th><th>What It Does</th></tr></thead><tbody>
+          <tr><td><code>LinearRegression()</code></td><td>Creates a <b>blank model object</b> — it hasn't learned anything yet. Think of it as a new student on Day 1.</td></tr>
+          <tr><td><code>model.fit(X_train, y_train)</code></td><td>🎯 <b>THE TRAINING STEP!</b> The model reads all training data and calculates the best coefficients (slopes) and intercept to minimise errors.</td></tr>
+          <tr><td><code>model.predict(X_test)</code></td><td>🔮 <b>THE PREDICTION STEP!</b> Feeds new (unseen) feature values into the learned equation and gets predicted salaries back.</td></tr>
+          <tr><td><code>y_pred</code></td><td>An array of predicted salary values — one prediction for each row in X_test.</td></tr>
+          <tr><td><code>print(y_pred)</code></td><td>Displays the predictions. Example: <code>[38500.  61200.  45800.]</code></td></tr>
+        </tbody></table>
+
+        <!-- ── FIT VS PREDICT ── -->
+        <h3 style="color:#66e3c4;margin-top:24px">⚡ fit() vs predict() — Key Difference</h3>
+        <table><thead><tr><th></th><th><code>model.fit()</code></th><th><code>model.predict()</code></th></tr></thead><tbody>
+          <tr><td><b>When</b></td><td>Training phase</td><td>After training</td></tr>
+          <tr><td><b>Input</b></td><td>X_train + y_train (features AND answers)</td><td>X_test (features ONLY — no answers)</td></tr>
+          <tr><td><b>What it does</b></td><td>Learns the equation (finds m and c)</td><td>Uses the equation to predict y values</td></tr>
+          <tr><td><b>Analogy</b></td><td>Student <b>studying</b> with textbook + answer key</td><td>Student <b>writing the exam</b> (no answer key!)</td></tr>
+          <tr><td><b>Runs</b></td><td>Once (on training data)</td><td>Many times (any new data)</td></tr>
+        </tbody></table>
+
+        <div class="callout">
+          💡 <b>After <code>.fit()</code></b>, you can inspect what the model learned:<br>
+          <code>model.coef_</code> → the slopes (one per feature)<br>
+          <code>model.intercept_</code> → the starting value (c in Y = mX + c)<br>
+          Example: <code>[1400, 5000, 3000]</code> means each year of experience adds ₹1,400, being in IT adds ₹5,000, being in Sales adds ₹3,000.
+        </div>
+
+      </details>
+
+      <!-- STEP 6 — EVALUATE -->
+      <details>
+        <summary><span class="pill">Step 6</span> Evaluate the Model (R², MAE, RMSE)</summary>
+
+        <!-- ── WHY EVALUATE? ── -->
+        <h3 style="color:#66e3c4;margin-top:18px">📊 Why do we evaluate?</h3>
+        <p>The model made predictions (<code>y_pred</code>). But <b>how good are they?</b> We need numbers to measure accuracy — not just "looks okay".</p>
+
+        <table><thead><tr><th>Employee</th><th style="color:#ff8282">Actual (y_test)</th><th style="color:#7aa2ff">Predicted (y_pred)</th><th>Error</th><th>Good?</th></tr></thead><tbody>
+          <tr><td>Ravi</td><td>₹40,000</td><td>₹38,500</td><td style="color:#66e3c4">₹1,500</td><td style="color:#66e3c4">✅ Small</td></tr>
+          <tr><td>Priya</td><td>₹58,000</td><td>₹61,200</td><td style="color:#ff8282">₹3,200</td><td style="color:#ffd666">⚠️ Bigger</td></tr>
+          <tr><td>Amit</td><td>₹32,000</td><td>₹33,100</td><td style="color:#66e3c4">₹1,100</td><td style="color:#66e3c4">✅ Small</td></tr>
+        </tbody></table>
+
+        <!-- ── THE CODE ── -->
+        <h3 style="color:#66e3c4;margin-top:24px">💻 The Code</h3>
+        <pre style="background:#111827;padding:16px;border-radius:10px;overflow-x:auto">
+<span style="color:#ffd666">from</span> sklearn.metrics <span style="color:#ffd666">import</span> r2_score, mean_absolute_error, mean_squared_error
+<span style="color:#ffd666">import</span> numpy <span style="color:#ffd666">as</span> np
+
+<span style="color:#66e3c4"># Calculate R-squared score</span>
+R_squared = r2_score(y_test, y_pred)
+<span style="color:#ffd666">print</span>(<span style="color:#ff8282">f"R-squared (R²): {R_squared:.2f}"</span>)
+<span style="color:#ffd666">print</span>(<span style="color:#ff8282">f"Our model explains {R_squared*100:.2f}% of salary variation.\n"</span>)
+
+<span style="color:#66e3c4"># Calculate Mean Absolute Error (MAE)</span>
+MAE = mean_absolute_error(y_test, y_pred)
+<span style="color:#ffd666">print</span>(<span style="color:#ff8282">f"Mean Absolute Error (MAE): ₹{MAE:,.2f}"</span>)
+<span style="color:#ffd666">print</span>(<span style="color:#ff8282">f"On average, our prediction is off by ₹{MAE:,.0f}.\n"</span>)
+
+<span style="color:#66e3c4"># Calculate Root Mean Squared Error (RMSE)</span>
+RMSE = np.sqrt(mean_squared_error(y_test, y_pred))
+<span style="color:#ffd666">print</span>(<span style="color:#ff8282">f"Root Mean Squared Error (RMSE): ₹{RMSE:,.2f}"</span>)
+<span style="color:#ffd666">print</span>(<span style="color:#ff8282">f"RMSE is ₹{RMSE:,.0f} — larger errors are penalised more."</span>)</pre>
+
+        <table><thead><tr><th>Command</th><th>What It Does</th></tr></thead><tbody>
+          <tr><td><code>r2_score(y_test, y_pred)</code></td><td>Calculates <b>R²</b> — how much of the salary variation the model can explain (0 to 1)</td></tr>
+          <tr><td><code>mean_absolute_error(y_test, y_pred)</code></td><td>Calculates <b>MAE</b> — average of |actual − predicted| (absolute differences)</td></tr>
+          <tr><td><code>mean_squared_error(y_test, y_pred)</code></td><td>Calculates <b>MSE</b> — average of (actual − predicted)² (squared differences)</td></tr>
+          <tr><td><code>np.sqrt(…)</code></td><td>Takes square root of MSE to get <b>RMSE</b> — brings it back to ₹ units</td></tr>
+        </tbody></table>
+
+        <!-- ── R-SQUARED EXPLAINED ── -->
+        <h3 style="color:#66e3c4;margin-top:24px">📈 R² (R-Squared) — "How much does the model explain?"</h3>
+
+        <table><thead><tr><th>R² = 0.85</th><th>What it means</th></tr></thead><tbody>
+          <tr><td style="color:#66e3c4;font-size:24px;text-align:center"><b>85%</b></td><td>The model <b>explains 85%</b> of why salaries differ from person to person (experience, department, etc.)</td></tr>
+          <tr><td style="color:#ff8282;font-size:24px;text-align:center"><b>15%</b></td><td>The remaining 15% is due to factors the model <b>doesn't know about</b> (negotiation skills, company culture, luck)</td></tr>
+        </tbody></table>
+
+        <table><thead><tr><th>R² Value</th><th>Rating</th><th>Meaning</th><th>Example</th></tr></thead><tbody>
+          <tr><td><b>0.90 – 1.00</b></td><td style="color:#66e3c4">🟢 Excellent</td><td>Model captures almost all patterns</td><td>Predicting house price from area + location + rooms</td></tr>
+          <tr><td><b>0.70 – 0.89</b></td><td style="color:#ffd666">🟡 Good</td><td>Model captures most patterns</td><td>Predicting salary from experience + department</td></tr>
+          <tr><td><b>0.50 – 0.69</b></td><td style="color:#ff8282">🟠 Moderate</td><td>Model captures some patterns — consider more features</td><td>Predicting marks from study hours alone</td></tr>
+          <tr><td><b>Below 0.50</b></td><td style="color:#ff8282">🔴 Poor</td><td>Model is barely better than just guessing the average</td><td>Predicting stock price from weather</td></tr>
+        </tbody></table>
+
+        <div class="callout" style="border-left:4px solid #ffd666">
+          🎓 <b>Exam Analogy:</b> If R² = 0.85, it's like a student who studies the textbook (features) and scores <b>85%</b> on the exam. The 15% they got wrong is the stuff that wasn't in the textbook — like trick questions or topics not covered.
+        </div>
+
+        <!-- ── MAE EXPLAINED ── -->
+        <h3 style="color:#66e3c4;margin-top:24px">📏 MAE (Mean Absolute Error) — "By how much am I off?"</h3>
+
+        <p style="color:#ffd666;font-weight:bold;margin-bottom:6px">MAE Calculation Example:</p>
+        <table><thead><tr><th>Employee</th><th>Actual</th><th>Predicted</th><th>|Actual − Predicted|</th></tr></thead><tbody>
+          <tr><td>Ravi</td><td>₹40,000</td><td>₹38,500</td><td style="color:#7aa2ff">₹1,500</td></tr>
+          <tr><td>Priya</td><td>₹58,000</td><td>₹61,200</td><td style="color:#7aa2ff">₹3,200</td></tr>
+          <tr><td>Amit</td><td>₹32,000</td><td>₹33,100</td><td style="color:#7aa2ff">₹1,100</td></tr>
+          <tr><td colspan="3" style="text-align:right"><b>MAE = (1,500 + 3,200 + 1,100) ÷ 3 =</b></td><td style="color:#66e3c4;font-size:18px"><b>₹1,933</b></td></tr>
+        </tbody></table>
+        <div class="callout">→ "On average, our prediction is off by <b>₹1,933</b>"</div>
+
+        <table><thead><tr><th>Feature</th><th>MAE</th></tr></thead><tbody>
+          <tr><td><b>Formula</b></td><td>Average of |actual − predicted| for all test rows</td></tr>
+          <tr><td><b>Unit</b></td><td>Same as target (₹) — easy to interpret!</td></tr>
+          <tr><td><b>Treats errors</b></td><td>All errors equally — ₹100 off and ₹10,000 off are treated proportionally</td></tr>
+          <tr><td><b>Lower is</b></td><td>Better ✅ — means predictions are closer to reality</td></tr>
+          <tr><td><b>Best for</b></td><td>When you want a simple, intuitive measure of average mistake</td></tr>
+        </tbody></table>
+
+        <!-- ── RMSE EXPLAINED ── -->
+        <h3 style="color:#66e3c4;margin-top:24px">📐 RMSE (Root Mean Squared Error) — "How bad are the big mistakes?"</h3>
+
+        <p style="color:#ffd666;font-weight:bold;margin-bottom:6px">RMSE Calculation Example:</p>
+        <table><thead><tr><th>Employee</th><th>Actual</th><th>Predicted</th><th>Error</th><th>(Error)²</th><th>Note</th></tr></thead><tbody>
+          <tr><td>Ravi</td><td>₹40,000</td><td>₹38,500</td><td>₹1,500</td><td style="color:#7aa2ff">2,250,000</td><td></td></tr>
+          <tr><td>Priya</td><td>₹58,000</td><td>₹61,200</td><td>₹3,200</td><td style="color:#7aa2ff">10,240,000</td><td style="color:#ff8282">← big error gets amplified!</td></tr>
+          <tr><td>Amit</td><td>₹32,000</td><td>₹33,100</td><td>₹1,100</td><td style="color:#7aa2ff">1,210,000</td><td></td></tr>
+          <tr><td colspan="4" style="text-align:right"><b>MSE = (2,250,000 + 10,240,000 + 1,210,000) ÷ 3 =</b></td><td style="color:#7aa2ff"><b>4,566,667</b></td><td></td></tr>
+          <tr><td colspan="4" style="text-align:right"><b>RMSE = √4,566,667 =</b></td><td style="color:#66e3c4;font-size:18px"><b>₹2,137</b></td><td></td></tr>
+        </tbody></table>
+        <div class="callout">→ RMSE (₹2,137) is <b>higher than MAE (₹1,933)</b> because squaring punishes Priya's big error more</div>
+
+        <table><thead><tr><th>Feature</th><th>RMSE</th></tr></thead><tbody>
+          <tr><td><b>Formula</b></td><td>√(average of (actual − predicted)² )</td></tr>
+          <tr><td><b>Unit</b></td><td>Same as target (₹) — interpretable</td></tr>
+          <tr><td><b>Treats errors</b></td><td>Big errors are <b>penalised much more</b> (squaring amplifies large mistakes)</td></tr>
+          <tr><td><b>Lower is</b></td><td>Better ✅</td></tr>
+          <tr><td><b>Best for</b></td><td>When big mistakes are costly (e.g., medical, financial predictions)</td></tr>
+        </tbody></table>
+
+        <!-- ── MAE vs RMSE ── -->
+        <h3 style="color:#66e3c4;margin-top:24px">⚔️ MAE vs RMSE — When to use which?</h3>
+        <table><thead><tr><th></th><th>MAE</th><th>RMSE</th></tr></thead><tbody>
+          <tr><td><b>Treats all errors</b></td><td>Equally</td><td>Big errors punished more</td></tr>
+          <tr><td><b>Always</b></td><td>RMSE ≥ MAE</td><td>RMSE ≥ MAE</td></tr>
+          <tr><td><b>If MAE ≈ RMSE</b></td><td colspan="2">All errors are similar in size (consistent model) ✅</td></tr>
+          <tr><td><b>If RMSE ≫ MAE</b></td><td colspan="2">Some predictions have <b>very large errors</b> (investigate those!) ⚠️</td></tr>
+          <tr><td><b>Use MAE when</b></td><td colspan="2">You want a simple average error — "how many ₹ off on average?"</td></tr>
+          <tr><td><b>Use RMSE when</b></td><td colspan="2">Big mistakes are expensive — medical dosage, loan amount, fraud detection</td></tr>
+        </tbody></table>
+
+        <!-- ── COMPLETE CHEAT SHEET ── -->
+        <h3 style="color:#66e3c4;margin-top:24px">📋 Evaluation Cheat Sheet</h3>
+        <table><thead><tr><th>Metric</th><th>Question It Answers</th><th>Good Value</th><th>Direction</th></tr></thead><tbody>
+          <tr><td><b>R²</b></td><td>"How much variance does the model explain?"</td><td>&gt; 0.80</td><td>Higher is better ⬆️</td></tr>
+          <tr><td><b>MAE</b></td><td>"On average, how many ₹ am I wrong?"</td><td>As low as possible</td><td>Lower is better ⬇️</td></tr>
+          <tr><td><b>RMSE</b></td><td>"How bad are my worst mistakes?"</td><td>Close to MAE</td><td>Lower is better ⬇️</td></tr>
+        </tbody></table>
+
+        <div class="callout">
+          🎯 <b>Quick Decision Guide:</b><br>
+          1️⃣ Check <b>R²</b> first — is the model useful at all? (above 0.70? good!)<br>
+          2️⃣ Check <b>MAE</b> — is the average error acceptable for your business? (₹2,000 off on a ₹50,000 salary = 4% — pretty good!)<br>
+          3️⃣ Check <b>RMSE vs MAE</b> — if RMSE is much bigger than MAE, some predictions are wildly off — find and fix those rows
+        </div>
+
+      </details>
+
+      <!-- STEP 7 — ACTUAL VS PREDICTED CHART -->
+      <details>
+        <summary><span class="pill">Step 7</span> Visualise — Actual vs Predicted Chart</summary>
+
+        <!-- ── WHAT IS THIS CHART? ── -->
+        <h3 style="color:#66e3c4;margin-top:18px">📈 What does this chart show?</h3>
+        <p>This scatter plot answers one question: <b>"How close are our predictions to reality?"</b> Every dot is one employee from the test set.</p>
+
+        <table><thead><tr><th>Element on the Chart</th><th>What It Represents</th><th>How to Read It</th></tr></thead><tbody>
+          <tr><td>🔵 <b>Blue Dots</b></td><td>Each dot = one employee from the test set</td><td><b>X-axis</b> = their <em>actual</em> salary &nbsp;|&nbsp; <b>Y-axis</b> = what the model <em>predicted</em></td></tr>
+          <tr><td>🟠 <b>Orange Dashed Line</b></td><td>The <b>Perfect Prediction Line</b> (diagonal)</td><td>If the model were <b>100% correct</b>, every dot would sit exactly on this line (actual = predicted)</td></tr>
+          <tr><td>Dot <b>ON</b> the line</td><td>Prediction = Actual</td><td>✅ Perfect prediction! (rarely happens)</td></tr>
+          <tr><td>Dot <b>ABOVE</b> the line</td><td>Predicted &gt; Actual</td><td>⬆️ Model <b>overestimated</b> this employee's salary</td></tr>
+          <tr><td>Dot <b>BELOW</b> the line</td><td>Predicted &lt; Actual</td><td>⬇️ Model <b>underestimated</b> this employee's salary</td></tr>
+          <tr><td>Dots <b>close together</b> near the line</td><td>Consistent, accurate model</td><td>✅ Low MAE/RMSE, high R²</td></tr>
+          <tr><td>Dots <b>scattered far</b> from the line</td><td>Inconsistent predictions</td><td>❌ High errors — model needs more features or a different algorithm</td></tr>
+        </tbody></table>
+
+        <!-- ── VISUAL EXAMPLE TABLE ── -->
+        <h3 style="color:#66e3c4;margin-top:24px">🎯 Reading the dots — Example</h3>
+        <table><thead><tr><th>Employee</th><th>Actual Salary (X-axis)</th><th>Predicted Salary (Y-axis)</th><th>Where is the dot?</th><th>Meaning</th></tr></thead><tbody>
+          <tr><td>Ravi</td><td>₹40,000</td><td>₹38,500</td><td style="color:#66e3c4">Slightly <b>below</b> the line</td><td>Model underestimated by ₹1,500</td></tr>
+          <tr><td>Priya</td><td>₹58,000</td><td>₹61,200</td><td style="color:#ffd666">Slightly <b>above</b> the line</td><td>Model overestimated by ₹3,200</td></tr>
+          <tr><td>Amit</td><td>₹32,000</td><td>₹32,000</td><td style="color:#66e3c4"><b>On</b> the line</td><td>Perfect prediction! ✅</td></tr>
+          <tr><td>Sneha</td><td>₹70,000</td><td>₹45,000</td><td style="color:#ff8282">Far <b>below</b> the line</td><td>❌ Big miss — investigate why!</td></tr>
+        </tbody></table>
+
+        <!-- ── THE CODE ── -->
+        <h3 style="color:#66e3c4;margin-top:24px">💻 The Code</h3>
+        <pre style="background:#111827;padding:16px;border-radius:10px;overflow-x:auto">
+<span style="color:#ffd666">import</span> matplotlib.pyplot <span style="color:#ffd666">as</span> plt
+<span style="color:#ffd666">import</span> seaborn <span style="color:#ffd666">as</span> sns
+
+plt.figure(figsize=(<span style="color:#7aa2ff">10</span>, <span style="color:#7aa2ff">7</span>))
+
+<span style="color:#66e3c4"># Create a scatter plot of actual vs predicted salaries</span>
+sns.scatterplot(x=y_test, y=y_pred, alpha=<span style="color:#7aa2ff">0.9</span>)
+
+<span style="color:#66e3c4"># Plot a perfect prediction line (diagonal line from min to max)</span>
+plt.plot([y_test.min(), y_test.max()], [y_test.min(), y_test.max()],
+         color=<span style="color:#ff8282">'orange'</span>, linestyle=<span style="color:#ff8282">'--'</span>, linewidth=<span style="color:#7aa2ff">2</span>, label=<span style="color:#ff8282">'Perfect Prediction'</span>)
+
+<span style="color:#66e3c4"># Set title and axis labels</span>
+plt.title(<span style="color:#ff8282">'How close are our salary predictions?'</span>, fontsize=<span style="color:#7aa2ff">16</span>)
+plt.xlabel(<span style="color:#ff8282">'Actual Salary (in ₹)'</span>, fontsize=<span style="color:#7aa2ff">12</span>)
+plt.ylabel(<span style="color:#ff8282">'Predicted Salary (in ₹)'</span>, fontsize=<span style="color:#7aa2ff">12</span>)
+plt.grid(<span style="color:#ffd666">True</span>, linestyle=<span style="color:#ff8282">'--'</span>, alpha=<span style="color:#7aa2ff">0.7</span>)
+plt.legend()
+plt.tight_layout()
+plt.show()</pre>
+
+        <table><thead><tr><th>Command</th><th>What It Does</th></tr></thead><tbody>
+          <tr><td><code>plt.figure(figsize=(10, 7))</code></td><td>Creates a chart canvas — 10 inches wide, 7 inches tall</td></tr>
+          <tr><td><code>sns.scatterplot(x=y_test, y=y_pred)</code></td><td>Draws <b>blue dots</b> — X = actual salary, Y = predicted salary. Each dot = one employee.</td></tr>
+          <tr><td><code>alpha=0.9</code></td><td>Dot transparency (0=invisible, 1=solid). 0.9 = slightly see-through so overlapping dots are visible</td></tr>
+          <tr><td><code>plt.plot([min, max], [min, max], …)</code></td><td>Draws the <b>orange dashed diagonal line</b> from the smallest to largest salary. This is the "perfect prediction" reference line.</td></tr>
+          <tr><td><code>color='orange', linestyle='--'</code></td><td>Makes the line orange &amp; dashed (so it's easy to distinguish from dots)</td></tr>
+          <tr><td><code>plt.title(…)</code></td><td>Adds the chart title at the top</td></tr>
+          <tr><td><code>plt.xlabel / ylabel</code></td><td>Labels the X-axis (Actual) and Y-axis (Predicted)</td></tr>
+          <tr><td><code>plt.grid(True, linestyle='--')</code></td><td>Shows dashed grid lines for easier reading</td></tr>
+          <tr><td><code>plt.legend()</code></td><td>Shows the legend box identifying the orange line</td></tr>
+          <tr><td><code>plt.tight_layout()</code></td><td>Adjusts spacing so nothing gets cut off</td></tr>
+          <tr><td><code>plt.show()</code></td><td>Renders the chart on screen</td></tr>
+        </tbody></table>
+
+        <!-- ── HOW TO JUDGE ── -->
+        <h3 style="color:#66e3c4;margin-top:24px">✅ How to judge your model from this chart</h3>
+        <table><thead><tr><th>What You See</th><th>What It Means</th><th>Rating</th></tr></thead><tbody>
+          <tr><td>All dots hugging the orange line tightly</td><td>Predictions are very close to actual — <b>excellent model</b></td><td style="color:#66e3c4">🟢 Great</td></tr>
+          <tr><td>Most dots near the line, a few stray</td><td>Good overall, but some outlier predictions — <b>investigate those employees</b></td><td style="color:#ffd666">🟡 Good</td></tr>
+          <tr><td>Dots scattered widely around the line</td><td>Predictions are inconsistent — <b>model needs improvement</b></td><td style="color:#ff8282">🟠 Weak</td></tr>
+          <tr><td>Dots form a cloud with no pattern</td><td>Model has <b>not learned the relationship</b> — try more features or a different algorithm</td><td style="color:#ff8282">🔴 Poor</td></tr>
+        </tbody></table>
+
+        <div class="callout">
+          🎉 <b>Congratulations!</b> You've completed the full Linear Regression Lab!<br><br>
+          <b>Recap of all 7 steps:</b><br>
+          1️⃣ Import Libraries → 2️⃣ IQR Outlier Removal → 3️⃣ One-Hot Encoding → 4️⃣ Train/Test Split → 5️⃣ Train &amp; Predict → 6️⃣ Evaluate (R², MAE, RMSE) → 7️⃣ Visualise Results
+        </div>
+
+      </details>
+
+    </section>
+
+    <section id="lifecycle">
+      <h2>Lifecycle (Expand/Collapse)</h2>
+      <details open><summary>1) Problem definition</summary><p>Define the question + success metric (ex: predict churn).</p></details>
+      <details><summary>2) Data collection</summary><p>Collect from apps, logs, sensors, databases, surveys.</p></details>
+      <details><summary>3) Data cleaning & prep</summary><p>Fix missing values, duplicates, outliers, formats.</p></details>
+      <details><summary>4) EDA</summary><p>Explore patterns using statistics and visualizations.</p></details>
+      <details><summary>5) Modeling (ML/AI)</summary><p>Train classification/regression/clustering models.</p></details>
+      <details><summary>6) Evaluation</summary><p>Validate on unseen data using correct metrics.</p></details>
+      <details><summary>7) Deployment</summary><p>Expose model via API, batch jobs, or apps.</p></details>
+      <details><summary>8) Monitoring</summary><p>Watch drift, retrain, and improve iteratively.</p></details>
+    </section>
+
+    <section id="examples">
+      <h2>Start with a hook (Ask students)</h2>
+      <div class="callout">
+        <p style="margin:0">
+          <strong>"How does Netflix know what movie you'll like next?"</strong>
+        </p>
+      </div>
+
+      <h2>Now explain</h2>
+      <p>
+        👉 Because it uses <strong>Data Science + Artificial Intelligence</strong>
+      </p>
+      <div class="grid2">
+        <div class="mini">
+          <h3>Data Science</h3>
+          <p class="muted" style="margin:0">Understanding the past</p>
+        </div>
+        <div class="mini">
+          <h3>AI</h3>
+          <p class="muted" style="margin:0">Acting on that understanding automatically</p>
+        </div>
+      </div>
+
+      <div class="callout">
+        <p style="margin:0">
+          ✅ <strong>Data Science</strong> tells us <strong>WHAT</strong> is happening<br/>
+          ✅ <strong>AI</strong> decides <strong>WHAT TO DO</strong> about it
+        </p>
+      </div>
+
+      <h2>Examples (Data Science vs AI)</h2>
+      <div style="overflow:auto">
+        <table style="width:100%; border-collapse:separate; border-spacing:0; border:1px solid rgba(255,255,255,.10); border-radius:14px; overflow:hidden;">
+          <thead>
+            <tr style="background:rgba(122,162,255,.12);">
+              <th style="text-align:left; padding:12px; border-bottom:1px solid rgba(255,255,255,.10);">Scenario</th>
+              <th style="text-align:left; padding:12px; border-bottom:1px solid rgba(255,255,255,.10);">Data Science (Insight)</th>
+              <th style="text-align:left; padding:12px; border-bottom:1px solid rgba(255,255,255,.10);">AI (Action)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td style="padding:12px; border-bottom:1px solid rgba(255,255,255,.08);">Sales dropped</td>
+              <td style="padding:12px; border-bottom:1px solid rgba(255,255,255,.08);">Finds the pattern from past sales data</td>
+              <td style="padding:12px; border-bottom:1px solid rgba(255,255,255,.08);">Automatically recommends discounts</td>
+            </tr>
+            <tr>
+              <td style="padding:12px; border-bottom:1px solid rgba(255,255,255,.08);">Student performance</td>
+              <td style="padding:12px; border-bottom:1px solid rgba(255,255,255,.08);">Predicts who may fail</td>
+              <td style="padding:12px; border-bottom:1px solid rgba(255,255,255,.08);">Suggests a personalized study plan</td>
+            </tr>
+            <tr>
+              <td style="padding:12px;">Traffic data</td>
+              <td style="padding:12px;">Finds peak congestion times</td>
+              <td style="padding:12px;">Changes signal timing automatically</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h2>Quick classroom activity</h2>
+      <div class="callout">
+        <p style="margin:0">
+          Ask learners to pick any app (Swiggy / Amazon / Instagram) and answer:
+          <br/>1) What data is collected?
+          <br/>2) What insight is extracted (Data Science)?
+          <br/>3) What decision is automated (AI)?
+        </p>
+      </div>
+
+      <p class="muted" style="margin-top:12px">
+        Tip: You can also plug in your own examples from <a href="https://microsoft-my.sharepoint-df.com/personal/ajgup_microsoft_com/_layouts/15/Doc.aspx?sourcedoc=%7BC6341851-AABE-47E8-B3BB-5575812D75C2%7D&file=Data%20Science%20with%20AI.docx&action=default&mobileredirect=true&DefaultItemOpen=1&EntityRepresentationId=b7ded7d5-698a-4731-81d0-8b85fcf99450" style="color:var(--brand)">Data Science with AI.docx</a>.
+      </p>
+    </section>
+
+    <div class="muted" style="margin-top:12px;border-top:1px solid var(--b);padding-top:10px">
+      Note: Navigation works without JavaScript. Search highlighting uses JavaScript.
+    </div>
+  </main>
+</div>
+
+<script>
+  // Optional search highlighter (if JS is allowed)
+  const q = document.getElementById('q');
+  const clear = document.getElementById('clear');
+  const sections = [...document.querySelectorAll('main section')];
+
+  function clearHighlights(){
+    sections.forEach(s => s.innerHTML = s.innerHTML.replaceAll('<span class="hl">','').replaceAll('</span>',''));
+  }
+
+  function highlight(term){
+    if(!term) return;
+    const re = new RegExp(term.replace(/[.*+?^${}()|[\]\\]/g,'\\$&'), 'gi');
+    sections.forEach(s=>{
+      // Skip if already highlighted too much: basic approach
+      s.innerHTML = s.innerHTML.replace(re, m => `<span class="hl">${m}</span>`);
+    });
+  }
+
+  q.addEventListener('input', ()=>{
+    clearHighlights();
+    const term = q.value.trim();
+    if(term) highlight(term);
+  });
+
+  clear.addEventListener('click', ()=>{
+    q.value = '';
+    clearHighlights();
+    q.focus();
+  });
+
+  // Active nav styling (no dependency on JS for navigation)
+  const navLinks = [...document.querySelectorAll('#nav a')];
+  window.addEventListener('hashchange', ()=>{
+    navLinks.forEach(a => a.classList.toggle('active', a.getAttribute('href') === location.hash));
+  });
+</script>
+</body>
+</html>
