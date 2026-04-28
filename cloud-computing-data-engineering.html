@@ -97,7 +97,7 @@
     <p id="pwdErr" style="color:#ff6b6b;margin:10px 0 0;display:none;font-size:14px">Incorrect password. Try again.</p>
   </div>
 </div>
-<script>if(location.protocol==='file:'){document.getElementById('lockScreen').remove();document.getElementById('app').style.display='';}</script>
+<script>document.addEventListener('DOMContentLoaded',function(){if(location.protocol==='file:'){document.getElementById('lockScreen').remove();document.getElementById('app').style.display='';}});</script>
 <div class="app" id="app" style="display:none">
   <button class="toggle-nav" id="toggleNav" title="Toggle navigation">☰</button>
   <aside class="side">
