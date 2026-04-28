@@ -80,7 +80,7 @@
     <h2 style="color:#e8eefc;margin:0 0 8px">Protected Content</h2>
     <p style="color:#a9b7da;font-size:14px;margin:0 0 20px">Enter the password to access this training module.</p>
     <input id="pwdInput" type="password" placeholder="Password" style="width:100%;padding:12px;border-radius:12px;border:1px solid rgba(255,255,255,.1);background:#0f1a33;color:#e8eefc;font-size:16px;margin-bottom:12px" onkeydown="if(event.key==='Enter')document.getElementById('pwdBtn').click()">
-    <button id="pwdBtn" onclick="if(document.getElementById('pwdInput').value==='Training@123'){document.getElementById('lockScreen').remove();document.getElementById('app').style.display=''}else{document.getElementById('pwdErr').style.display='block'}" style="width:100%;padding:12px;border-radius:12px;border:none;background:linear-gradient(135deg,#7aa2ff,#66e3c4);color:#0b1220;font-weight:700;font-size:16px;cursor:pointer">Unlock</button>
+    <button id="pwdBtn" onclick="(async()=>{const e=new TextEncoder().encode(document.getElementById('pwdInput').value),h=await crypto.subtle.digest('SHA-256',e),a=Array.from(new Uint8Array(h)).map(b=>b.toString(16).padStart(2,'0')).join('');if(a==='f442e8bd3c9ff4cddd33f85094d6e6f6ade02869becc2afb338cfc7145c43b02'){document.getElementById('lockScreen').remove();document.getElementById('app').style.display=''}else{document.getElementById('pwdErr').style.display='block'}})()" style="width:100%;padding:12px;border-radius:12px;border:none;background:linear-gradient(135deg,#7aa2ff,#66e3c4);color:#0b1220;font-weight:700;font-size:16px;cursor:pointer">Unlock</button>
     <p id="pwdErr" style="color:#ff6b6b;margin:10px 0 0;display:none;font-size:14px">Incorrect password. Try again.</p>
   </div>
 </div>
@@ -109,6 +109,7 @@
         <a href="#mini-project">🎬 Mini Project: Movies</a>
         <a href="#oop">🏗️ OOP (Classes)</a>
         <a href="#practice">🏋️ Practice Exercises</a>
+        <a href="#assignments">📝 Assignments &amp; Interview Qs</a>
       </div>
 
       <div class="muted" style="margin-top:12px">
@@ -2550,6 +2551,298 @@ word_count = {}
           <br/><br/>🚀 <b>You made it!</b> From variables to a full movie recommendation system.
         </p>
       </div>
+    </div>
+    </section>
+
+    <!-- ───────────── ASSIGNMENTS & INTERVIEW ───────────── -->
+    <section id="assignments" data-label="Assignments">
+    <div class="sec-header" onclick="this.parentElement.classList.toggle('collapsed')">
+      <h2>📝 Assignments, Interview Questions &amp; Answers</h2>
+      <span class="sec-toggle">▼</span>
+    </div>
+    <div class="sec-body">
+
+      <div class="callout info">
+        <p style="margin:0">📝 <b>Instructions:</b> Questions are organized by topic. Copy-paste into a document for distribution. Answers are in a separate block below.</p>
+      </div>
+
+      <!-- COPY-PASTE QUESTIONS -->
+      <div class="mini" style="margin:14px 0;border-top:3px solid var(--brand2)">
+        <h3 style="color:var(--brand2)">📋 Questions Only — Copy-Paste Ready</h3>
+        <p class="muted">Select all text below, copy, and paste into your Word/Google Doc:</p>
+        <div style="border:1px solid var(--b);border-radius:12px;padding:16px;background:rgba(0,0,0,.3);margin-top:8px;font-size:14px;line-height:2">
+
+<p style="margin:0 0 4px;font-weight:700;color:var(--brand)">Section A: Python Basics &amp; Data Types (10 Questions)</p>
+<p style="margin:0">1. What is Python? Explain what "interpreted", "high-level", and "dynamically typed" mean with examples.</p>
+<p style="margin:0">2. What are the 5 core data types in Python? Give an example of each.</p>
+<p style="margin:0">3. What is type casting? Convert the string "42" to an integer and a float. What happens if you try int("hello")?</p>
+<p style="margin:0">4. What are the rules for naming variables in Python? Give 3 valid and 3 invalid variable names.</p>
+<p style="margin:0">5. What is an f-string? Write code that prints "My name is [name] and I am [age] years old" using an f-string.</p>
+<p style="margin:0">6. What does "immutable" mean? Which Python data types are immutable and which are mutable?</p>
+<p style="margin:0">7. Explain string slicing with the syntax [start:stop:step]. Given word = "PYTHON", what is word[1:4], word[::-1], and word[::2]?</p>
+<p style="margin:0">8. What is the difference between = and == in Python?</p>
+<p style="margin:0">9. Write a Python program that takes a user's birth year as input and prints their age.</p>
+<p style="margin:0">10. What is None in Python? When would you use it?</p>
+
+<p style="margin:16px 0 4px;font-weight:700;color:var(--brand)">Section B: Data Structures (10 Questions)</p>
+<p style="margin:0">1. Compare List, Tuple, Set, and Dictionary across these features: ordered, mutable, duplicates allowed, syntax.</p>
+<p style="margin:0">2. Write code to create a list of 5 fruits, add "mango" at the end, insert "kiwi" at position 1, and remove "banana".</p>
+<p style="margin:0">3. What is a list comprehension? Write one that creates a list of squares of even numbers from 1 to 20.</p>
+<p style="margin:0">4. What is the difference between a list and a tuple? When should you use each?</p>
+<p style="margin:0">5. What is tuple unpacking? Show how to swap two variables a=5 and b=10 in one line.</p>
+<p style="margin:0">6. How do you remove duplicates from a list? Write code to remove duplicates from [1, 2, 2, 3, 3, 3, 4].</p>
+<p style="margin:0">7. What are set operations? Write code showing union, intersection, and difference of two sets.</p>
+<p style="margin:0">8. Create a dictionary of 3 students with their scores. Write code to: add a student, update a score, delete a student, and loop through all key-value pairs.</p>
+<p style="margin:0">9. What is dictionary comprehension? Create a dictionary of numbers 1-5 mapped to their cubes.</p>
+<p style="margin:0">10. What is range()? What does range(2, 20, 3) produce? Why is range called "lazy"?</p>
+
+<p style="margin:16px 0 4px;font-weight:700;color:var(--brand)">Section C: Control Flow &amp; Functions (10 Questions)</p>
+<p style="margin:0">1. Write a program that takes a score (0-100) and prints the grade: A (≥90), B (≥80), C (≥70), D (≥60), F (below 60).</p>
+<p style="margin:0">2. What is the difference between for and while loops? When would you use each?</p>
+<p style="margin:0">3. What do break and continue do in a loop? Write an example of each.</p>
+<p style="margin:0">4. Write a function that takes a list of numbers and returns the sum, average, min, and max as a tuple.</p>
+<p style="margin:0">5. What are default parameters in a function? Write a function greet(name, greeting="Hello") and call it with and without the greeting argument.</p>
+<p style="margin:0">6. Write a FizzBuzz program: print numbers 1-30, but print "Fizz" for multiples of 3, "Buzz" for multiples of 5, and "FizzBuzz" for multiples of both.</p>
+<p style="margin:0">7. What is variable scope? What is the difference between a local and global variable?</p>
+<p style="margin:0">8. What is a lambda function? Write a lambda that doubles a number. Then use it with map() to double every number in [1, 2, 3, 4, 5].</p>
+<p style="margin:0">9. Write a function is_palindrome(text) that returns True if the text reads the same forwards and backwards (e.g., "madam" → True).</p>
+<p style="margin:0">10. What is match-case in Python? How is it different from if-elif? Write a match-case for HTTP status codes (200, 404, 500).</p>
+
+<p style="margin:16px 0 4px;font-weight:700;color:var(--brand)">Section D: File Handling &amp; Error Handling (5 Questions)</p>
+<p style="margin:0">1. What are the file modes "r", "w", and "a"? What happens if you open a non-existent file with each mode?</p>
+<p style="margin:0">2. Write code that creates a file "students.txt", writes 3 student names, then reads and prints them line by line.</p>
+<p style="margin:0">3. What is a try-except block? Write code that safely converts user input to an integer, handling the case where they type a non-number.</p>
+<p style="margin:0">4. List 5 common Python exception types and when each occurs.</p>
+<p style="margin:0">5. What is the purpose of "else" and "finally" in a try-except block?</p>
+
+<p style="margin:16px 0 4px;font-weight:700;color:var(--brand)">Section E: NumPy &amp; Pandas (8 Questions)</p>
+<p style="margin:0">1. What is the difference between a Python list and a NumPy array? Why is NumPy faster?</p>
+<p style="margin:0">2. Create a NumPy array [10, 20, 30, 40, 50]. Multiply every element by 3 and find the mean, sum, and standard deviation.</p>
+<p style="margin:0">3. What is a Pandas DataFrame? How is it different from a dictionary?</p>
+<p style="margin:0">4. Create a DataFrame with columns Name, Age, City, Score for 5 students. Filter students with Score > 80 and sort by Score descending.</p>
+<p style="margin:0">5. What does df.describe() show? What does df.info() show?</p>
+<p style="margin:0">6. How do you read a CSV file in Pandas? How do you save a DataFrame to a CSV?</p>
+<p style="margin:0">7. What is groupby() in Pandas? Write code that groups students by City and calculates the average Score per city.</p>
+<p style="margin:0">8. What is the apply() function? Write code that adds a "Grade" column based on Score (A ≥90, B ≥80, C ≥70, else F).</p>
+
+<p style="margin:16px 0 4px;font-weight:700;color:var(--brand)">Section F: OOP &amp; Modules (5 Questions)</p>
+<p style="margin:0">1. What is a class and what is an object? Explain with the cookie cutter analogy.</p>
+<p style="margin:0">2. What is __init__ and what is self in a Python class?</p>
+<p style="margin:0">3. Create a class BankAccount with methods deposit(), withdraw(), and get_balance(). The withdraw method should prevent overdrafts.</p>
+<p style="margin:0">4. What is inheritance? Write a class Animal with a speak() method, then a class Dog that inherits from Animal and adds a fetch() method.</p>
+<p style="margin:0">5. What is a module in Python? How do you import it? What is pip and how do you install an external package?</p>
+
+<p style="margin:16px 0 4px;font-weight:700;color:var(--brand)">Section G: Interview Questions (10 Questions)</p>
+<p style="margin:0">1. What is the difference between a list and a tuple in Python?</p>
+<p style="margin:0">2. How is memory managed in Python? What is garbage collection?</p>
+<p style="margin:0">3. What is the difference between shallow copy and deep copy?</p>
+<p style="margin:0">4. What are *args and **kwargs? Give an example of each.</p>
+<p style="margin:0">5. What is a decorator in Python? Write a simple example.</p>
+<p style="margin:0">6. What is the difference between append() and extend() for lists?</p>
+<p style="margin:0">7. How do you handle exceptions in Python? What is the difference between except Exception and bare except?</p>
+<p style="margin:0">8. What is a generator in Python? How is it different from a list? Write a simple generator using yield.</p>
+<p style="margin:0">9. What is the difference between == and "is" in Python?</p>
+<p style="margin:0">10. What is a virtual environment in Python? Why is it important?</p>
+
+        </div>
+      </div>
+
+      <!-- ANSWERS -->
+      <h2 style="margin-top:24px">✅ Answers — Copy-Paste Ready</h2>
+      <p class="muted">Select all text below, copy, and paste into your document.</p>
+
+      <div style="border:1px solid var(--b);border-radius:12px;padding:16px;background:rgba(0,0,0,.3);margin-top:8px;font-size:14px;line-height:2">
+
+<p style="margin:0 0 4px;font-weight:700;color:var(--brand)">Section A: Python Basics &amp; Data Types — Answers</p>
+
+<p style="margin:0"><b>1. What is Python?</b></p>
+<p style="margin:0">Python is a general-purpose programming language. Interpreted: runs code line by line without a separate compile step (like a live translator). High-level: close to human language, you don't manage memory or hardware. Dynamically typed: you don't declare variable types — Python figures them out at runtime. x = 10 (int), then x = "hello" (str) — same variable, different types.</p>
+
+<p style="margin:12px 0 0"><b>2. Five core data types.</b></p>
+<p style="margin:0">int (whole numbers: 42, -7), float (decimals: 3.14, -0.5), str (text: "hello"), bool (True/False), NoneType (None — represents no value).</p>
+
+<p style="margin:12px 0 0"><b>3. Type casting.</b></p>
+<p style="margin:0">Type casting converts one type to another. int("42") → 42 (string to int). float("42") → 42.0 (string to float). int("hello") → ValueError crash because "hello" is not a number.</p>
+
+<p style="margin:12px 0 0"><b>4. Variable naming rules.</b></p>
+<p style="margin:0">Must start with a letter or underscore, can contain letters/numbers/underscores, case-sensitive, can't be a reserved keyword. Valid: my_name, age2, _private. Invalid: 2name (starts with number), my-name (hyphen), class (reserved keyword).</p>
+
+<p style="margin:12px 0 0"><b>5. f-string.</b></p>
+<p style="margin:0">An f-string is a formatted string literal (prefix f before quotes) that lets you embed variables directly: name = "Ajay"; age = 28; print(f"My name is {name} and I am {age} years old"). You can also put expressions: f"{age + 1}".</p>
+
+<p style="margin:12px 0 0"><b>6. Immutable meaning.</b></p>
+<p style="margin:0">Immutable means once created, the value cannot be changed in place. Immutable: str, int, float, bool, tuple, frozenset. Mutable: list, dict, set. Example: "hello"[0] = "H" → TypeError. You must create a new string instead.</p>
+
+<p style="margin:12px 0 0"><b>7. String slicing.</b></p>
+<p style="margin:0">[start:stop:step] — start is inclusive, stop is exclusive. word = "PYTHON": word[1:4] = "YTH" (index 1,2,3). word[::-1] = "NOHTYP" (reversed). word[::2] = "PTO" (every 2nd character).</p>
+
+<p style="margin:12px 0 0"><b>8. = vs ==.</b></p>
+<p style="margin:0">= is assignment (stores a value): x = 10. == is comparison (checks equality): x == 10 returns True. Mixing them up is the #1 beginner mistake.</p>
+
+<p style="margin:12px 0 0"><b>9. Age calculator.</b></p>
+<p style="margin:0">birth_year = int(input("Enter birth year: ")); age = 2026 - birth_year; print(f"You are {age} years old")</p>
+
+<p style="margin:12px 0 0"><b>10. None.</b></p>
+<p style="margin:0">None represents the absence of a value (like null in other languages). Used as: default return value for functions that don't explicitly return anything, placeholder for variables not yet assigned a real value, checking: if result is None.</p>
+
+<p style="margin:16px 0 4px;font-weight:700;color:var(--brand)">Section B: Data Structures — Answers</p>
+
+<p style="margin:0"><b>1. List vs Tuple vs Set vs Dict.</b></p>
+<p style="margin:0">List []: ordered, mutable, duplicates allowed. Tuple (): ordered, immutable, duplicates allowed. Set {}: unordered, mutable, no duplicates. Dict {k:v}: ordered (3.7+), mutable, keys unique.</p>
+
+<p style="margin:12px 0 0"><b>2. List operations.</b></p>
+<p style="margin:0">fruits = ["apple", "banana", "cherry", "grape", "orange"]; fruits.append("mango"); fruits.insert(1, "kiwi"); fruits.remove("banana")</p>
+
+<p style="margin:12px 0 0"><b>3. List comprehension.</b></p>
+<p style="margin:0">A one-liner to create lists. Squares of even numbers 1-20: squares = [x**2 for x in range(1, 21) if x % 2 == 0] → [4, 16, 36, 64, 100, 144, 196, 256, 324, 400].</p>
+
+<p style="margin:12px 0 0"><b>4. List vs Tuple.</b></p>
+<p style="margin:0">Lists are mutable (can change), tuples are immutable (can't change). Use lists when data changes (shopping cart). Use tuples for fixed data (coordinates, RGB colors), dictionary keys, and returning multiple values from functions.</p>
+
+<p style="margin:12px 0 0"><b>5. Tuple unpacking &amp; swap.</b></p>
+<p style="margin:0">Unpacking assigns each tuple element to a variable: x, y, z = (10, 20, 30). Swap: a, b = b, a — Python evaluates the right side first, then assigns. After swap: a=10, b=5.</p>
+
+<p style="margin:12px 0 0"><b>6. Remove duplicates.</b></p>
+<p style="margin:0">unique = list(set([1, 2, 2, 3, 3, 3, 4])) → [1, 2, 3, 4]. Converting to set removes duplicates, then back to list.</p>
+
+<p style="margin:12px 0 0"><b>7. Set operations.</b></p>
+<p style="margin:0">a = {1,2,3,4}; b = {3,4,5,6}. Union: a | b = {1,2,3,4,5,6}. Intersection: a &amp; b = {3,4}. Difference: a - b = {1,2}.</p>
+
+<p style="margin:12px 0 0"><b>8. Dictionary operations.</b></p>
+<p style="margin:0">students = {"Alice": 90, "Bob": 78, "Charlie": 85}. Add: students["Diana"] = 92. Update: students["Bob"] = 82. Delete: del students["Charlie"]. Loop: for name, score in students.items(): print(f"{name}: {score}").</p>
+
+<p style="margin:12px 0 0"><b>9. Dict comprehension.</b></p>
+<p style="margin:0">cubes = {x: x**3 for x in range(1, 6)} → {1: 1, 2: 8, 3: 27, 4: 64, 5: 125}.</p>
+
+<p style="margin:12px 0 0"><b>10. range().</b></p>
+<p style="margin:0">range(start, stop, step) generates numbers. range(2, 20, 3) → [2, 5, 8, 11, 14, 17]. It's "lazy" because it generates numbers one at a time instead of creating the full list in memory. range(1000000) uses almost no memory.</p>
+
+<p style="margin:16px 0 4px;font-weight:700;color:var(--brand)">Section C: Control Flow &amp; Functions — Answers</p>
+
+<p style="margin:0"><b>1. Grade calculator.</b></p>
+<p style="margin:0">score = int(input("Score: ")); if score >= 90: grade = "A" elif score >= 80: grade = "B" elif score >= 70: grade = "C" elif score >= 60: grade = "D" else: grade = "F"; print(f"Grade: {grade}").</p>
+
+<p style="margin:12px 0 0"><b>2. for vs while.</b></p>
+<p style="margin:0">for: iterates over a known sequence (list, range, string) — use when you know how many iterations. while: repeats as long as a condition is True — use when you don't know when to stop (e.g., keep asking until valid input).</p>
+
+<p style="margin:12px 0 0"><b>3. break and continue.</b></p>
+<p style="margin:0">break exits the loop entirely: for i in range(10): if i == 5: break → prints 0,1,2,3,4. continue skips the current iteration: for i in range(6): if i == 3: continue → prints 0,1,2,4,5 (skips 3).</p>
+
+<p style="margin:12px 0 0"><b>4. Function returning tuple.</b></p>
+<p style="margin:0">def stats(nums): return sum(nums), sum(nums)/len(nums), min(nums), max(nums). Call: s, avg, mn, mx = stats([10, 20, 30]).</p>
+
+<p style="margin:12px 0 0"><b>5. Default parameters.</b></p>
+<p style="margin:0">def greet(name, greeting="Hello"): print(f"{greeting}, {name}!"). greet("Alice") → "Hello, Alice!". greet("Bob", "Hi") → "Hi, Bob!". Default values are used when the argument is not provided.</p>
+
+<p style="margin:12px 0 0"><b>6. FizzBuzz.</b></p>
+<p style="margin:0">for i in range(1, 31): if i % 15 == 0: print("FizzBuzz") elif i % 3 == 0: print("Fizz") elif i % 5 == 0: print("Buzz") else: print(i). Check 15 first (divisible by both 3 and 5).</p>
+
+<p style="margin:12px 0 0"><b>7. Variable scope.</b></p>
+<p style="margin:0">Local variables exist only inside the function. Global variables exist outside and are accessible everywhere. A local variable with the same name as a global one creates a separate copy — doesn't affect the global.</p>
+
+<p style="margin:12px 0 0"><b>8. Lambda and map().</b></p>
+<p style="margin:0">Lambda is an anonymous one-line function: double = lambda x: x * 2. With map: list(map(lambda x: x * 2, [1,2,3,4,5])) → [2,4,6,8,10]. map() applies a function to every item.</p>
+
+<p style="margin:12px 0 0"><b>9. Palindrome checker.</b></p>
+<p style="margin:0">def is_palindrome(text): return text.lower() == text.lower()[::-1]. is_palindrome("madam") → True. is_palindrome("hello") → False. Uses slicing [::-1] to reverse.</p>
+
+<p style="margin:12px 0 0"><b>10. match-case.</b></p>
+<p style="margin:0">Python 3.10+ switch-like syntax. match status: case 200: print("OK") case 404: print("Not Found") case 500: print("Server Error") case _: print("Unknown"). Unlike if-elif, match-case is cleaner when comparing one variable against many fixed values. _ is the catch-all default.</p>
+
+<p style="margin:16px 0 4px;font-weight:700;color:var(--brand)">Section D: File Handling &amp; Error Handling — Answers</p>
+
+<p style="margin:0"><b>1. File modes.</b></p>
+<p style="margin:0">"r" (read): file must exist, error if missing. "w" (write): creates file if missing, ERASES existing content. "a" (append): creates file if missing, adds to end without erasing. Always use "with open()" for automatic file closing.</p>
+
+<p style="margin:12px 0 0"><b>2. Write and read file.</b></p>
+<p style="margin:0">with open("students.txt", "w") as f: f.write("Alice\nBob\nCharlie\n"). Then: with open("students.txt", "r") as f: for line in f: print(line.strip()).</p>
+
+<p style="margin:12px 0 0"><b>3. try-except for input.</b></p>
+<p style="margin:0">try: num = int(input("Enter number: ")); print(f"You entered {num}") except ValueError: print("That's not a number!"). The except block runs only if int() fails.</p>
+
+<p style="margin:12px 0 0"><b>4. Five common exceptions.</b></p>
+<p style="margin:0">ValueError (int("abc")), TypeError ("hello" + 5), ZeroDivisionError (10/0), FileNotFoundError (open("missing.txt")), IndexError ([1,2,3][10]).</p>
+
+<p style="margin:12px 0 0"><b>5. else and finally.</b></p>
+<p style="margin:0">else runs only if NO exception occurred (successful execution). finally ALWAYS runs regardless of success or failure — used for cleanup (closing files, releasing resources).</p>
+
+<p style="margin:16px 0 4px;font-weight:700;color:var(--brand)">Section E: NumPy &amp; Pandas — Answers</p>
+
+<p style="margin:0"><b>1. List vs NumPy array.</b></p>
+<p style="margin:0">Lists can hold mixed types, NumPy arrays hold one type. NumPy is ~50x faster because it's written in C, operates on entire arrays at once (vectorized), and uses contiguous memory. [1,2,3] * 2 = [1,2,3,1,2,3] (repeat) vs np.array([1,2,3]) * 2 = [2,4,6] (math).</p>
+
+<p style="margin:12px 0 0"><b>2. NumPy operations.</b></p>
+<p style="margin:0">a = np.array([10,20,30,40,50]). a * 3 = [30,60,90,120,150]. np.mean(a) = 30.0. np.sum(a) = 150. np.std(a) = 14.14.</p>
+
+<p style="margin:12px 0 0"><b>3. DataFrame vs dictionary.</b></p>
+<p style="margin:0">A DataFrame is a 2D labeled table (rows and columns) with built-in methods for filtering, sorting, grouping, statistics. A dictionary is a simple key-value store. DataFrames are built on top of dictionaries but add powerful data manipulation capabilities.</p>
+
+<p style="margin:12px 0 0"><b>4. DataFrame filter and sort.</b></p>
+<p style="margin:0">df = pd.DataFrame({"Name":[...], "Age":[...], "City":[...], "Score":[...]}). Filter: df[df["Score"] > 80]. Sort: df.sort_values("Score", ascending=False).</p>
+
+<p style="margin:12px 0 0"><b>5. describe() and info().</b></p>
+<p style="margin:0">df.describe() shows statistics for numeric columns: count, mean, std, min, 25%, 50%, 75%, max. df.info() shows column names, data types, non-null counts, and memory usage — useful for spotting missing data.</p>
+
+<p style="margin:12px 0 0"><b>6. Read and save CSV.</b></p>
+<p style="margin:0">Read: df = pd.read_csv("file.csv"). Save: df.to_csv("output.csv", index=False). index=False prevents writing the row numbers as a column.</p>
+
+<p style="margin:12px 0 0"><b>7. groupby().</b></p>
+<p style="margin:0">Groups rows by a column and applies aggregation. df.groupby("City")["Score"].mean() → average score per city. Can also use .sum(), .count(), .max(), .min().</p>
+
+<p style="margin:12px 0 0"><b>8. apply() for Grade column.</b></p>
+<p style="margin:0">df["Grade"] = df["Score"].apply(lambda x: "A" if x >= 90 else "B" if x >= 80 else "C" if x >= 70 else "F"). apply() runs a function on every value in a column.</p>
+
+<p style="margin:16px 0 4px;font-weight:700;color:var(--brand)">Section F: OOP &amp; Modules — Answers</p>
+
+<p style="margin:0"><b>1. Class and object.</b></p>
+<p style="margin:0">A class is a blueprint/template (like a cookie cutter). An object is an instance created from that class (the actual cookie). You can make many objects from one class, each with its own data. class Student: defines the blueprint; s1 = Student("Alice", 25) creates an object.</p>
+
+<p style="margin:12px 0 0"><b>2. __init__ and self.</b></p>
+<p style="margin:0">__init__ is the constructor — runs automatically when you create a new object. It initializes the object's attributes. self refers to the current object instance — it's how the object accesses its own data. Every method must have self as its first parameter.</p>
+
+<p style="margin:12px 0 0"><b>3. BankAccount class.</b></p>
+<p style="margin:0">class BankAccount: def __init__(self, owner, balance=0): self.owner = owner; self.balance = balance. def deposit(self, amount): self.balance += amount. def withdraw(self, amount): if amount > self.balance: print("Insufficient funds") else: self.balance -= amount. def get_balance(self): return self.balance.</p>
+
+<p style="margin:12px 0 0"><b>4. Inheritance.</b></p>
+<p style="margin:0">A child class inherits attributes and methods from a parent class. class Animal: def speak(self): return f"{self.name} makes a sound". class Dog(Animal): def fetch(self): return f"{self.name} fetches!". Dog inherits speak() from Animal and adds its own fetch() method. super().__init__() calls the parent's constructor.</p>
+
+<p style="margin:12px 0 0"><b>5. Modules and pip.</b></p>
+<p style="margin:0">A module is a .py file containing reusable functions/classes. Import: import math or from math import sqrt. pip is Python's package manager for installing external packages: pip install pandas. Packages come from PyPI (Python Package Index).</p>
+
+<p style="margin:16px 0 4px;font-weight:700;color:var(--brand)">Section G: Interview Questions — Answers</p>
+
+<p style="margin:0"><b>1. List vs Tuple.</b></p>
+<p style="margin:0">Lists are mutable (can add/remove/change items), tuples are immutable (fixed after creation). Lists use more memory, tuples are slightly faster. Tuples can be dictionary keys, lists cannot. Use lists for changing data, tuples for fixed data.</p>
+
+<p style="margin:12px 0 0"><b>2. Memory management.</b></p>
+<p style="margin:0">Python uses automatic memory management. Objects are stored in a private heap. Reference counting tracks how many variables point to an object. When the count reaches 0, the object is deallocated. Garbage collector handles circular references that reference counting misses.</p>
+
+<p style="margin:12px 0 0"><b>3. Shallow vs deep copy.</b></p>
+<p style="margin:0">Shallow copy (copy.copy() or list.copy()) creates a new object but references the same nested objects. Deep copy (copy.deepcopy()) creates a completely independent copy including all nested objects. Modifying a nested list in a shallow copy affects the original; deep copy doesn't.</p>
+
+<p style="margin:12px 0 0"><b>4. *args and **kwargs.</b></p>
+<p style="margin:0">*args collects extra positional arguments as a tuple: def add(*args): return sum(args); add(1,2,3) → 6. **kwargs collects extra keyword arguments as a dictionary: def info(**kwargs): for k,v in kwargs.items(): print(f"{k}={v}"); info(name="Alice", age=25).</p>
+
+<p style="margin:12px 0 0"><b>5. Decorators.</b></p>
+<p style="margin:0">A decorator wraps a function to add behavior without modifying it. def timer(func): def wrapper(*args): import time; start = time.time(); result = func(*args); print(f"Took {time.time()-start:.2f}s"); return result; return wrapper. Use: @timer before a function definition.</p>
+
+<p style="margin:12px 0 0"><b>6. append() vs extend().</b></p>
+<p style="margin:0">append() adds ONE item to the end: [1,2].append([3,4]) → [1,2,[3,4]] (nested list). extend() adds EACH item individually: [1,2].extend([3,4]) → [1,2,3,4] (flat list).</p>
+
+<p style="margin:12px 0 0"><b>7. Exception handling.</b></p>
+<p style="margin:0">try-except catches errors. except Exception catches all standard exceptions with the error message accessible via "as e". Bare except (no type) catches EVERYTHING including KeyboardInterrupt and SystemExit — this is bad practice because it hides bugs. Always catch specific exceptions.</p>
+
+<p style="margin:12px 0 0"><b>8. Generators.</b></p>
+<p style="margin:0">A generator produces values one at a time using yield instead of return. def count_up(n): for i in range(n): yield i. Unlike a list, it doesn't store all values in memory — generates them on demand (lazy evaluation). Memory efficient for large sequences.</p>
+
+<p style="margin:12px 0 0"><b>9. == vs is.</b></p>
+<p style="margin:0">== checks if values are equal: [1,2] == [1,2] → True. "is" checks if both variables point to the SAME object in memory: a = [1,2]; b = [1,2]; a is b → False (same value, different objects). a = b; a is b → True (same object).</p>
+
+<p style="margin:12px 0 0"><b>10. Virtual environment.</b></p>
+<p style="margin:0">A virtual environment is an isolated Python installation with its own packages. Created with: python -m venv myenv. Activated with: myenv\Scripts\activate (Windows). Important because different projects may need different package versions — venv prevents conflicts. Without it, installing a package for Project A could break Project B.</p>
+
+      </div>
+
     </div>
     </section>
 

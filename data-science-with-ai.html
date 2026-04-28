@@ -72,7 +72,7 @@
     <h2 style="color:#e8eefc;margin:0 0 8px">Protected Content</h2>
     <p style="color:#a9b7da;font-size:14px;margin:0 0 20px">Enter the password to access this training module.</p>
     <input id="pwdInput" type="password" placeholder="Password" style="width:100%;padding:12px;border-radius:12px;border:1px solid rgba(255,255,255,.1);background:#0f1a33;color:#e8eefc;font-size:16px;margin-bottom:12px" onkeydown="if(event.key==='Enter')document.getElementById('pwdBtn').click()">
-    <button id="pwdBtn" onclick="if(document.getElementById('pwdInput').value==='Training@123'){document.getElementById('lockScreen').remove();document.getElementById('app').style.display=''}else{document.getElementById('pwdErr').style.display='block'}" style="width:100%;padding:12px;border-radius:12px;border:none;background:linear-gradient(135deg,#7aa2ff,#66e3c4);color:#0b1220;font-weight:700;font-size:16px;cursor:pointer">Unlock</button>
+    <button id="pwdBtn" onclick="(async()=>{const e=new TextEncoder().encode(document.getElementById('pwdInput').value),h=await crypto.subtle.digest('SHA-256',e),a=Array.from(new Uint8Array(h)).map(b=>b.toString(16).padStart(2,'0')).join('');if(a==='f442e8bd3c9ff4cddd33f85094d6e6f6ade02869becc2afb338cfc7145c43b02'){document.getElementById('lockScreen').remove();document.getElementById('app').style.display=''}else{document.getElementById('pwdErr').style.display='block'}})()" style="width:100%;padding:12px;border-radius:12px;border:none;background:linear-gradient(135deg,#7aa2ff,#66e3c4);color:#0b1220;font-weight:700;font-size:16px;cursor:pointer">Unlock</button>
     <p id="pwdErr" style="color:#ff6b6b;margin:10px 0 0;display:none;font-size:14px">Incorrect password. Try again.</p>
   </div>
 </div>
