@@ -563,6 +563,303 @@
       </table>
       <p style="margin-top:8px"><b>⏱️ Total time: ~13 minutes</b> for a functional feedback board with auth, real-time updates, and admin controls — something that would traditionally take a developer <b>1-2 weeks</b>.</p>
 
+      <h2>🗄️ Setting Up Supabase (Database &amp; Backend)</h2>
+      <div class="callout info" style="margin-top:8px">
+        <p style="margin:0">💡 <b>What is Supabase?</b> An open-source Firebase alternative that gives you a <b>PostgreSQL database</b>, instant REST API, authentication, and real-time subscriptions — all with a generous free tier. No backend code needed.</p>
+      </div>
+
+      <h3 style="margin-top:14px">Step 1: Create a Supabase Project</h3>
+      <div class="timeline">
+        <div class="timeline-item">
+          <div class="timeline-dot">1️⃣</div>
+          <div class="timeline-content">
+            <h3>Sign up at <b>supabase.com</b></h3>
+            <p>Free tier — no credit card required. Sign in with GitHub for fastest setup.</p>
+          </div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-dot">2️⃣</div>
+          <div class="timeline-content">
+            <h3>Click <b>"New Project"</b></h3>
+            <p>Pick a name (e.g., "VibeCoding"), choose a region close to you, set a database password.</p>
+          </div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-dot">3️⃣</div>
+          <div class="timeline-content">
+            <h3>Wait ~30 seconds for provisioning</h3>
+            <p>Supabase sets up your PostgreSQL database, REST API, and auth system automatically.</p>
+          </div>
+        </div>
+      </div>
+
+      <h3>Step 2: Get Your API Keys</h3>
+      <div class="callout green" style="margin-top:8px">
+        <p style="margin:0">🔑 <b>Where to find them:</b> Go to <b>Settings → API Keys</b> in your Supabase dashboard. You need two values:</p>
+      </div>
+      <table style="margin-top:10px">
+        <thead>
+          <tr style="background:rgba(102,227,196,.15)">
+            <th>Key</th>
+            <th>Where to Find</th>
+            <th>What It's For</th>
+            <th>Safe to Share?</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td><b>Project URL</b></td><td>Settings → General → Project ID<br/><code>https://&lt;project-id&gt;.supabase.co</code></td><td>The API endpoint for your database</td><td>✅ Yes (public)</td></tr>
+          <tr><td><b>Anon / Public Key</b></td><td>Settings → API Keys → <b>anon public</b></td><td>Client-side access with Row Level Security</td><td>✅ Yes (public, RLS enforced)</td></tr>
+          <tr style="background:rgba(255,107,107,.08)"><td><b>Service Role Key</b></td><td>Settings → API Keys → <b>service_role secret</b></td><td>Server-side admin access, bypasses RLS</td><td>❌ <b>NEVER</b> expose this</td></tr>
+        </tbody>
+      </table>
+
+      <h3>Step 3: Create the <code>.env.local</code> File</h3>
+      <p>In your project root, create a file called <b>.env.local</b> — this is where your app reads the keys from:</p>
+      <pre><code><span class="comment"># .env.local — put this in your project root</span>
+<span class="comment"># ⚠️ Add .env.local to .gitignore so it never gets committed!</span>
+
+<span class="builtin">NEXT_PUBLIC_SUPABASE_URL</span>=<span class="string">https://your-project-id.supabase.co</span>
+<span class="builtin">NEXT_PUBLIC_SUPABASE_ANON_KEY</span>=<span class="string">your-anon-public-key-here</span></code></pre>
+      <div class="callout warn" style="margin-top:8px">
+        <p style="margin:0">⚠️ <b>Important:</b> The <code>NEXT_PUBLIC_</code> prefix means these variables are exposed to the browser. That's fine for the <b>anon key</b> because Supabase uses Row Level Security (RLS) to control access. Never put the <b>service_role key</b> in a <code>NEXT_PUBLIC_</code> variable.</p>
+      </div>
+
+      <h3>Step 4: Run the SQL Migration</h3>
+      <p>Go to <b>SQL Editor</b> in your Supabase dashboard (left sidebar), paste your migration SQL, and click <b>Run</b>:</p>
+      <pre><code><span class="comment">-- Create the ideas table</span>
+<span class="keyword">create table if not exists</span> ideas (
+  id <span class="builtin">uuid</span> <span class="keyword">default</span> <span class="func">gen_random_uuid()</span> <span class="keyword">primary key</span>,
+  title <span class="builtin">text</span> <span class="keyword">not null</span>,
+  description <span class="builtin">text</span> <span class="keyword">not null</span>,
+  votes <span class="builtin">integer</span> <span class="keyword">default</span> <span class="number">0</span>,
+  status <span class="builtin">text</span> <span class="keyword">default</span> <span class="string">'New'</span>,
+  created_at <span class="builtin">timestamptz</span> <span class="keyword">default</span> <span class="func">now()</span>
+);
+
+<span class="comment">-- Enable Row Level Security</span>
+<span class="keyword">alter table</span> ideas <span class="keyword">enable row level security</span>;
+
+<span class="comment">-- Allow anyone to read</span>
+<span class="keyword">create policy</span> <span class="string">"Anyone can read"</span>
+  <span class="keyword">on</span> ideas <span class="keyword">for select using</span> (<span class="number">true</span>);
+
+<span class="comment">-- Allow anyone to insert (demo only)</span>
+<span class="keyword">create policy</span> <span class="string">"Anyone can insert"</span>
+  <span class="keyword">on</span> ideas <span class="keyword">for insert with check</span> (<span class="number">true</span>);
+
+<span class="comment">-- Allow anyone to update (demo only)</span>
+<span class="keyword">create policy</span> <span class="string">"Anyone can update"</span>
+  <span class="keyword">on</span> ideas <span class="keyword">for update using</span> (<span class="number">true</span>);</code></pre>
+
+      <h3>Step 5: Connect Your App to Supabase</h3>
+      <p>The Supabase client code (AI generates this for you):</p>
+      <pre><code><span class="comment">// lib/supabase.ts</span>
+<span class="keyword">import</span> { createClient } <span class="keyword">from</span> <span class="string">"@supabase/supabase-js"</span>;
+
+<span class="keyword">const</span> supabaseUrl = process.env.<span class="builtin">NEXT_PUBLIC_SUPABASE_URL</span>!;
+<span class="keyword">const</span> supabaseAnonKey = process.env.<span class="builtin">NEXT_PUBLIC_SUPABASE_ANON_KEY</span>!;
+
+<span class="keyword">export const</span> supabase = <span class="func">createClient</span>(supabaseUrl, supabaseAnonKey);</code></pre>
+
+      <h2>🚀 Deploying to Vercel (Go Live in 2 Minutes)</h2>
+      <div class="callout info" style="margin-top:8px">
+        <p style="margin:0">💡 <b>What is Vercel?</b> A cloud platform built for frontend &amp; Next.js apps. Push your code → it's live on the internet with HTTPS, CDN, and auto-deploys. Free tier is very generous — no credit card needed.</p>
+      </div>
+
+      <h3 style="margin-top:14px">Deployment Steps</h3>
+      <div class="timeline">
+        <div class="timeline-item">
+          <div class="timeline-dot">1️⃣</div>
+          <div class="timeline-content">
+            <h3>Push code to <b>GitHub</b></h3>
+            <p>Create a repo and push. Make sure <code>.env.local</code> is in <code>.gitignore</code> — never commit secrets to GitHub!</p>
+          </div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-dot">2️⃣</div>
+          <div class="timeline-content">
+            <h3>Sign in to <b>vercel.com</b> with GitHub</h3>
+            <p>Free Hobby plan — unlimited deployments, custom domains, HTTPS included.</p>
+          </div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-dot">3️⃣</div>
+          <div class="timeline-content">
+            <h3>Click <b>"Add New Project"</b> → Import your repo</h3>
+            <p>Vercel auto-detects it's a Next.js app and configures build settings for you.</p>
+          </div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-dot">4️⃣</div>
+          <div class="timeline-content">
+            <h3>Add <b>Environment Variables</b> (before clicking Deploy)</h3>
+            <p>This is the critical step — Vercel needs your Supabase keys to connect to the database.</p>
+          </div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-dot">5️⃣</div>
+          <div class="timeline-content">
+            <h3>Click <b>Deploy</b> → Live in ~30 seconds</h3>
+            <p>Vercel gives you a URL like <code>your-app.vercel.app</code>. Share it with anyone!</p>
+          </div>
+        </div>
+      </div>
+
+      <h3>Environment Variables in Vercel</h3>
+      <p>On the deployment screen, expand <b>"Environment Variables"</b> and add these two:</p>
+      <table style="margin-top:8px">
+        <thead>
+          <tr style="background:rgba(122,162,255,.15)">
+            <th>Key</th>
+            <th>Value</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td><code>NEXT_PUBLIC_SUPABASE_URL</code></td><td><code>https://&lt;your-project-id&gt;.supabase.co</code></td></tr>
+          <tr><td><code>NEXT_PUBLIC_SUPABASE_ANON_KEY</code></td><td><code>&lt;your-anon-public-key&gt;</code></td></tr>
+        </tbody>
+      </table>
+      <div class="callout warn" style="margin-top:10px">
+        <p style="margin:0">⚠️ <b>Without these env vars, the deployed app will crash.</b> This is the #1 mistake — the app works locally (reads from <code>.env.local</code>) but breaks on Vercel because the variables aren't set there.</p>
+      </div>
+
+      <h3>After Deployment — Auto-Deploys</h3>
+      <p>Every time you <code>git push</code> to GitHub, Vercel <b>automatically rebuilds and redeploys</b> your app. No manual steps needed — push code, it's live in seconds.</p>
+
+      <details style="margin-top:14px">
+        <summary>📋 Quick Reference: Complete Setup Checklist</summary>
+        <table>
+          <thead>
+            <tr style="background:rgba(255,159,67,.12)">
+              <th>✓</th>
+              <th>Step</th>
+              <th>Where</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>☐</td><td>Create Supabase project</td><td>supabase.com → New Project</td></tr>
+            <tr><td>☐</td><td>Copy Project URL and Anon Key</td><td>Supabase → Settings → API Keys</td></tr>
+            <tr><td>☐</td><td>Create <code>.env.local</code> with both keys</td><td>Project root folder</td></tr>
+            <tr><td>☐</td><td>Add <code>.env.local</code> to <code>.gitignore</code></td><td>Project root folder</td></tr>
+            <tr><td>☐</td><td>Run migration SQL in Supabase</td><td>Supabase → SQL Editor</td></tr>
+            <tr><td>☐</td><td>Test locally with <code>npm run dev</code></td><td>Terminal → localhost:3000</td></tr>
+            <tr><td>☐</td><td>Push code to GitHub</td><td>Terminal → git push</td></tr>
+            <tr><td>☐</td><td>Import repo on Vercel</td><td>vercel.com → Add New Project</td></tr>
+            <tr><td>☐</td><td>Add env vars on Vercel</td><td>Vercel → Project Settings → Env Vars</td></tr>
+            <tr><td>☐</td><td>Deploy &amp; share the link!</td><td>Vercel → Deploy</td></tr>
+          </tbody>
+        </table>
+      </details>
+
+      <h2>🔄 Alternative: Replit — Zero-Setup All-in-One</h2>
+      <div class="callout" style="margin-top:8px;border-left:4px solid #f368e0">
+        <p style="margin:0">💡 <b>Don't want to set up Supabase + Vercel separately?</b> Replit bundles <b>code editor + database + hosting + deployment</b> into a single browser-based platform. Describe what you want → Replit Agent builds it → click Deploy → it's live. No terminal, no env vars, no Git.</p>
+      </div>
+
+      <h3 style="margin-top:14px">What is Replit Agent?</h3>
+      <p><b>Replit Agent</b> is an AI that can plan, build, and deploy entire applications autonomously. You describe your app in plain English, and the agent:</p>
+      <ul>
+        <li>Creates the <b>project structure</b> and writes all the code</li>
+        <li>Sets up a <b>built-in database</b> (Replit DB or PostgreSQL)</li>
+        <li>Configures <b>environment variables</b> automatically</li>
+        <li>Runs the app in a <b>live preview</b> so you can test instantly</li>
+        <li><b>Deploys</b> to a public URL with one click</li>
+      </ul>
+
+      <h3>How It Works — Feedback Board on Replit</h3>
+      <div class="timeline">
+        <div class="timeline-item">
+          <div class="timeline-dot">1️⃣</div>
+          <div class="timeline-content">
+            <h3>Go to <b>replit.com</b> → Click <b>"Create Repl"</b></h3>
+            <p>Free account, no credit card. Choose "Agent" mode.</p>
+          </div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-dot">2️⃣</div>
+          <div class="timeline-content">
+            <h3>Type your prompt</h3>
+            <p><em>"Build a feedback board where users can submit ideas, upvote them, and admins can change status. Include a dark mode."</em></p>
+          </div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-dot">3️⃣</div>
+          <div class="timeline-content">
+            <h3>Agent builds everything</h3>
+            <p>It creates files, installs packages, sets up the database, and shows you a live preview — all automatically.</p>
+          </div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-dot">4️⃣</div>
+          <div class="timeline-content">
+            <h3>Click <b>"Deploy"</b> → You're live</h3>
+            <p>Replit hosts it for you. No Vercel, no GitHub, no env vars to configure.</p>
+          </div>
+        </div>
+      </div>
+
+      <h3>Which Approach Should You Use?</h3>
+      <table style="margin-top:8px">
+        <thead>
+          <tr style="background:rgba(243,104,224,.12)">
+            <th></th>
+            <th>Replit Agent</th>
+            <th>Copilot + Supabase + Vercel</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td><b>Setup time</b></td><td>~0 min (all in browser)</td><td>~10 min (accounts + env vars)</td></tr>
+          <tr><td><b>Best for</b></td><td>Quick prototypes, beginners, hackathons</td><td>Production apps, teams, custom workflows</td></tr>
+          <tr><td><b>Database</b></td><td>Built-in (Replit DB / PostgreSQL)</td><td>Supabase (PostgreSQL + real-time + auth)</td></tr>
+          <tr><td><b>Hosting</b></td><td>Included (replit.dev domain)</td><td>Vercel (custom domains, CDN, edge network)</td></tr>
+          <tr><td><b>Code editor</b></td><td>Browser-based (Replit IDE)</td><td>VS Code (local, full power)</td></tr>
+          <tr><td><b>AI assistance</b></td><td>Replit Agent (autonomous)</td><td>GitHub Copilot (collaborative)</td></tr>
+          <tr><td><b>Flexibility</b></td><td>Good for standard apps</td><td>Full control — any library, any config</td></tr>
+          <tr><td><b>Free tier</b></td><td>Limited compute &amp; deploys</td><td>Very generous (all 3 have free tiers)</td></tr>
+          <tr><td><b>Learning value</b></td><td>Lower — more abstracted</td><td>Higher — you understand the full stack</td></tr>
+        </tbody>
+      </table>
+
+      <details style="margin-top:14px">
+        <summary>⚠️ Replit Free Tier Limitations (Know Before You Demo)</summary>
+        <table style="margin-top:10px">
+          <thead>
+            <tr style="background:rgba(255,107,107,.12)">
+              <th>Limit</th>
+              <th>Free (Starter)</th>
+              <th>Paid (Core — $25/mo)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td><b>Agent prompts</b></td><td>Very limited (few per day)</td><td>Unlimited</td></tr>
+            <tr><td><b>Deployments</b></td><td>Static sites only</td><td>Full dynamic app deploys</td></tr>
+            <tr><td><b>Compute</b></td><td>0.5 vCPU, 512 MB RAM</td><td>Up to 8 vCPU, 16 GB RAM</td></tr>
+            <tr><td><b>Always-on</b></td><td>❌ Apps sleep after ~15 min inactivity</td><td>✅ Stays running 24/7</td></tr>
+            <tr><td><b>Storage</b></td><td>10 GB</td><td>50 GB</td></tr>
+            <tr><td><b>Private Repls</b></td><td>Limited</td><td>Unlimited</td></tr>
+            <tr><td><b>Custom domains</b></td><td>❌ No</td><td>✅ Yes</td></tr>
+          </tbody>
+        </table>
+        <div class="callout warn" style="margin-top:10px">
+          <p style="margin:0">⚠️ <b>Biggest gotchas on Replit free tier:</b></p>
+          <ul style="margin:8px 0 0 18px">
+            <li><b>Agent is heavily rate-limited</b> — you can run out of prompts mid-project</li>
+            <li><b>Apps go to sleep</b> after ~15 min of inactivity — first visit after sleep takes 10-30 sec to wake up</li>
+            <li><b>Dynamic deploys require the paid plan</b> — free tier only deploys static sites</li>
+          </ul>
+        </div>
+        <p style="margin-top:10px"><b>By comparison</b>, the Copilot + Supabase + Vercel stack all have generous free tiers:</p>
+        <ul>
+          <li><b>GitHub Copilot</b> — free for individual use in VS Code</li>
+          <li><b>Supabase</b> — 500 MB database, 50K auth users, unlimited API requests</li>
+          <li><b>Vercel</b> — unlimited deploys, always-on, custom domains, 100 GB bandwidth</li>
+        </ul>
+      </details>
+
+      <div class="callout green" style="margin-top:12px">
+        <p style="margin:0">🎯 <b>Presenter recommendation:</b> Start with <b>Replit</b> if you want the fastest "zero to live" experience. Move to <b>Copilot + Supabase + Vercel</b> when you want more control, better performance, and a professional development workflow. Both are valid — use what matches your goal.</p>
+      </div>
+
       <h2>Key Mindset Shift</h2>
       <div class="grid2">
         <div class="mini" style="border-top:3px solid #ff9f43">
