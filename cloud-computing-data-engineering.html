@@ -118,6 +118,8 @@
         <a href="#nature-of-data"><span class="nav-num data">10</span> Nature of Data</a>
         <a href="#azure-storage"><span class="nav-num data">11</span> Storage Accounts</a>
         <a href="#rest-apis"><span class="nav-num data">12</span> REST APIs</a>
+        <a href="#azure-sql"><span class="nav-num data">13</span> Azure SQL</a>
+        <a href="#azure-data-factory"><span class="nav-num data">14</span> Azure Data Factory</a>
         <a href="#assignments"><span class="nav-num assign">📝</span> Assignments</a>
       </div>
 
@@ -3493,6 +3495,911 @@ x-ms-request-id: a1b2c3d4-...                <span class="comment">← Debug ID<
 r = requests.<span class="func">get</span>(url, headers=h)
 <span class="func">print</span>(r.json())</code></pre>
         </div>
+      </div>
+
+    </div>
+    </section>
+
+    <!-- ───────────── AZURE SQL ───────────── -->
+    <section id="azure-sql" data-label="Section 13">
+    <div class="sec-header" onclick="this.parentElement.classList.toggle('collapsed')">
+      <h2>🗄️ Azure SQL — Relational Databases in the Cloud</h2>
+      <span class="sec-toggle">▼</span>
+    </div>
+    <div class="sec-body">
+      <p class="muted">SQL fundamentals, ACID properties, and getting started with Azure SQL Database</p>
+
+      <span class="pill"><b>Type</b> Relational (RDBMS)</span>
+      <span class="pill"><b>Language</b> T-SQL</span>
+      <span class="pill"><b>Model</b> PaaS / Managed</span>
+      <span class="pill"><b>Engine</b> SQL Server</span>
+
+      <div class="callout" style="margin-top:12px">
+        <p style="margin:0"><b>Teaching hook:</b> "Think of a database as a well-organized filing cabinet. Each drawer is a table, each folder inside is a row, and the labels on the folder are columns. SQL is the language you use to ask the filing cabinet: 'Give me all folders where city = Hyderabad.'"</p>
+      </div>
+
+      <!-- SQL BASICS -->
+      <h2 style="margin-top:18px">📖 What is SQL?</h2>
+      <p><b>SQL (Structured Query Language)</b> is the standard language for interacting with <b>relational databases</b>. It lets you <b>create</b>, <b>read</b>, <b>update</b>, and <b>delete</b> data stored in tables (called <b>CRUD</b> operations).</p>
+
+      <div class="grid2">
+        <div class="mini">
+          <h3>📋 Key Concepts</h3>
+          <ul>
+            <li><b>Table</b> — A structured collection of data in rows and columns (like an Excel sheet)</li>
+            <li><b>Row (Record)</b> — A single entry in the table (one customer, one order)</li>
+            <li><b>Column (Field)</b> — A specific attribute (name, email, age)</li>
+            <li><b>Primary Key</b> — A unique identifier for each row (e.g., <code>CustomerID</code>)</li>
+            <li><b>Foreign Key</b> — A column that links to another table's primary key (relationships!)</li>
+            <li><b>Schema</b> — The blueprint/structure of your database (tables, columns, data types, constraints)</li>
+          </ul>
+        </div>
+        <div class="mini">
+          <h3>🗂️ SQL Sub-Languages</h3>
+          <table>
+            <thead>
+              <tr style="background:rgba(122,162,255,.12)">
+                <th>Category</th>
+                <th>Purpose</th>
+                <th>Commands</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td><b>DDL</b></td><td>Define structure</td><td>CREATE, ALTER, DROP</td></tr>
+              <tr><td><b>DML</b></td><td>Manipulate data</td><td>SELECT, INSERT, UPDATE, DELETE</td></tr>
+              <tr><td><b>DCL</b></td><td>Control access</td><td>GRANT, REVOKE</td></tr>
+              <tr><td><b>TCL</b></td><td>Manage transactions</td><td>COMMIT, ROLLBACK, SAVEPOINT</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- ESSENTIAL SQL QUERIES -->
+      <h2 style="margin-top:18px">🔑 Essential SQL Queries — Quick Reference</h2>
+
+      <div class="mini" style="margin-top:10px">
+        <h3>📝 DDL — Creating &amp; Modifying Tables</h3>
+<pre><code><span class="comment">-- Create a table</span>
+<span class="keyword">CREATE TABLE</span> Customers (
+    CustomerID   <span class="builtin">INT</span> <span class="keyword">PRIMARY KEY</span> <span class="keyword">IDENTITY</span>(<span class="number">1</span>,<span class="number">1</span>),
+    FullName     <span class="builtin">NVARCHAR</span>(<span class="number">100</span>) <span class="keyword">NOT NULL</span>,
+    Email        <span class="builtin">NVARCHAR</span>(<span class="number">150</span>) <span class="keyword">UNIQUE</span>,
+    City         <span class="builtin">NVARCHAR</span>(<span class="number">50</span>),
+    CreatedAt    <span class="builtin">DATETIME2</span> <span class="keyword">DEFAULT</span> <span class="func">GETDATE</span>()
+);
+
+<span class="comment">-- Add a column</span>
+<span class="keyword">ALTER TABLE</span> Customers <span class="keyword">ADD</span> Phone <span class="builtin">NVARCHAR</span>(<span class="number">15</span>);
+
+<span class="comment">-- Remove a table (careful!)</span>
+<span class="keyword">DROP TABLE</span> Customers;</code></pre>
+      </div>
+
+      <div class="mini" style="margin-top:10px">
+        <h3>📝 DML — Reading &amp; Writing Data</h3>
+<pre><code><span class="comment">-- Insert data</span>
+<span class="keyword">INSERT INTO</span> Customers (FullName, Email, City)
+<span class="keyword">VALUES</span> (<span class="string">'Ajay Gupta'</span>, <span class="string">'ajay@example.com'</span>, <span class="string">'Hyderabad'</span>);
+
+<span class="comment">-- Read data (SELECT is the most-used SQL command!)</span>
+<span class="keyword">SELECT</span> FullName, City <span class="keyword">FROM</span> Customers <span class="keyword">WHERE</span> City = <span class="string">'Hyderabad'</span>;
+
+<span class="comment">-- Update data</span>
+<span class="keyword">UPDATE</span> Customers <span class="keyword">SET</span> City = <span class="string">'Bangalore'</span> <span class="keyword">WHERE</span> CustomerID = <span class="number">1</span>;
+
+<span class="comment">-- Delete data</span>
+<span class="keyword">DELETE FROM</span> Customers <span class="keyword">WHERE</span> CustomerID = <span class="number">1</span>;</code></pre>
+      </div>
+
+      <div class="mini" style="margin-top:10px">
+        <h3>📝 JOINs — Combining Tables</h3>
+<pre><code><span class="comment">-- INNER JOIN: Only matching rows from both tables</span>
+<span class="keyword">SELECT</span> c.FullName, o.OrderDate, o.Amount
+<span class="keyword">FROM</span> Customers c
+<span class="keyword">INNER JOIN</span> Orders o <span class="keyword">ON</span> c.CustomerID = o.CustomerID;
+
+<span class="comment">-- LEFT JOIN: All rows from left table + matches from right</span>
+<span class="keyword">SELECT</span> c.FullName, o.Amount
+<span class="keyword">FROM</span> Customers c
+<span class="keyword">LEFT JOIN</span> Orders o <span class="keyword">ON</span> c.CustomerID = o.CustomerID;
+
+<span class="comment">-- Aggregation with GROUP BY</span>
+<span class="keyword">SELECT</span> City, <span class="func">COUNT</span>(*) <span class="keyword">AS</span> CustomerCount, <span class="func">AVG</span>(Age) <span class="keyword">AS</span> AvgAge
+<span class="keyword">FROM</span> Customers
+<span class="keyword">GROUP BY</span> City
+<span class="keyword">HAVING</span> <span class="func">COUNT</span>(*) &gt; <span class="number">5</span>
+<span class="keyword">ORDER BY</span> CustomerCount <span class="keyword">DESC</span>;</code></pre>
+      </div>
+
+      <!-- JOINS VISUAL -->
+      <h2 style="margin-top:18px">🔗 JOIN Types — Visual Guide</h2>
+      <table>
+        <thead>
+          <tr style="background:rgba(122,162,255,.12)">
+            <th>JOIN Type</th>
+            <th>What It Returns</th>
+            <th>When to Use</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td><b>INNER JOIN</b></td><td>Only rows that match in <b>both</b> tables</td><td>Show customers who have placed orders</td></tr>
+          <tr><td><b>LEFT JOIN</b></td><td><b>All</b> rows from left table + matches from right (NULLs if no match)</td><td>Show all customers, even those with no orders</td></tr>
+          <tr><td><b>RIGHT JOIN</b></td><td><b>All</b> rows from right table + matches from left</td><td>Show all orders, even orphaned ones</td></tr>
+          <tr><td><b>FULL OUTER JOIN</b></td><td><b>All</b> rows from both tables (NULLs where no match)</td><td>Find mismatches between two datasets</td></tr>
+          <tr><td><b>CROSS JOIN</b></td><td>Every row from A × every row from B (Cartesian product)</td><td>Generate all combinations (e.g., sizes × colors)</td></tr>
+        </tbody>
+      </table>
+
+      <!-- ACID -->
+      <h2 style="margin-top:18px">⚗️ ACID Properties — The Gold Standard of Databases</h2>
+
+      <div class="callout info" style="margin-top:8px">
+        <p style="margin:0">💡 <b>Key concept:</b> ACID properties guarantee that database transactions are processed <b>reliably</b>. This is what makes relational databases trustworthy for banking, e-commerce, healthcare, etc. This is a <b>must-know interview topic!</b></p>
+      </div>
+
+      <div class="grid2" style="margin-top:10px">
+        <div class="mini" style="border-top:3px solid #7aa2ff">
+          <h3>🔷 A — Atomicity</h3>
+          <p style="margin:4px 0 0"><b>"All or Nothing."</b> A transaction either <b>completes fully</b> or <b>doesn't happen at all</b>. If any step fails, everything rolls back.</p>
+          <p class="muted" style="margin:6px 0 0"><b>Analogy:</b> Bank transfer — ₹5,000 leaves Account A and arrives in Account B. If the credit fails, the debit is reversed. You never lose money in the middle.</p>
+<pre style="margin:8px 0;font-size:12px"><code><span class="keyword">BEGIN TRANSACTION</span>;
+  <span class="keyword">UPDATE</span> Accounts <span class="keyword">SET</span> Balance = Balance - <span class="number">5000</span> <span class="keyword">WHERE</span> AccID = <span class="string">'A'</span>;
+  <span class="keyword">UPDATE</span> Accounts <span class="keyword">SET</span> Balance = Balance + <span class="number">5000</span> <span class="keyword">WHERE</span> AccID = <span class="string">'B'</span>;
+<span class="keyword">COMMIT</span>;  <span class="comment">-- Both succeed, or both rollback</span></code></pre>
+        </div>
+        <div class="mini" style="border-top:3px solid #66e3c4">
+          <h3>🔷 C — Consistency</h3>
+          <p style="margin:4px 0 0"><b>"Valid state to valid state."</b> A transaction can only bring the database from one <b>valid state</b> to another. All rules (constraints, triggers, cascades) must be satisfied.</p>
+          <p class="muted" style="margin:6px 0 0"><b>Analogy:</b> In a chess game, every move must follow the rules. You can't place a pawn on an occupied square — the game state must always be valid.</p>
+          <ul style="margin-top:6px">
+            <li>PRIMARY KEY must remain unique</li>
+            <li>FOREIGN KEY references must be valid</li>
+            <li>CHECK constraints must pass</li>
+            <li>NOT NULL columns can't be null</li>
+          </ul>
+        </div>
+        <div class="mini" style="border-top:3px solid #ffd666">
+          <h3>🔷 I — Isolation</h3>
+          <p style="margin:4px 0 0"><b>"Transactions don't interfere."</b> Concurrent transactions execute as if they were running <b>one at a time</b>. One transaction can't see another's uncommitted changes.</p>
+          <p class="muted" style="margin:6px 0 0"><b>Analogy:</b> Two people editing different sections of a Google Doc — they don't overwrite each other's work.</p>
+          <table style="margin-top:6px">
+            <thead><tr style="background:rgba(122,162,255,.12)"><th>Isolation Level</th><th>Behavior</th></tr></thead>
+            <tbody>
+              <tr><td>Read Uncommitted</td><td>Can read dirty (uncommitted) data — fastest but risky</td></tr>
+              <tr><td>Read Committed</td><td>Only reads committed data — SQL Server default</td></tr>
+              <tr><td>Repeatable Read</td><td>Locks rows you've read — no one can change them until you're done</td></tr>
+              <tr><td>Serializable</td><td>Full isolation — slowest but safest, like single-user mode</td></tr>
+              <tr><td>Snapshot</td><td>Uses row versioning — readers don't block writers (Azure SQL default)</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="mini" style="border-top:3px solid #ff6b6b">
+          <h3>🔷 D — Durability</h3>
+          <p style="margin:4px 0 0"><b>"Once committed, it's permanent."</b> After a transaction is committed, the data is <b>saved to disk</b> and survives crashes, power failures, or disasters.</p>
+          <p class="muted" style="margin:6px 0 0"><b>Analogy:</b> Once you've signed a contract and it's filed — even if the building burns down, there's a backup copy. The deal is done.</p>
+          <ul style="margin-top:6px">
+            <li>Data written to <b>transaction log</b> on disk before commit</li>
+            <li>Azure SQL uses <b>geo-replication</b> for extra durability</li>
+            <li>Even if the server crashes immediately after COMMIT — your data is safe</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- NORMALIZATION -->
+      <h2 style="margin-top:18px">🏗️ Normalization — Organizing Data Efficiently</h2>
+      <p>Normalization is the process of <b>structuring tables</b> to reduce data redundancy and improve data integrity.</p>
+      <table>
+        <thead>
+          <tr style="background:rgba(122,162,255,.12)">
+            <th>Normal Form</th>
+            <th>Rule</th>
+            <th>Example Fix</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td><b>1NF</b></td><td>Each column holds <b>atomic</b> (single) values — no arrays or comma-separated lists</td><td>Split "Phone1, Phone2" into separate rows</td></tr>
+          <tr><td><b>2NF</b></td><td>1NF + every non-key column depends on the <b>whole</b> primary key (no partial dependency)</td><td>Move StudentName to a Students table (it depends only on StudentID, not the composite key)</td></tr>
+          <tr><td><b>3NF</b></td><td>2NF + no non-key column depends on <b>another non-key column</b> (no transitive dependency)</td><td>Move CityState to a Cities table (ZipCode → City → State)</td></tr>
+        </tbody>
+      </table>
+      <p class="muted">Most production databases aim for <b>3NF</b>. Data warehouses often <b>denormalize</b> (flatten) for faster reads — you'll learn this in the Data Engineering modules.</p>
+
+      <!-- INDEXES -->
+      <h2 style="margin-top:18px">⚡ Indexes — Speed Up Your Queries</h2>
+      <div class="callout" style="margin-top:8px">
+        <p style="margin:0"><b>Teaching hook:</b> "An index is like the index at the back of a textbook. Instead of reading every page to find 'Azure SQL', you look up the index, find the page number, and go directly there."</p>
+      </div>
+      <div class="grid2" style="margin-top:10px">
+        <div class="mini">
+          <h3>Clustered Index</h3>
+          <p style="margin:4px 0 0">Sorts and stores the actual table data in order. <b>Only one per table</b> (like a phone book sorted by last name).</p>
+          <p class="muted" style="margin:4px 0 0">Created automatically on the PRIMARY KEY.</p>
+<pre style="margin:4px 0;font-size:12px"><code><span class="comment">-- Already created by PRIMARY KEY</span>
+<span class="keyword">CREATE CLUSTERED INDEX</span> IX_Customers_ID
+  <span class="keyword">ON</span> Customers(CustomerID);</code></pre>
+        </div>
+        <div class="mini">
+          <h3>Non-Clustered Index</h3>
+          <p style="margin:4px 0 0">A separate structure that points to the data. <b>Multiple allowed per table</b> (like sticky-note bookmarks).</p>
+          <p class="muted" style="margin:4px 0 0">Create on columns you frequently filter/search by.</p>
+<pre style="margin:4px 0;font-size:12px"><code><span class="keyword">CREATE NONCLUSTERED INDEX</span> IX_Customers_City
+  <span class="keyword">ON</span> Customers(City);</code></pre>
+        </div>
+      </div>
+
+      <!-- WHAT IS AZURE SQL -->
+      <h2 style="margin-top:18px">☁️ What is Azure SQL?</h2>
+      <p><b>Azure SQL</b> is Microsoft's family of <b>managed relational database services</b> in the cloud, built on the <b>SQL Server engine</b>. It gives you all the power of SQL Server — without the headache of managing VMs, OS patching, backups, or high availability.</p>
+
+      <div class="callout info" style="margin-top:8px">
+        <p style="margin:0">💡 <b>Key insight:</b> Azure SQL is <b>PaaS</b> (Platform-as-a-Service). Microsoft manages the infrastructure, patching, backups, and HA — you focus on your schema, queries, and data.</p>
+      </div>
+
+      <!-- AZURE SQL FAMILY -->
+      <h2 style="margin-top:18px">🏠 The Azure SQL Family</h2>
+      <table>
+        <thead>
+          <tr style="background:rgba(0,120,212,.12)">
+            <th>Service</th>
+            <th>What It Is</th>
+            <th>Best For</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td><b>Azure SQL Database</b></td><td>Fully managed single database (PaaS). Serverless or provisioned compute.</td><td>New cloud-native apps, microservices, SaaS products</td></tr>
+          <tr><td><b>Azure SQL Managed Instance</b></td><td>Near 100% SQL Server compatibility in a managed instance. Supports cross-database queries, SQL Agent, CLR.</td><td>Lift-and-shift migration of on-prem SQL Server workloads</td></tr>
+          <tr><td><b>SQL Server on Azure VM</b></td><td>Full SQL Server on an IaaS VM. You manage the OS &amp; SQL Server.</td><td>Apps needing full OS access, legacy features, or custom configurations</td></tr>
+        </tbody>
+      </table>
+      <p class="muted">For new projects, start with <b>Azure SQL Database</b>. For migrating existing SQL Server apps, evaluate <b>Managed Instance</b> first.</p>
+
+      <!-- PURCHASING MODELS -->
+      <h2 style="margin-top:18px">💰 Purchasing Models</h2>
+      <div class="grid2">
+        <div class="mini" style="border-top:3px solid #50e6ff">
+          <h3>🔹 DTU Model (simpler)</h3>
+          <p style="margin:4px 0 0"><b>Database Transaction Unit</b> — a bundled measure of CPU, memory, and IO. Think of it like a "meal deal" — you pick a size (Basic, Standard, Premium).</p>
+          <ul>
+            <li><b>Basic</b> — 5 DTUs, 2 GB storage. Dev/test, light workloads.</li>
+            <li><b>Standard</b> — 10–3000 DTUs. Most production apps.</li>
+            <li><b>Premium</b> — 125–4000 DTUs. High-performance, in-memory OLTP.</li>
+          </ul>
+          <p class="muted" style="margin:6px 0 0">Simpler to understand and manage. Good for predictable workloads.</p>
+        </div>
+        <div class="mini" style="border-top:3px solid #66e3c4">
+          <h3>🔹 vCore Model (flexible)</h3>
+          <p style="margin:4px 0 0">Choose CPU cores, memory, and storage <b>independently</b>. Like building your own meal — pick each item separately.</p>
+          <ul>
+            <li><b>General Purpose</b> — Budget-friendly, remote storage. Most workloads.</li>
+            <li><b>Business Critical</b> — Local SSD, built-in HA replicas. Low latency.</li>
+            <li><b>Hyperscale</b> — Up to 100 TB, rapid scale-out, instant backups. Large databases.</li>
+          </ul>
+          <p class="muted" style="margin:6px 0 0">More control, supports Reserved Capacity discounts (1yr/3yr). Azure Hybrid Benefit for existing SQL Server licenses.</p>
+        </div>
+      </div>
+
+      <!-- DTU vs vCore DEEP DIVE -->
+      <h2 style="margin-top:18px">🤔 DTU vs. vCore — When to Use What?</h2>
+
+      <div class="callout info" style="margin-top:8px">
+        <p style="margin:0">💡 <b>Simple rule of thumb:</b> If you're new to Azure SQL and want simplicity — start with <b>DTU</b>. If you need fine-grained control, cost optimization, or are migrating from on-prem SQL Server — go with <b>vCore</b>.</p>
+      </div>
+
+      <table style="margin-top:10px">
+        <thead>
+          <tr style="background:rgba(0,120,212,.12)">
+            <th>Criteria</th>
+            <th>DTU Model</th>
+            <th>vCore Model</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td><b>Pricing concept</b></td><td>Bundled — CPU + Memory + IO packed into a single DTU number</td><td>Independent — choose vCores, memory, and storage separately</td></tr>
+          <tr><td><b>Analogy</b></td><td>🍔 Meal combo — burger + fries + drink, pick a size (S/M/L)</td><td>🍽️ À la carte — pick each dish individually</td></tr>
+          <tr><td><b>Simplicity</b></td><td>⭐ Easier — just pick a tier (Basic / Standard / Premium)</td><td>Requires understanding of CPU, memory, storage needs</td></tr>
+          <tr><td><b>Flexibility</b></td><td>Limited — if you need more IO, you also pay for more CPU</td><td>⭐ Full control — scale compute and storage independently</td></tr>
+          <tr><td><b>Max database size</b></td><td>Up to 4 TB (Premium P15)</td><td>⭐ Up to 100 TB (Hyperscale)</td></tr>
+          <tr><td><b>Serverless option</b></td><td>❌ Not available</td><td>⭐ Available (auto-pause, auto-scale)</td></tr>
+          <tr><td><b>Azure Hybrid Benefit</b></td><td>❌ Not supported</td><td>⭐ Bring your own SQL Server license (save up to 55%)</td></tr>
+          <tr><td><b>Reserved Capacity</b></td><td>❌ Not available</td><td>⭐ 1-year or 3-year reservations (save up to 33%)</td></tr>
+          <tr><td><b>Managed Instance</b></td><td>❌ Not available</td><td>⭐ Only vCore supported</td></tr>
+          <tr><td><b>Migration from on-prem</b></td><td>Hard to map — what's 100 DTUs in CPU terms?</td><td>⭐ Easy — "my server has 8 cores" → pick 8 vCores</td></tr>
+        </tbody>
+      </table>
+
+      <div class="grid2" style="margin-top:12px">
+        <div class="mini" style="border-left:4px solid #50e6ff">
+          <h3>✅ Choose DTU When...</h3>
+          <ul>
+            <li>You're <b>new</b> to Azure SQL and want the simplest option</li>
+            <li>Your workload is <b>predictable</b> and steady</li>
+            <li>You don't have existing SQL Server licenses</li>
+            <li>Database is <b>small to medium</b> (under 4 TB)</li>
+            <li>You want a quick <b>dev/test</b> setup (Basic tier = cheapest)</li>
+            <li>You don't need serverless auto-pause</li>
+          </ul>
+        </div>
+        <div class="mini" style="border-left:4px solid #66e3c4">
+          <h3>✅ Choose vCore When...</h3>
+          <ul>
+            <li>You're <b>migrating from on-prem SQL Server</b> (easy core mapping)</li>
+            <li>You have <b>existing SQL Server licenses</b> (Azure Hybrid Benefit = huge savings)</li>
+            <li>You need <b>Serverless</b> compute (auto-pause for dev/test)</li>
+            <li>Your database is <b>large</b> (needs Hyperscale — up to 100 TB)</li>
+            <li>You want <b>Reserved Capacity</b> discounts (1yr / 3yr commitment)</li>
+            <li>You need <b>Managed Instance</b> (only supports vCore)</li>
+            <li>You need <b>independent scaling</b> — e.g., lots of storage but less compute</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="callout warn" style="margin-top:10px">
+        <p style="margin:0">⚠️ <b>Microsoft's recommendation:</b> vCore is the <b>recommended model</b> for new projects. DTU is simpler but older, and new features (Serverless, Hyperscale, Reserved Capacity) are <b>vCore-only</b>. If you're starting fresh — go vCore.</p>
+      </div>
+
+      <!-- SERVERLESS -->
+      <h2 style="margin-top:18px">⚡ Serverless Compute Tier</h2>
+      <div class="mini" style="margin-top:8px">
+        <p style="margin:4px 0 0">Azure SQL Database offers a <b>Serverless</b> compute tier — the database <b>auto-scales</b> compute and <b>auto-pauses</b> when idle (you only pay for storage while paused!).</p>
+        <div class="grid2" style="margin-top:8px">
+          <div>
+            <b>How it works:</b>
+            <ul>
+              <li>You set a <b>min</b> and <b>max</b> vCores range</li>
+              <li>Compute scales automatically within that range based on demand</li>
+              <li>After a configurable idle period → database <b>auto-pauses</b></li>
+              <li>First connection after pause → auto-resumes (small delay)</li>
+            </ul>
+          </div>
+          <div>
+            <b>Best for:</b>
+            <ul>
+              <li>Dev/test environments</li>
+              <li>Databases with unpredictable or intermittent usage</li>
+              <li>New apps where you don't know the workload pattern</li>
+              <li>Cost-conscious projects that don't need 24/7 compute</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- SECURITY -->
+      <h2 style="margin-top:18px">🔐 Security Features</h2>
+      <div class="grid3">
+        <div class="mini">
+          <h3>🛡️ Authentication</h3>
+          <ul>
+            <li><b>SQL Authentication</b> — Username + password</li>
+            <li><b>Entra ID Auth</b> — Use Azure AD/Entra identities (recommended!)</li>
+            <li><b>Managed Identity</b> — No credentials in code</li>
+          </ul>
+        </div>
+        <div class="mini">
+          <h3>🔒 Encryption</h3>
+          <ul>
+            <li><b>TDE</b> — Transparent Data Encryption (data at rest, enabled by default)</li>
+            <li><b>TLS</b> — Encryption in transit (always on)</li>
+            <li><b>Always Encrypted</b> — Client-side encryption for sensitive columns</li>
+          </ul>
+        </div>
+        <div class="mini">
+          <h3>🚧 Network Security</h3>
+          <ul>
+            <li><b>Firewall rules</b> — IP-based access control</li>
+            <li><b>VNet Service Endpoints</b> — Restrict to your Azure VNet</li>
+            <li><b>Private Endpoints</b> — Fully private connectivity (no public IP)</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- CONNECTING -->
+      <h2 style="margin-top:18px">🔌 Connecting to Azure SQL</h2>
+      <div class="mini" style="margin-top:8px">
+        <h3>🐍 From Python</h3>
+<pre><code><span class="keyword">import</span> pyodbc
+
+<span class="comment"># Connection string</span>
+conn_str = (
+    <span class="string">"Driver={ODBC Driver 18 for SQL Server};"</span>
+    <span class="string">"Server=tcp:myserver.database.windows.net,1433;"</span>
+    <span class="string">"Database=mydb;"</span>
+    <span class="string">"Uid=myadmin;"</span>
+    <span class="string">"Pwd={your_password};"</span>    <span class="comment"># Use Key Vault in production!</span>
+    <span class="string">"Encrypt=yes;"</span>
+    <span class="string">"TrustServerCertificate=no;"</span>
+)
+
+conn = pyodbc.<span class="func">connect</span>(conn_str)
+cursor = conn.<span class="func">cursor</span>()
+cursor.<span class="func">execute</span>(<span class="string">"SELECT TOP 10 * FROM Customers"</span>)
+
+<span class="keyword">for</span> row <span class="keyword">in</span> cursor:
+    <span class="func">print</span>(row)
+
+conn.<span class="func">close</span>()</code></pre>
+      </div>
+
+      <div class="mini" style="margin-top:10px">
+        <h3>📦 Tools for Azure SQL</h3>
+        <div class="grid3">
+          <div>
+            <b>⭐ Azure Data Studio</b>
+            <p class="muted" style="margin:4px 0 0">Free, cross-platform (Windows, macOS, Linux), modern SQL editor by Microsoft. Notebooks support!</p>
+            <p style="margin:4px 0 0"><a href="https://learn.microsoft.com/sql/azure-data-studio/download-azure-data-studio" target="_blank" style="color:#50e6ff;font-size:12px">📥 Download Azure Data Studio</a></p>
+          </div>
+          <div>
+            <b>🔧 SSMS (Windows only)</b>
+            <p class="muted" style="margin:4px 0 0">SQL Server Management Studio — full-featured, Windows-only. The classic tool for SQL Server administration.</p>
+            <p style="margin:4px 0 0"><a href="https://learn.microsoft.com/sql/ssms/download-sql-server-management-studio-ssms" target="_blank" style="color:#50e6ff;font-size:12px">📥 Download SSMS</a></p>
+          </div>
+          <div>
+            <b>🌐 Azure Portal</b>
+            <p class="muted" style="margin:4px 0 0">Query Editor built into the portal — quick queries without installing anything. Works in any browser.</p>
+          </div>
+        </div>
+
+        <div class="callout warn" style="margin-top:10px">
+          <p style="margin:0">🍎 <b>On macOS?</b> SSMS is <b>not available on Mac</b>. Use these alternatives instead:</p>
+          <ul style="margin:6px 0 0">
+            <li><b>Azure Data Studio</b> — Microsoft's recommended cross-platform tool. Full SQL editing, IntelliSense, integrated terminal, and Jupyter notebooks. <a href="https://learn.microsoft.com/sql/azure-data-studio/download-azure-data-studio" target="_blank" style="color:#50e6ff">Download here</a></li>
+            <li><b>VS Code + mssql extension</b> — Lightweight option. Install the <a href="https://marketplace.visualstudio.com/items?itemName=ms-mssql.mssql" target="_blank" style="color:#50e6ff">SQL Server (mssql)</a> extension for IntelliSense, query execution, and results grid</li>
+            <li><b>DBeaver</b> — Free, open-source, supports many databases including Azure SQL. <a href="https://dbeaver.io/download/" target="_blank" style="color:#50e6ff">Download here</a></li>
+            <li><b>Azure Portal Query Editor</b> — No install needed, works in any browser on any OS</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- KEY DIFFERENCES -->
+      <h2 style="margin-top:18px">🆚 Azure SQL Database vs. On-Prem SQL Server</h2>
+      <table>
+        <thead>
+          <tr style="background:rgba(0,120,212,.12)">
+            <th>Feature</th>
+            <th>On-Prem SQL Server</th>
+            <th>Azure SQL Database</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td><b>Infrastructure</b></td><td>You manage hardware, OS, patching</td><td>Fully managed by Microsoft</td></tr>
+          <tr><td><b>High Availability</b></td><td>You set up Always On AG (complex)</td><td>Built-in 99.99% SLA</td></tr>
+          <tr><td><b>Backups</b></td><td>You configure and manage</td><td>Automatic (PITR up to 35 days)</td></tr>
+          <tr><td><b>Scaling</b></td><td>Buy bigger hardware (days/weeks)</td><td>Scale up/down in minutes, no downtime</td></tr>
+          <tr><td><b>Cost</b></td><td>Large CapEx + ongoing OpEx</td><td>Pure OpEx, pay-as-you-go</td></tr>
+          <tr><td><b>Security</b></td><td>You configure TDE, firewall, auditing</td><td>TDE on by default, built-in threat detection</td></tr>
+          <tr><td><b>Geo-Replication</b></td><td>Complex to set up</td><td>One-click active geo-replication</td></tr>
+        </tbody>
+      </table>
+
+      <!-- POWER PLATFORM INTEGRATIONS -->
+      <h2 style="margin-top:18px">🔌 Azure SQL + Power Platform — The Microsoft Ecosystem</h2>
+      <p>One of Azure SQL's biggest strengths is its <b>native integration</b> with the <b>Microsoft Power Platform</b>. Your database doesn't live in isolation — it connects seamlessly to tools that business users already know.</p>
+
+      <div class="grid3" style="margin-top:10px">
+        <div class="mini" style="border-top:3px solid #ffd666">
+          <h3>📊 Power BI</h3>
+          <p style="margin:4px 0 0"><b>Business Intelligence &amp; Visualization.</b> Connect Power BI directly to Azure SQL to build interactive dashboards and reports.</p>
+          <ul>
+            <li><b>DirectQuery</b> — queries Azure SQL in real-time, always fresh data</li>
+            <li><b>Import mode</b> — pulls data into Power BI's in-memory engine for faster visuals</li>
+            <li>Schedule <b>automatic refresh</b> — dashboards stay up to date</li>
+            <li>Row-Level Security (RLS) — different users see different data</li>
+          </ul>
+          <p class="muted" style="margin:6px 0 0"><b>Use case:</b> Sales dashboard showing live revenue from your Azure SQL orders table.</p>
+        </div>
+        <div class="mini" style="border-top:3px solid #7aa2ff">
+          <h3>⚡ Power Automate</h3>
+          <p style="margin:4px 0 0"><b>Workflow Automation.</b> Create automated flows triggered by database events or that write data to Azure SQL — no code needed.</p>
+          <ul>
+            <li><b>Trigger:</b> "When a row is added/modified" — react to database changes</li>
+            <li><b>Action:</b> Insert, update, or delete rows in Azure SQL from any flow</li>
+            <li>Connect Azure SQL to <b>300+ connectors</b> — Teams, Outlook, SharePoint, etc.</li>
+            <li>Build approval workflows that write decisions back to the database</li>
+          </ul>
+          <p class="muted" style="margin:6px 0 0"><b>Use case:</b> New order inserted → Power Automate sends a Teams notification to the sales team.</p>
+        </div>
+        <div class="mini" style="border-top:3px solid #66e3c4">
+          <h3>📱 Power Apps</h3>
+          <p style="margin:4px 0 0"><b>Low-Code App Builder.</b> Build custom business apps (mobile + web) that read/write directly from Azure SQL — without writing backend code.</p>
+          <ul>
+            <li>Connect to Azure SQL as a <b>data source</b> — tables appear as collections</li>
+            <li>Build <b>CRUD forms</b> — add, edit, view, delete records visually</li>
+            <li>Works on <b>mobile + desktop</b> — field workers can update data on the go</li>
+            <li>Combine with Power Automate for <b>app + workflow</b> solutions</li>
+          </ul>
+          <p class="muted" style="margin:6px 0 0"><b>Use case:</b> Inventory management app where warehouse staff scan items and update Azure SQL in real-time.</p>
+        </div>
+      </div>
+
+      <div class="callout info" style="margin-top:10px">
+        <p style="margin:0">💡 <b>Why this matters:</b> As a Data Engineer, you build the data layer (Azure SQL tables, views, stored procedures). The <b>Power Platform</b> is how business users <b>consume</b> that data — through dashboards (Power BI), automated workflows (Power Automate), and custom apps (Power Apps). Understanding these integrations makes you a <b>full-stack data professional</b> — you don't just store data, you enable the business to act on it.</p>
+      </div>
+
+      <!-- OTHER INTEGRATIONS -->
+      <h2 style="margin-top:18px">🔗 Other Key Azure SQL Integrations</h2>
+      <table>
+        <thead>
+          <tr style="background:rgba(0,120,212,.12)">
+            <th>Service</th>
+            <th>Integration</th>
+            <th>What It Does</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td><b>Azure Data Factory</b></td><td>Source / Sink connector</td><td>ETL pipelines — extract from Azure SQL, transform, load to Data Lake or warehouse</td></tr>
+          <tr><td><b>Azure Synapse Analytics</b></td><td>Linked Service</td><td>Query Azure SQL data alongside Data Lake data using Synapse SQL pools</td></tr>
+          <tr><td><b>Azure Functions</b></td><td>SQL Bindings</td><td>Trigger serverless code on database changes, or read/write SQL from functions</td></tr>
+          <tr><td><b>Azure Logic Apps</b></td><td>SQL Connector</td><td>Enterprise-grade workflow automation with Azure SQL triggers and actions</td></tr>
+          <tr><td><b>Azure App Service</b></td><td>Connection Strings</td><td>Web apps and APIs connect to Azure SQL as their backend database</td></tr>
+        </tbody>
+      </table>
+
+      <!-- DATA ENGINEER RELEVANCE -->
+      <div class="callout" style="margin-top:14px">
+        <p style="margin:0">🎯 <b>As a Data Engineer, you'll use Azure SQL to:</b><br/>
+        1. <b>Store structured data</b> — transactional data from applications (orders, users, products)<br/>
+        2. <b>Source for ETL</b> — extract data from Azure SQL into Data Lake / Synapse for analytics<br/>
+        3. <b>Staging tables</b> — land and transform data before loading into a warehouse<br/>
+        4. <b>Serve analytics</b> — serve processed data to Power BI dashboards<br/>
+        5. <b>Metadata store</b> — store pipeline configurations, control tables, watermarks for incremental loads</p>
+      </div>
+
+    </div>
+    </section>
+
+    <!-- ───────────── AZURE DATA FACTORY ───────────── -->
+    <section id="azure-data-factory" data-label="Section 14">
+    <div class="sec-header" onclick="this.parentElement.classList.toggle('collapsed')">
+      <h2>🏭 Azure Data Factory — The ETL/ELT Orchestrator</h2>
+      <span class="sec-toggle">▼</span>
+    </div>
+    <div class="sec-body">
+      <p class="muted">The cloud-native data integration service for building ETL/ELT pipelines at scale</p>
+
+      <span class="pill"><b>Type</b> Data Integration (PaaS)</span>
+      <span class="pill"><b>Pattern</b> ETL / ELT</span>
+      <span class="pill"><b>Code</b> No-code / Low-code</span>
+      <span class="pill"><b>Scale</b> Serverless</span>
+
+      <div class="callout" style="margin-top:12px">
+        <p style="margin:0"><b>Teaching hook:</b> "Imagine you run a food delivery company. You pick up food from different restaurants (sources), pack it properly (transform), and deliver it to customers (destination). Azure Data Factory does the same thing but with data — it picks up data from various sources, transforms it, and delivers it to where it needs to go."</p>
+      </div>
+
+      <!-- WHAT IS ADF -->
+      <h2 style="margin-top:18px">📖 What is Azure Data Factory?</h2>
+      <p><b>Azure Data Factory (ADF)</b> is Microsoft's <b>cloud-native data integration service</b>. It allows you to create, schedule, and orchestrate <b>data pipelines</b> that move and transform data from various sources to various destinations — all without writing infrastructure code.</p>
+
+      <div class="callout info" style="margin-top:8px">
+        <p style="margin:0">💡 <b>Key insight:</b> ADF is a <b>pipeline orchestrator</b>, not a compute engine. It tells <b>other services</b> (Spark, SQL, Databricks) what to do and when. Think of it as the <b>conductor</b> of an orchestra — it doesn't play the instruments, it coordinates them.</p>
+      </div>
+
+      <!-- ETL vs ELT -->
+      <h2 style="margin-top:18px">🔄 ETL vs. ELT — What’s the Difference?</h2>
+      <div class="grid2">
+        <div class="mini" style="border-top:3px solid #ff9900">
+          <h3>🔧 ETL — Extract, Transform, Load</h3>
+          <p style="margin:4px 0 0">Data is <b>transformed before</b> it reaches the destination. The transformation happens in a separate processing layer.</p>
+          <ul>
+            <li>Extract from source (API, database, file)</li>
+            <li>Transform in a compute engine (clean, filter, join)</li>
+            <li>Load the cleaned data into the destination</li>
+          </ul>
+          <p class="muted" style="margin:6px 0 0"><b>When:</b> Legacy data warehouses, when destination has limited compute, when you need strict data quality before loading.</p>
+        </div>
+        <div class="mini" style="border-top:3px solid #50e6ff">
+          <h3>⚡ ELT — Extract, Load, Transform</h3>
+          <p style="margin:4px 0 0">Data is loaded <b>raw first</b>, then transformed inside the destination using its own compute power.</p>
+          <ul>
+            <li>Extract from source</li>
+            <li>Load raw data into a Data Lake or warehouse</li>
+            <li>Transform using the destination's engine (Spark, Synapse SQL, Databricks)</li>
+          </ul>
+          <p class="muted" style="margin:6px 0 0"><b>When:</b> Modern cloud architectures, big data, when destination is powerful (Data Lake + Spark). ⭐ This is the modern standard.</p>
+        </div>
+      </div>
+
+      <!-- ADF COMPONENTS -->
+      <h2 style="margin-top:18px">🧩 ADF Core Components</h2>
+      <p>ADF is built from a set of <b>building blocks</b> that you compose together. Understanding each component is essential:</p>
+
+      <!-- PIPELINE -->
+      <div class="mini" style="margin-top:12px;border-left:4px solid #7aa2ff">
+        <h3>1️⃣ Pipeline</h3>
+        <p style="margin:4px 0 0">A <b>logical grouping of activities</b> that together perform a task. It's the <b>top-level container</b> — like a workflow or a recipe.</p>
+        <ul>
+          <li>A pipeline can have <b>one or many activities</b></li>
+          <li>Activities can run <b>sequentially</b> or <b>in parallel</b></li>
+          <li>Pipelines can <b>call other pipelines</b> (Execute Pipeline activity)</li>
+          <li>You can <b>parameterize</b> pipelines to make them reusable</li>
+        </ul>
+        <p class="muted" style="margin:6px 0 0"><b>Analogy:</b> A pipeline is like a cooking recipe — it lists all the steps (activities) in order to make a dish.</p>
+      </div>
+
+      <!-- ACTIVITY -->
+      <div class="mini" style="margin-top:10px;border-left:4px solid #66e3c4">
+        <h3>2️⃣ Activity</h3>
+        <p style="margin:4px 0 0">A <b>single step</b> within a pipeline. Each activity performs one action — copy data, run a script, call an API, etc.</p>
+        <div class="grid3" style="margin-top:8px">
+          <div>
+            <b>📦 Data Movement</b>
+            <ul>
+              <li><b>Copy Activity</b> — The workhorse! Copies data from source to sink (destination)</li>
+            </ul>
+          </div>
+          <div>
+            <b>🔄 Data Transformation</b>
+            <ul>
+              <li><b>Data Flow</b> — Visual, no-code transformations (runs on Spark under the hood)</li>
+              <li><b>Databricks Notebook</b> — Run a Databricks notebook</li>
+              <li><b>Stored Procedure</b> — Execute a SQL stored proc</li>
+              <li><b>HDInsight</b> — Run Hive, Pig, Spark jobs</li>
+            </ul>
+          </div>
+          <div>
+            <b>📌 Control Flow</b>
+            <ul>
+              <li><b>If Condition</b> — Branch based on true/false</li>
+              <li><b>ForEach</b> — Loop over a collection</li>
+              <li><b>Until</b> — Loop until a condition is met</li>
+              <li><b>Wait</b> — Pause for a duration</li>
+              <li><b>Execute Pipeline</b> — Call another pipeline</li>
+              <li><b>Web Activity</b> — Call a REST API</li>
+              <li><b>Set Variable</b> — Assign values to variables</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- LINKED SERVICE -->
+      <div class="mini" style="margin-top:10px;border-left:4px solid #ffd666">
+        <h3>3️⃣ Linked Service</h3>
+        <p style="margin:4px 0 0">A <b>connection string</b> to an external resource. It defines <b>how</b> ADF connects to a data source or destination.</p>
+        <ul>
+          <li>Contains connection info: server address, database name, authentication method</li>
+          <li>Supports <b>90+ connectors</b> — Azure SQL, Blob Storage, S3, Salesforce, Oracle, REST APIs, etc.</li>
+          <li>Authentication options: SQL auth, Managed Identity, Service Principal, Key Vault references</li>
+          <li>Created <b>once</b>, reused across multiple datasets and pipelines</li>
+        </ul>
+        <p class="muted" style="margin:6px 0 0"><b>Analogy:</b> A Linked Service is like saving a WiFi password on your phone — you configure it once, and your phone connects automatically every time.</p>
+      </div>
+
+      <!-- DATASET -->
+      <div class="mini" style="margin-top:10px;border-left:4px solid #ff6b6b">
+        <h3>4️⃣ Dataset</h3>
+        <p style="margin:4px 0 0">A <b>named view of data</b> that points to the data you want to use. It references a Linked Service and specifies the <b>structure</b> (table, file, folder).</p>
+        <ul>
+          <li>Points to a <b>Linked Service</b> (the connection) + specific data (table name, file path, container)</li>
+          <li>Defines the <b>schema</b> — column names, data types (optional but recommended)</li>
+          <li>Can be <b>parameterized</b> — e.g., pass the file name or table name at runtime</li>
+          <li>Used as <b>input (source)</b> or <b>output (sink)</b> in a Copy Activity</li>
+        </ul>
+        <p class="muted" style="margin:6px 0 0"><b>Analogy:</b> If a Linked Service is the WiFi connection to a library, the Dataset is pointing to a specific book (table) on a specific shelf (schema).</p>
+      </div>
+
+      <!-- INTEGRATION RUNTIME -->
+      <div class="mini" style="margin-top:10px;border-left:4px solid #c586c0">
+        <h3>5️⃣ Integration Runtime (IR)</h3>
+        <p style="margin:4px 0 0">The <b>compute infrastructure</b> that ADF uses to actually execute activities. Think of it as the <b>engine</b> that does the work.</p>
+        <table style="margin-top:8px">
+          <thead>
+            <tr style="background:rgba(122,162,255,.12)">
+              <th>IR Type</th>
+              <th>Where It Runs</th>
+              <th>Use Case</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td><b>Azure IR</b></td><td>Managed by Microsoft in Azure</td><td>Cloud-to-cloud data movement and transformation. Auto-resolve region. ⭐ Default</td></tr>
+            <tr><td><b>Self-Hosted IR</b></td><td>Your own machine (on-prem or VM)</td><td>Connect to on-premises data sources (SQL Server, Oracle, file shares behind a firewall)</td></tr>
+            <tr><td><b>Azure-SSIS IR</b></td><td>Managed SSIS cluster in Azure</td><td>Lift-and-shift existing SSIS packages to the cloud</td></tr>
+          </tbody>
+        </table>
+        <p class="muted" style="margin:6px 0 0"><b>Analogy:</b> The Integration Runtime is like the delivery truck. Azure IR = company-owned fleet (managed). Self-Hosted IR = your own truck that can go behind private gates (on-prem firewalls).</p>
+      </div>
+
+      <!-- TRIGGER -->
+      <div class="mini" style="margin-top:10px;border-left:4px solid #50e6ff">
+        <h3>6️⃣ Trigger</h3>
+        <p style="margin:4px 0 0">Defines <b>when</b> a pipeline runs. Without a trigger, a pipeline only runs when you manually click "Debug" or "Trigger Now".</p>
+        <table style="margin-top:8px">
+          <thead>
+            <tr style="background:rgba(122,162,255,.12)">
+              <th>Trigger Type</th>
+              <th>How It Works</th>
+              <th>Example</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td><b>Schedule</b></td><td>Runs at a fixed schedule (cron-like)</td><td>"Every day at 2:00 AM", "Every Monday at 6 AM"</td></tr>
+            <tr><td><b>Tumbling Window</b></td><td>Fixed-size, non-overlapping time intervals with retry &amp; dependency support</td><td>"Process every 1-hour window of data", backfill historical windows</td></tr>
+            <tr><td><b>Event-based (Blob)</b></td><td>Fires when a file is created or deleted in Blob Storage</td><td>"When a CSV is uploaded to /input/ folder, run the pipeline"</td></tr>
+            <tr><td><b>Custom Event</b></td><td>Fires on custom events from Event Grid</td><td>"When an upstream system publishes a 'data-ready' event"</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- DATA FLOW -->
+      <div class="mini" style="margin-top:10px;border-left:4px solid #4ec9b0">
+        <h3>7️⃣ Data Flow (Mapping Data Flow)</h3>
+        <p style="margin:4px 0 0">A <b>visual, no-code data transformation</b> designer inside ADF. Runs on <b>Apache Spark</b> under the hood — you just drag and drop.</p>
+        <div class="grid2" style="margin-top:8px">
+          <div>
+            <b>Transformation types:</b>
+            <ul>
+              <li><b>Source</b> — Read from a dataset</li>
+              <li><b>Filter</b> — WHERE clause (keep matching rows)</li>
+              <li><b>Select</b> — Pick/rename columns</li>
+              <li><b>Derived Column</b> — Add calculated columns</li>
+              <li><b>Aggregate</b> — GROUP BY + SUM, COUNT, AVG</li>
+              <li><b>Join</b> — Combine two streams</li>
+              <li><b>Lookup</b> — Enrich data from a reference table</li>
+              <li><b>Pivot / Unpivot</b> — Reshape data</li>
+              <li><b>Sink</b> — Write to destination</li>
+            </ul>
+          </div>
+          <div>
+            <b>Key features:</b>
+            <ul>
+              <li><b>Data Preview</b> — See sample data at each step while designing</li>
+              <li><b>Schema Drift</b> — Handle columns that appear/disappear at runtime</li>
+              <li><b>Debug Mode</b> — Spin up a live Spark cluster to test interactively</li>
+              <li><b>Parameterization</b> — Pass parameters from the pipeline to the data flow</li>
+              <li>Runs on <b>auto-scaled Spark clusters</b> (you don't manage the cluster)</li>
+            </ul>
+          </div>
+        </div>
+        <p class="muted" style="margin:6px 0 0"><b>When to use:</b> When you need transformations beyond what Copy Activity can do, but don't want to write Spark/Python code. Great for data engineers who prefer visual design.</p>
+      </div>
+
+      <!-- HOW COMPONENTS FIT TOGETHER -->
+      <h2 style="margin-top:18px">🔗 How Components Fit Together</h2>
+      <div class="mini" style="margin-top:8px">
+<pre><code><span class="comment">┌─────────────────────────────────────────────────────────────────┐</span>
+<span class="comment">│</span>  <span class="keyword">TRIGGER</span>  (Schedule: "Every day at 2 AM")              <span class="comment">│</span>
+<span class="comment">│     │                                                          │</span>
+<span class="comment">│     ▼                                                          │</span>
+<span class="comment">│</span>  <span class="keyword">PIPELINE</span>  ("Daily_Sales_ETL")                            <span class="comment">│</span>
+<span class="comment">│     │                                                          │</span>
+<span class="comment">│     ├───</span> <span class="func">Activity 1</span>: Copy Activity                           <span class="comment">│</span>
+<span class="comment">│     │       Source:</span> <span class="string">Dataset</span> → <span class="string">Linked Service</span> → On-Prem SQL   <span class="comment">│</span>
+<span class="comment">│     │       Sink:</span>   <span class="string">Dataset</span> → <span class="string">Linked Service</span> → Azure Data Lake<span class="comment">│</span>
+<span class="comment">│     │       Uses:</span>   <span class="builtin">Self-Hosted IR</span> (on-prem access)          <span class="comment">│</span>
+<span class="comment">│     │                                                          │</span>
+<span class="comment">│     ├───</span> <span class="func">Activity 2</span>: Data Flow (Transform)                   <span class="comment">│</span>
+<span class="comment">│     │       Clean, filter, join, aggregate                      │</span>
+<span class="comment">│     │       Uses:</span>   <span class="builtin">Azure IR</span> (Spark cluster)                 <span class="comment">│</span>
+<span class="comment">│     │                                                          │</span>
+<span class="comment">│     └───</span> <span class="func">Activity 3</span>: Stored Procedure                         <span class="comment">│</span>
+<span class="comment">│             Run usp_LoadFactSales on Azure SQL                  │</span>
+<span class="comment">└─────────────────────────────────────────────────────────────────┘</span></code></pre>
+      </div>
+
+      <!-- COPY ACTIVITY DEEP DIVE -->
+      <h2 style="margin-top:18px">📦 Copy Activity — The Workhorse of ADF</h2>
+      <p>The <b>Copy Activity</b> is the most-used activity in ADF. It copies data from a <b>source</b> to a <b>sink</b> (destination) with optional column mapping and basic transformations.</p>
+      <div class="grid2" style="margin-top:8px">
+        <div class="mini">
+          <h3>📥 Supported Sources (90+)</h3>
+          <ul>
+            <li><b>Azure:</b> SQL Database, Blob Storage, Data Lake, Cosmos DB, Synapse, Table Storage</li>
+            <li><b>Databases:</b> SQL Server, Oracle, MySQL, PostgreSQL, MongoDB</li>
+            <li><b>Files:</b> CSV, JSON, Parquet, Avro, ORC, Excel, XML</li>
+            <li><b>SaaS:</b> Salesforce, Dynamics 365, SAP, Google BigQuery</li>
+            <li><b>Protocols:</b> REST API, SFTP, FTP, HTTP, OData</li>
+            <li><b>Cloud:</b> Amazon S3, Google Cloud Storage, Snowflake</li>
+          </ul>
+        </div>
+        <div class="mini">
+          <h3>⚙️ Copy Activity Features</h3>
+          <ul>
+            <li><b>Column mapping</b> — Map source columns to sink columns</li>
+            <li><b>Schema mapping</b> — Auto-detect or define schema</li>
+            <li><b>Data type conversion</b> — Automatic type handling</li>
+            <li><b>Parallel copy</b> — Scale out for large datasets (DIU setting)</li>
+            <li><b>Staging</b> — Use Blob Storage as staging area for performance</li>
+            <li><b>Fault tolerance</b> — Skip incompatible rows, log errors</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- PARAMETERS & VARIABLES -->
+      <h2 style="margin-top:18px">🎯 Parameters &amp; Variables</h2>
+      <div class="grid2">
+        <div class="mini" style="border-top:3px solid #7aa2ff">
+          <h3>📌 Parameters</h3>
+          <p style="margin:4px 0 0"><b>Read-only</b> values passed <b>into</b> a pipeline at runtime. Defined at pipeline level, values set by the caller.</p>
+<pre style="margin:8px 0;font-size:12px"><code><span class="comment">// Pipeline parameter: fileName</span>
+<span class="comment">// Used in dataset:</span> @pipeline().parameters.fileName
+<span class="comment">// Caller passes:</span> <span class="string">"sales_2024_01.csv"</span></code></pre>
+          <p class="muted" style="margin:4px 0 0">Use for values that change between runs (file names, dates, table names).</p>
+        </div>
+        <div class="mini" style="border-top:3px solid #66e3c4">
+          <h3>📌 Variables</h3>
+          <p style="margin:4px 0 0"><b>Read-write</b> values that can be <b>set and changed</b> during pipeline execution using Set Variable or Append Variable activities.</p>
+<pre style="margin:8px 0;font-size:12px"><code><span class="comment">// Variable: processedCount</span>
+<span class="comment">// Set with:</span> Set Variable activity
+<span class="comment">// Append with:</span> Append Variable activity
+<span class="comment">// Read with:</span> @variables(<span class="string">'processedCount'</span>)</code></pre>
+          <p class="muted" style="margin:4px 0 0">Use for counters, accumulators, or values computed during execution.</p>
+        </div>
+      </div>
+
+      <!-- MONITORING -->
+      <h2 style="margin-top:18px">📊 Monitoring &amp; Debugging</h2>
+      <div class="mini" style="margin-top:8px">
+        <div class="grid2">
+          <div>
+            <b>🔍 Monitor Hub:</b>
+            <ul>
+              <li><b>Pipeline runs</b> — See status (Succeeded / Failed / In Progress / Cancelled)</li>
+              <li><b>Activity runs</b> — Drill into each activity's duration, input, output</li>
+              <li><b>Trigger runs</b> — See which triggers fired and their status</li>
+              <li><b>Gantt chart</b> — Visual timeline of activity execution</li>
+            </ul>
+          </div>
+          <div>
+            <b>🛠️ Debugging tools:</b>
+            <ul>
+              <li><b>Debug mode</b> — Run pipeline interactively in the studio (no trigger needed)</li>
+              <li><b>Breakpoints</b> — Pause pipeline at a specific activity</li>
+              <li><b>Data Preview</b> — Preview data at any step in a Data Flow</li>
+              <li><b>Alerts</b> — Set up email/webhook alerts on pipeline failure</li>
+              <li><b>Log Analytics</b> — Send diagnostic logs to Azure Monitor for long-term analysis</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- ADF vs SSIS -->
+      <h2 style="margin-top:18px">🆚 ADF vs. SSIS vs. Databricks</h2>
+      <table>
+        <thead>
+          <tr style="background:rgba(122,162,255,.12)">
+            <th>Feature</th>
+            <th>Azure Data Factory</th>
+            <th>SSIS</th>
+            <th>Databricks</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td><b>Type</b></td><td>Cloud-native orchestrator</td><td>On-prem ETL tool</td><td>Spark-based analytics platform</td></tr>
+          <tr><td><b>Code</b></td><td>No-code / low-code (visual)</td><td>Visual + C#/VB scripts</td><td>Code-first (Python, Scala, SQL)</td></tr>
+          <tr><td><b>Compute</b></td><td>Serverless (managed)</td><td>Runs on SQL Server</td><td>Spark clusters (managed)</td></tr>
+          <tr><td><b>Scale</b></td><td>Serverless auto-scale</td><td>Limited by server</td><td>Elastic Spark clusters</td></tr>
+          <tr><td><b>Connectors</b></td><td>90+ built-in ⭐</td><td>Dozens of providers</td><td>JDBC, files, APIs (code-driven)</td></tr>
+          <tr><td><b>Transformation</b></td><td>Data Flows (Spark-based, visual)</td><td>Rich transforms (mature)</td><td>Full Spark power ⭐</td></tr>
+          <tr><td><b>Best for</b></td><td>Orchestration + simple transforms</td><td>Legacy on-prem ETL</td><td>Complex big data transformations</td></tr>
+        </tbody>
+      </table>
+      <p class="muted">In practice, many teams use <b>ADF + Databricks together</b> — ADF for orchestration and scheduling, Databricks for heavy transformations.</p>
+
+      <!-- PRICING -->
+      <h2 style="margin-top:18px">💰 ADF Pricing — Pay for What You Use</h2>
+      <table>
+        <thead>
+          <tr style="background:rgba(0,120,212,.12)">
+            <th>Component</th>
+            <th>What You Pay For</th>
+            <th>Approximate Cost</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td><b>Pipeline orchestration</b></td><td>Per activity run</td><td>~$1 per 1,000 activity runs</td></tr>
+          <tr><td><b>Data movement</b></td><td>Per DIU-hour (Data Integration Unit)</td><td>~$0.25 per DIU-hour</td></tr>
+          <tr><td><b>Data Flow execution</b></td><td>Per vCore-hour (Spark cluster time)</td><td>~$0.27 per vCore-hour</td></tr>
+          <tr><td><b>Self-Hosted IR</b></td><td>Free (runs on your own machine)</td><td>$0 for the IR itself</td></tr>
+        </tbody>
+      </table>
+      <p class="muted">ADF has a generous <b>free tier</b> — first 5 pipeline activity runs and first 5 low-frequency triggers are free per month. Great for learning!</p>
+
+      <!-- DATA ENGINEER RELEVANCE -->
+      <div class="callout" style="margin-top:14px">
+        <p style="margin:0">🎯 <b>As a Data Engineer, ADF will be your daily driver for:</b><br/>
+        1. <b>Data ingestion</b> — Pull data from APIs, databases, files, SaaS apps into your Data Lake<br/>
+        2. <b>Pipeline orchestration</b> — Schedule and sequence ETL/ELT workflows<br/>
+        3. <b>Data transformation</b> — Use Data Flows or call Databricks/Spark for heavy transforms<br/>
+        4. <b>Incremental loading</b> — Use watermark columns + Tumbling Window triggers to load only new data<br/>
+        5. <b>Hybrid connectivity</b> — Self-Hosted IR to access on-prem databases behind firewalls<br/>
+        6. <b>Monitoring &amp; alerting</b> — Track pipeline health, set up failure alerts, debug issues</p>
       </div>
 
     </div>
