@@ -128,7 +128,7 @@
         <a href="#real-web-apps"><span class="nav-num core">05</span> Building Real Web Apps</a>
         <a href="#full-potential"><span class="nav-num core">06</span> Products You Can Build</a>
         <a href="#why-it-matters"><span class="nav-num core">07</span> Why It Matters</a>
-        <a href="#task-manager"><span class="nav-num demo">08</span> Inside Look: Task Manager</a>
+        <a href="#placement-tracker"><span class="nav-num demo">08</span> Inside Look: Placement Tracker</a>
 
         <div class="muted" style="padding:4px 10px;margin-top:8px;text-transform:uppercase;letter-spacing:1px;font-size:10px;font-weight:700;color:#66e3c4">Block 3 — Closing</div>
         <a href="#qa-wrapup"><span class="nav-num wrap">09</span> Q&amp;A &amp; Wrap-Up</a>
@@ -248,7 +248,7 @@
           <tr style="background:rgba(255,159,67,.06)"><td>05</td><td><b>Building Real Web Apps with Vibe Coding</b></td><td><span class="block-label core-bl">Core</span></td><td>4 min</td></tr>
           <tr style="background:rgba(255,159,67,.06)"><td>06</td><td><b>Unlocking the Full Potential: Products You Can Build</b></td><td><span class="block-label core-bl">Core</span></td><td>3 min</td></tr>
           <tr style="background:rgba(255,159,67,.06)"><td>07</td><td><b>Why Vibe Coding Matters in the Real World</b></td><td><span class="block-label core-bl">Core</span></td><td>3 min</td></tr>
-          <tr style="background:rgba(243,104,224,.06)"><td>08</td><td><b>Inside Look: Our Task Manager &amp; Productivity Boosting</b></td><td><span class="block-label demo-bl">Case Study</span></td><td>2 min</td></tr>
+          <tr style="background:rgba(243,104,224,.06)"><td>08</td><td><b>Inside Look: Placement Prep Tracker &amp; Productivity Boosting</b></td><td><span class="block-label demo-bl">Case Study</span></td><td>2 min</td></tr>
           <tr><td>09</td><td>Q&amp;A &amp; Wrap-Up</td><td><span class="block-label wrap-bl">Closing</span></td><td>3 min</td></tr>
         </tbody>
       </table>
@@ -403,6 +403,62 @@
         </div>
       </div>
 
+      <h2>When to Use Each Tool</h2>
+      <div class="callout info" style="margin-top:8px">
+        <p style="margin:0">💡 <b>Presenter tip:</b> Audience will ask "which one should I use?" — use this comparison to give a clear, confident answer.</p>
+      </div>
+
+      <table style="margin-top:10px">
+        <thead>
+          <tr style="background:rgba(243,104,224,.12)">
+            <th></th>
+            <th>⚡ Bolt.new</th>
+            <th>💜 Lovable</th>
+            <th>🔷 GitHub Copilot Agent</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td><b>Best for</b></td><td>Quick "wow" prototypes, hackathons, one-off tools</td><td>Data-driven apps with users, auth &amp; database (CRM, SaaS, dashboards)</td><td>Developers working in their own codebase with full control</td></tr>
+          <tr><td><b>How it works</b></td><td>100% browser-based. Prompt → running app in seconds via WebContainers</td><td>Browser-based with <b>native Supabase integration</b> — auto-generates DB schemas, auth, RLS policies</td><td>Inside VS Code — edits files across your actual repo, any tech stack</td></tr>
+          <tr><td><b>Key strength</b></td><td>Fastest zero-to-something. No setup, no IDE, no accounts needed</td><td>Tightest AI-to-database pipeline. Generates UI + data layer + auth together</td><td>Works with <b>any stack</b>, any existing project. You own the code &amp; Git history</td></tr>
+          <tr><td><b>Weakness</b></td><td>Less control over tech stack. Hard to integrate into existing codebases</td><td>Opinionated — pushes toward Supabase + React. Less flexible backend choices</td><td>Requires local setup (Node, Git, VS Code). Slower time-to-visual-result</td></tr>
+          <tr><td><b>Output quality</b></td><td>Good for demos, needs polish for production</td><td>More polished &amp; production-ready visually</td><td>Production-grade — you review every line</td></tr>
+          <tr><td><b>Ideal user</b></td><td>Anyone with an idea who wants to see it <b>right now</b></td><td>Non-technical founders building a real MVP</td><td>Developers building &amp; maintaining real products</td></tr>
+        </tbody>
+      </table>
+
+      <h3 style="margin-top:14px">Quick Decision Guide (Tell the Audience)</h3>
+      <div class="grid3">
+        <div class="mini" style="border-top:3px solid #f368e0">
+          <h3>💡 "I have an idea, show me something in 2 min"</h3>
+          <p style="margin:4px 0 0">→ Use <b>Bolt</b></p>
+        </div>
+        <div class="mini" style="border-top:3px solid #f368e0">
+          <h3>💡 "I need a full app with users &amp; data"</h3>
+          <p style="margin:4px 0 0">→ Use <b>Lovable</b></p>
+        </div>
+        <div class="mini" style="border-top:3px solid #f368e0">
+          <h3>💡 "I'm a dev building a real product"</h3>
+          <p style="margin:4px 0 0">→ Use <b>Copilot Agent</b></p>
+        </div>
+        <div class="mini" style="border-top:3px solid #f368e0">
+          <h3>💡 "I want to add a feature to existing code"</h3>
+          <p style="margin:4px 0 0">→ Use <b>Copilot Agent</b></p>
+        </div>
+        <div class="mini" style="border-top:3px solid #f368e0">
+          <h3>💡 "I'm non-technical, want to ship an MVP"</h3>
+          <p style="margin:4px 0 0">→ Use <b>Lovable</b> or <b>Bolt</b></p>
+        </div>
+        <div class="mini" style="border-top:3px solid #f368e0">
+          <h3>💡 "I need a quick landing page"</h3>
+          <p style="margin:4px 0 0">→ Use <b>Bolt</b></p>
+        </div>
+      </div>
+
+      <div class="callout green" style="margin-top:12px">
+        <p style="margin:0">🔑 <b>One-liner summary:</b> <b>Bolt</b> optimizes for <b>speed</b>, <b>Lovable</b> optimizes for <b>completeness</b> (especially the data layer), and <b>Copilot</b> optimizes for <b>control</b> and integration into professional workflows.</p>
+      </div>
+
       <h2>Demo Script — Step by Step</h2>
       <div class="callout info" style="margin-top:8px">
         <p style="margin:0">💡 <b>Presenter tip:</b> Practice this demo 3x before the webinar. Have a backup recording in case of internet issues. Keep talking while AI generates — narrate what's happening.</p>
@@ -413,8 +469,11 @@
 
       <h3>Step 2: Write the Prompt (30 sec)</h3>
       <div class="callout green" style="margin-top:8px">
-        <p style="margin:0"><b>Example prompt to type live:</b></p>
-        <p style="margin:8px 0 0;font-style:italic">"Build me a modern portfolio website for a freelance photographer. It should have a hero section with a full-screen background image, an about section, a gallery grid with hover effects, a contact form, and a footer. Use a dark elegant theme with smooth scroll animations. Make it fully responsive."</p>
+        <p style="margin:0"><b>Example prompt to type live (on Bolt.new):</b></p>
+        <p style="margin:8px 0 0;font-style:italic">"Build me a modern personal portfolio website for a fresh graduate looking for jobs. Include a hero section with my name and tagline, an about me section, a skills grid, a projects showcase with hover effects, and a contact section with email and social media links. Use a dark theme with smooth animations. Make it fully responsive."</p>
+      </div>
+      <div class="callout warn" style="margin-top:8px">
+        <p style="margin:0">⚠️ <b>Prompt tip:</b> Avoid saying "contact form" — Bolt will try to set up a database for form submissions, which adds complexity and slows the demo. Use "contact section with email and social media links" instead to keep it purely frontend.</p>
       </div>
 
       <h3>Step 3: Watch AI Generate (2-3 min)</h3>
@@ -432,10 +491,10 @@
       <h3>Step 5: Iterate with Follow-up Prompts (2 min)</h3>
       <p>Show the <b>iterative nature</b> of vibe coding — this is the key insight:</p>
       <pre><code><span class="comment">// Follow-up prompt examples:</span>
-<span class="string">"Add a testimonials carousel section between gallery and contact"</span>
+<span class="string">"Add a testimonials section with quotes from professors or internship managers"</span>
 <span class="string">"Change the color scheme to deep purple and gold"</span>
 <span class="string">"Add a loading animation when the page first opens"</span>
-<span class="string">"Make the contact form actually validate email format"</span></code></pre>
+<span class="string">"Add a resume download button in the hero section"</span></code></pre>
       <p>"This is the <b>vibe</b> in vibe coding. You're having a <b>conversation</b> with AI. You describe, it builds, you refine. Each iteration takes seconds, not hours."</p>
 
       <h3>Step 6: Drop the Mic (30 sec)</h3>
@@ -485,32 +544,44 @@
       </table>
 
       <h2>What Does a Real Prompt Look Like?</h2>
-      <p>Building a real app is about <b>chaining prompts</b> — each one building on the last:</p>
-      <pre><code><span class="comment">// Prompt chain for building a SaaS app:</span>
+      <p>Building a real app is about <b>chaining prompts</b> — each one building on the last. Notice how simple the language is — no jargon needed:</p>
+      <pre><code><span class="comment">// Prompt chain for building a Placement Prep Tracker:</span>
 
-<span class="comment">// 1. Initial scaffold</span>
-<span class="string">"Create a Next.js app with Tailwind CSS, a landing page,
- dashboard layout, and Supabase integration"</span>
+<span class="comment">// 1. Start the project</span>
+<span class="string">"Build me a Placement Prep Tracker website where I can
+ track which companies I'm applying to during campus
+ placements. I want a dashboard showing my stats and a
+ page to manage all my company applications. Use a
+ modern dark theme."</span>
 
-<span class="comment">// 2. Add authentication</span>
-<span class="string">"Add email/password auth using Supabase Auth with
- login, signup, and forgot password pages"</span>
+<span class="comment">// 2. Set up the database</span>
+<span class="string">"I need to save my data. Create a database table to store
+ each company I'm tracking — save the company name, job role,
+ salary package, application deadline, current status, which
+ interview round I'm at, and any personal notes."</span>
 
-<span class="comment">// 3. Build core feature</span>
-<span class="string">"Create a project management board with drag-and-drop
- columns (To Do, In Progress, Done) using dnd-kit"</span>
+<span class="comment">// 3. Build the main tracker</span>
+<span class="string">"Show my companies as cards organized in columns:
+ Wishlist, Applied, Interviewing, Offer, Rejected.
+ I should be able to drag a company card from one
+ column to another when my status changes."</span>
 
-<span class="comment">// 4. Add data layer</span>
-<span class="string">"Create Supabase tables for projects, tasks, and users
- with row-level security policies"</span>
+<span class="comment">// 4. Add a way to add new companies</span>
+<span class="string">"Add a button that opens a form where I can add a new
+ company. I should fill in the company name, role, salary,
+ deadline, and any notes. Show a success message when saved."</span>
 
-<span class="comment">// 5. Deploy</span>
-<span class="string">"Set up deployment to Vercel with environment variables
- for Supabase URL and anon key"</span></code></pre>
+<span class="comment">// 5. Make it live on the internet</span>
+<span class="string">"Deploy this so I can access it from my phone too.
+ Give me a link I can share with friends."</span></code></pre>
 
-      <h2>🎬 Real Example: Building a Feedback Board App</h2>
+      <div class="callout info" style="margin-top:8px">
+        <p style="margin:0">💡 <b>Notice:</b> Not a single technical term in those prompts. No "Next.js", no "Supabase", no "environment variables." The AI figures out the tech — you just describe what you want like you're talking to a friend. <b>That's the whole point of vibe coding.</b></p>
+      </div>
+
+      <h2>🎬 Real Example: Building a Placement Prep Tracker</h2>
       <div class="callout" style="margin-top:8px;border-left:4px solid #66e3c4">
-        <p style="margin:0">🟢 <b>Scenario:</b> You want to build a customer feedback board (like Canny) where users can submit ideas, upvote, and you can track feature requests.</p>
+        <p style="margin:0">🟢 <b>Scenario:</b> You're a college student with campus placements coming up. You want to track which companies you're applying to, what round you're at, deadlines, and your prep notes — all in one place.</p>
       </div>
 
       <table>
@@ -525,43 +596,43 @@
         <tbody>
           <tr>
             <td><b>1. Scaffold</b></td>
-            <td><em>"Build a Next.js feedback board app with Tailwind. Include a public board page and an admin dashboard."</em></td>
+            <td><em>"Build a Next.js Placement Prep Tracker app with Tailwind. Include a dashboard page showing stats and a companies tracking page."</em></td>
             <td>Project structure, 2 page layouts, nav bar, Tailwind config</td>
             <td>~2 min</td>
           </tr>
           <tr>
             <td><b>2. Database</b></td>
-            <td><em>"Add a Supabase table called 'ideas' with columns: id, title, description, votes, status, created_at. Add row-level security so anyone can read but only authenticated users can insert."</em></td>
+            <td><em>"Add a Supabase table called 'applications' with columns: id, company_name, role, package, deadline, status, round, notes, created_at. Add row-level security so anyone can read and insert."</em></td>
             <td>SQL migration, RLS policies, TypeScript types</td>
             <td>~1 min</td>
           </tr>
           <tr>
             <td><b>3. Core Feature</b></td>
-            <td><em>"Create a card component for each idea showing title, description, vote count, and an upvote button. Clicking upvote increments the count in Supabase in real-time."</em></td>
-            <td>IdeaCard component, upvote API route, real-time subscription</td>
+            <td><em>"Create a Kanban-style board with columns: Wishlist, Applied, Interviewing, Offer, Rejected. Show each company as a card with company name, role, package, and deadline. Let me drag cards between columns to update status."</em></td>
+            <td>Kanban board component, drag-and-drop logic, status update API</td>
             <td>~3 min</td>
           </tr>
           <tr>
-            <td><b>4. Submit Form</b></td>
-            <td><em>"Add a modal form to submit new ideas with title and description. Validate inputs and show a success toast."</em></td>
+            <td><b>4. Add Company Form</b></td>
+            <td><em>"Add a modal form to add a new company with fields: company name, role, package (LPA), deadline, round (Aptitude/Technical/HR/Final), and notes. Validate inputs and show a success toast."</em></td>
             <td>Modal component, form validation, toast notification</td>
             <td>~2 min</td>
           </tr>
           <tr>
-            <td><b>5. Admin View</b></td>
-            <td><em>"Build an admin page that lists all ideas in a table with filters by status (New, Planned, In Progress, Done). Let admins change the status with a dropdown."</em></td>
-            <td>Admin table, status filter, dropdown update logic</td>
+            <td><b>5. Dashboard &amp; Stats</b></td>
+            <td><em>"Build a dashboard page showing: total companies tracked, how many in each status, upcoming deadlines this week, and a conversion rate (offers vs total applied). Use nice stat cards."</em></td>
+            <td>Dashboard with stat cards, deadline list, conversion metrics</td>
             <td>~3 min</td>
           </tr>
           <tr>
             <td><b>6. Polish &amp; Deploy</b></td>
-            <td><em>"Add sorting by most votes, a search bar, dark mode toggle, and deploy to Vercel."</em></td>
-            <td>Sort/search logic, theme toggle, Vercel config</td>
+            <td><em>"Add search and filter by status, sort by deadline, dark mode toggle, and deploy to Vercel."</em></td>
+            <td>Sort/search/filter logic, theme toggle, Vercel config</td>
             <td>~2 min</td>
           </tr>
         </tbody>
       </table>
-      <p style="margin-top:8px"><b>⏱️ Total time: ~13 minutes</b> for a functional feedback board with auth, real-time updates, and admin controls — something that would traditionally take a developer <b>1-2 weeks</b>.</p>
+      <p style="margin-top:8px"><b>⏱️ Total time: ~13 minutes</b> for a functional placement tracker with a Kanban board, stats dashboard, and deadline tracking — something that would traditionally take a developer <b>1-2 weeks</b>.</p>
 
       <h2>🗄️ Setting Up Supabase (Database &amp; Backend)</h2>
       <div class="callout info" style="margin-top:8px">
@@ -626,30 +697,33 @@
 
       <h3>Step 4: Run the SQL Migration</h3>
       <p>Go to <b>SQL Editor</b> in your Supabase dashboard (left sidebar), paste your migration SQL, and click <b>Run</b>:</p>
-      <pre><code><span class="comment">-- Create the ideas table</span>
-<span class="keyword">create table if not exists</span> ideas (
+      <pre><code><span class="comment">-- Create the applications table (Placement Prep Tracker)</span>
+<span class="keyword">create table if not exists</span> applications (
   id <span class="builtin">uuid</span> <span class="keyword">default</span> <span class="func">gen_random_uuid()</span> <span class="keyword">primary key</span>,
-  title <span class="builtin">text</span> <span class="keyword">not null</span>,
-  description <span class="builtin">text</span> <span class="keyword">not null</span>,
-  votes <span class="builtin">integer</span> <span class="keyword">default</span> <span class="number">0</span>,
-  status <span class="builtin">text</span> <span class="keyword">default</span> <span class="string">'New'</span>,
+  company_name <span class="builtin">text</span> <span class="keyword">not null</span>,
+  role <span class="builtin">text</span> <span class="keyword">not null</span>,
+  package <span class="builtin">text</span>,
+  deadline <span class="builtin">date</span>,
+  status <span class="builtin">text</span> <span class="keyword">default</span> <span class="string">'Wishlist'</span>,
+  round <span class="builtin">text</span> <span class="keyword">default</span> <span class="string">'Not Started'</span>,
+  notes <span class="builtin">text</span>,
   created_at <span class="builtin">timestamptz</span> <span class="keyword">default</span> <span class="func">now()</span>
 );
 
 <span class="comment">-- Enable Row Level Security</span>
-<span class="keyword">alter table</span> ideas <span class="keyword">enable row level security</span>;
+<span class="keyword">alter table</span> applications <span class="keyword">enable row level security</span>;
 
 <span class="comment">-- Allow anyone to read</span>
 <span class="keyword">create policy</span> <span class="string">"Anyone can read"</span>
-  <span class="keyword">on</span> ideas <span class="keyword">for select using</span> (<span class="number">true</span>);
+  <span class="keyword">on</span> applications <span class="keyword">for select using</span> (<span class="number">true</span>);
 
 <span class="comment">-- Allow anyone to insert (demo only)</span>
 <span class="keyword">create policy</span> <span class="string">"Anyone can insert"</span>
-  <span class="keyword">on</span> ideas <span class="keyword">for insert with check</span> (<span class="number">true</span>);
+  <span class="keyword">on</span> applications <span class="keyword">for insert with check</span> (<span class="number">true</span>);
 
 <span class="comment">-- Allow anyone to update (demo only)</span>
 <span class="keyword">create policy</span> <span class="string">"Anyone can update"</span>
-  <span class="keyword">on</span> ideas <span class="keyword">for update using</span> (<span class="number">true</span>);</code></pre>
+  <span class="keyword">on</span> applications <span class="keyword">for update using</span> (<span class="number">true</span>);</code></pre>
 
       <h3>Step 5: Connect Your App to Supabase</h3>
       <p>The Supabase client code (AI generates this for you):</p>
@@ -766,7 +840,7 @@
         <li><b>Deploys</b> to a public URL with one click</li>
       </ul>
 
-      <h3>How It Works — Feedback Board on Replit</h3>
+      <h3>How It Works — Placement Tracker on Replit</h3>
       <div class="timeline">
         <div class="timeline-item">
           <div class="timeline-dot">1️⃣</div>
@@ -779,7 +853,7 @@
           <div class="timeline-dot">2️⃣</div>
           <div class="timeline-content">
             <h3>Type your prompt</h3>
-            <p><em>"Build a feedback board where users can submit ideas, upvote them, and admins can change status. Include a dark mode."</em></p>
+            <p><em>"Build a Placement Prep Tracker where students can add companies, track application status with a Kanban board, and see stats on a dashboard. Include dark mode."</em></p>
           </div>
         </div>
         <div class="timeline-item">
@@ -1081,41 +1155,45 @@
     </section>
 
     <!-- ───────────── TASK MANAGER CASE STUDY ───────────── -->
-    <section id="task-manager" data-label="Section 8 · 2 min" style="border-top-color:#f368e0">
+    <section id="placement-tracker" data-label="Section 8 · 2 min" style="border-top-color:#f368e0">
     <div class="sec-header" onclick="this.parentElement.classList.toggle('collapsed')">
-      <h2>🔍 Inside Look: Our Task Manager &amp; Productivity Boosting</h2>
+      <h2>🔍 Inside Look: Placement Prep Tracker &amp; Productivity Boosting</h2>
       <span class="sec-toggle">▼</span>
     </div>
     <div class="sec-body">
-      <p class="muted">A real case study — how we built a task manager app using vibe coding and measured the productivity gains</p>
+      <p class="muted">A real case study — how we built a Placement Prep Tracker using vibe coding and measured the productivity gains</p>
 
       <div class="callout" style="margin-top:8px">
-        <p style="margin:0">🎯 <b>Case study goal:</b> Show a <b>real product</b> built with vibe coding — not a toy demo, but something people actually use. Walk through the build process and share concrete time savings.</p>
+        <p style="margin:0">🎯 <b>Case study goal:</b> Show a <b>real product</b> built with vibe coding — not a toy demo, but something you'd actually use during placement season. Walk through the build process and share concrete time savings.</p>
       </div>
 
       <h2>What We Built</h2>
       <div class="mini" style="border-top:3px solid #f368e0">
-        <h3>📋 Task Manager App — Feature List</h3>
+        <h3>📋 Placement Prep Tracker — Feature List</h3>
         <div class="grid2">
           <div>
             <ul>
-              <li>Kanban board with drag-and-drop</li>
-              <li>User authentication (email + Google)</li>
-              <li>Real-time collaboration</li>
-              <li>Task assignments &amp; due dates</li>
-              <li>Priority labels &amp; tagging</li>
+              <li>Kanban board (Wishlist → Applied → Interviewing → Offer → Rejected)</li>
+              <li>Add companies with role, package, deadline</li>
+              <li>Drag-and-drop to update status</li>
+              <li>Track interview rounds (Aptitude/Technical/HR/Final)</li>
+              <li>Prep notes per company</li>
             </ul>
           </div>
           <div>
             <ul>
-              <li>Search &amp; filter</li>
+              <li>Dashboard with stats (total, conversion rate, upcoming deadlines)</li>
+              <li>Search &amp; filter by status</li>
+              <li>Sort by deadline</li>
               <li>Dark/light mode toggle</li>
               <li>Responsive (works on mobile)</li>
-              <li>Notification system</li>
-              <li>Data export (CSV/JSON)</li>
             </ul>
           </div>
         </div>
+      </div>
+
+      <div class="callout info" style="margin-top:12px">
+        <p style="margin:0">💡 <b>Why this app?</b> Every college student going through campus placements manually tracks companies in spreadsheets, WhatsApp groups, or sticky notes. This app solves a <b>real problem they face right now</b> — and they'll realize they could build it themselves.</p>
       </div>
 
       <h2>Build Timeline Comparison</h2>
@@ -1130,10 +1208,10 @@
         </thead>
         <tbody>
           <tr><td><b>UI/Frontend</b></td><td>2-3 weeks</td><td>2-3 days</td><td>~80%</td></tr>
-          <tr><td><b>Backend &amp; API</b></td><td>1-2 weeks</td><td>1-2 days</td><td>~80%</td></tr>
-          <tr><td><b>Auth &amp; Security</b></td><td>3-5 days</td><td>2-3 hours</td><td>~90%</td></tr>
-          <tr><td><b>Database Setup</b></td><td>2-3 days</td><td>1-2 hours</td><td>~90%</td></tr>
-          <tr><td><b>Testing &amp; QA</b></td><td>1 week</td><td>2-3 days</td><td>~60%</td></tr>
+          <tr><td><b>Kanban &amp; Drag-Drop</b></td><td>1-2 weeks</td><td>1-2 days</td><td>~80%</td></tr>
+          <tr><td><b>Database &amp; API</b></td><td>3-5 days</td><td>2-3 hours</td><td>~90%</td></tr>
+          <tr><td><b>Dashboard &amp; Stats</b></td><td>2-3 days</td><td>1-2 hours</td><td>~90%</td></tr>
+          <tr><td><b>Polish &amp; Deploy</b></td><td>3-5 days</td><td>1 day</td><td>~75%</td></tr>
           <tr style="background:rgba(102,227,196,.08)"><td><b>Total</b></td><td><b>5-7 weeks</b></td><td><b>~1 week</b></td><td><b>~80%</b></td></tr>
         </tbody>
       </table>
@@ -1143,9 +1221,9 @@
         <div class="mini">
           <h3>✅ What Works</h3>
           <ul>
-            <li><b>Be specific</b> in prompts — "Add a Kanban board with 3 columns" beats "add a task view"</li>
+            <li><b>Be specific</b> in prompts — "Add a Kanban board with 5 columns: Wishlist, Applied, Interviewing, Offer, Rejected" beats "add a tracker"</li>
             <li><b>Iterate fast</b> — don't spend 10 min crafting the perfect prompt, just start and refine</li>
-            <li><b>Use screenshots</b> — show AI what you want by referencing existing designs</li>
+            <li><b>Use screenshots</b> — show AI what you want by referencing existing designs (like Trello)</li>
             <li><b>Chain prompts</b> — build feature by feature, not everything at once</li>
           </ul>
         </div>
@@ -1160,8 +1238,29 @@
         </div>
       </div>
 
-      <div class="callout green" style="margin-top:12px">
-        <p style="margin:0">🚀 <b>Bottom line:</b> We built a production-quality task manager in <b>~1 week</b> that would have taken a traditional team <b>5-7 weeks</b>. The biggest gain was in UI and boilerplate code — AI eliminated 80%+ of the repetitive work, letting us focus on <b>product decisions</b> and <b>user experience</b>.</p>
+      <h2>🚀 What's Next? Take It Further</h2>
+      <div class="callout green" style="margin-top:8px">
+        <p style="margin:0">💡 <b>Tell the audience:</b> "This tracker works great with manual data entry. But imagine your next weekend project — connecting it to a <b>real job API</b> (like Remotive or JSearch) so it pulls live openings from LinkedIn and Indeed automatically. Same approach — describe what you want, AI builds it."</p>
+      </div>
+
+      <h2>💡 More App Ideas for Students</h2>
+      <div class="grid3" style="margin-top:8px">
+        <div class="mini" style="border-top:3px solid #ff9f43">
+          <h3>💬 Anonymous Campus Confessions</h3>
+          <p style="margin:4px 0 0">Post anonymously, upvote — goes viral on every campus. Same architecture as a feedback board.</p>
+        </div>
+        <div class="mini" style="border-top:3px solid #7aa2ff">
+          <h3>💰 Expense Splitter</h3>
+          <p style="margin:4px 0 0">Split rent, food, trip costs with roommates. Every student needs this daily.</p>
+        </div>
+        <div class="mini" style="border-top:3px solid #66e3c4">
+          <h3>🧠 AI Study Notes Summarizer</h3>
+          <p style="margin:4px 0 0">Paste lecture notes → AI summarizes + generates flashcards. Uses OpenAI API — impressive for hackathons.</p>
+        </div>
+      </div>
+
+      <div class="callout" style="margin-top:12px;border-left:4px solid #f368e0">
+        <p style="margin:0">🚀 <b>Bottom line:</b> We built a production-quality Placement Prep Tracker in <b>~1 week</b> that would have taken a traditional developer <b>5-7 weeks</b>. AI eliminated 80%+ of the repetitive work, letting us focus on <b>what the app should do</b> instead of <b>how to code it</b>.</p>
       </div>
     </div>
     </section>
